@@ -1,7 +1,7 @@
 name: Deploy docs
 
 # Renders docs/ to GitHub Pages. The Pages site lives at
-# https://atri-jar.github.io/aurum-mcp/ in Stage 1, then
+# https://changejarapp.github.io/aurum-mcp/ in Stage 1, then
 # https://changejarapp.github.io/aurum-mcp/ after the org migration.
 
 on:

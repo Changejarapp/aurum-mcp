@@ -83,9 +83,9 @@ jobs:
             Install:
             ```jsonc
             { "mcpServers": { "aurum": { "command": "npx",
-              "args": ["-y", "github:atri-jar/aurum-mcp#${{ steps.bump.outputs.tag }}"] } } }
+              "args": ["-y", "github:Changejarapp/aurum-mcp#${{ steps.bump.outputs.tag }}"] } } }
             ```
             Or stay on the rolling tag:
             ```jsonc
-            "args": ["-y", "github:atri-jar/aurum-mcp#latest-stable"]
+            "args": ["-y", "github:Changejarapp/aurum-mcp#latest-stable"]
             ```

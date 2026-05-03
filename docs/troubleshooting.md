@@ -29,7 +29,7 @@ SHA + timestamp.
 Change the install snippet's ref:
 
 ```jsonc
-"args": ["-y", "github:atri-jar/aurum-mcp#feat/your-branch"]
+"args": ["-y", "github:Changejarapp/aurum-mcp#feat/your-branch"]
 ```
 
 This is the killer feature of `npx`-from-Git: branch refs are
@@ -40,7 +40,7 @@ immediate, free, and don't pollute any registry.
 Pin to an older tag:
 
 ```jsonc
-"args": ["-y", "github:atri-jar/aurum-mcp#v0.1.0"]
+"args": ["-y", "github:Changejarapp/aurum-mcp#v0.1.0"]
 ```
 
 Tags are immutable — every `v*` will exist in the repo forever.
@@ -58,7 +58,7 @@ Most likely: your client isn't sending the `initialize` handshake
 correctly. Run with the inspector:
 
 ```bash
-git clone https://github.com/atri-jar/aurum-mcp.git
+git clone https://github.com/Changejarapp/aurum-mcp.git
 cd aurum-mcp && pnpm install && pnpm inspect
 ```
 
@@ -85,7 +85,7 @@ Useful for testing schema changes before they land in `aurum-android`.
 
 ## Filing issues
 
-Bug reports → <https://github.com/atri-jar/aurum-mcp/issues> (or, after
+Bug reports → <https://github.com/Changejarapp/aurum-mcp/issues> (or, after
 the org migration, `Changejarapp/aurum-mcp`). Include:
 
 - Output of `get_aurum_version` (run it from your LLM client)

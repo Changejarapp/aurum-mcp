@@ -3,7 +3,7 @@
 ## Setup
 
 ```bash
-git clone https://github.com/atri-jar/aurum-mcp.git
+git clone https://github.com/Changejarapp/aurum-mcp.git
 cd aurum-mcp
 pnpm install
 make help
@@ -72,7 +72,7 @@ unrelated change can land.
 ## Smoke test
 
 Every PR runs `smoke-test.yml`, which performs a real
-`npx -y github:atri-jar/aurum-mcp#${{ github.sha }}` install on a
+`npx -y github:Changejarapp/aurum-mcp#${{ github.sha }}` install on a
 fresh Ubuntu runner, then pipes a `tools/list` + a `tools/call` JSON-RPC
 request and verifies the server returns valid responses. This catches
 install-format regressions (subdirectory syntax, `prepare` hook

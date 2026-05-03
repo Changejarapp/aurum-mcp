@@ -1,6 +1,6 @@
 {
   "name": "aurum-mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MCP server for the Aurum Design System — talk to Aurum from your LLM client",
   "license": "MIT",
   "type": "module",
@@ -37,9 +37,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/atri-jar/aurum-mcp.git"
+    "url": "git+https://github.com/Changejarapp/aurum-mcp.git"
   },
-  "homepage": "https://github.com/atri-jar/aurum-mcp",
+  "homepage": "https://github.com/Changejarapp/aurum-mcp",
   "keywords": [
     "mcp",
     "model-context-protocol",

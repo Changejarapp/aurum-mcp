@@ -1,6 +1,6 @@
 name: Smoke test (npx-from-Git)
 
-# On every PR, perform an actual `npx -y github:atri-jar/aurum-mcp#${SHA}`
+# On every PR, perform an actual `npx -y github:Changejarapp/aurum-mcp#${SHA}`
 # install on a fresh Ubuntu runner — exactly the path real users hit. Then
 # pipe a `tools/list` JSON-RPC request and verify the server boots and
 # returns ≥7 tools. Catches install-format regressions (subdirectory

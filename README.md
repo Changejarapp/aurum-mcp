@@ -30,7 +30,7 @@ restart the client.
   "mcpServers": {
     "aurum": {
       "command": "npx",
-      "args": ["-y", "github:atri-jar/aurum-mcp#latest-stable"]
+      "args": ["-y", "github:Changejarapp/aurum-mcp#latest-stable"]
     }
   }
 }
@@ -43,7 +43,7 @@ restart the client.
   "mcpServers": {
     "aurum": {
       "command": "npx",
-      "args": ["-y", "github:atri-jar/aurum-mcp#latest-stable"]
+      "args": ["-y", "github:Changejarapp/aurum-mcp#latest-stable"]
     }
   }
 }
@@ -56,7 +56,7 @@ restart the client.
   "mcpServers": {
     "aurum": {
       "command": "npx",
-      "args": ["-y", "github:atri-jar/aurum-mcp#latest-stable"]
+      "args": ["-y", "github:Changejarapp/aurum-mcp#latest-stable"]
     }
   }
 }
@@ -69,7 +69,7 @@ restart the client.
   "mcpServers": {
     "aurum": {
       "command": "npx",
-      "args": ["-y", "github:atri-jar/aurum-mcp#latest-stable"]
+      "args": ["-y", "github:Changejarapp/aurum-mcp#latest-stable"]
     }
   }
 }
@@ -95,7 +95,7 @@ For reproducibility — automated scripts, audited setups — pin to an
 explicit tag:
 
 ```jsonc
-"args": ["-y", "github:atri-jar/aurum-mcp#v0.1.0"]
+"args": ["-y", "github:Changejarapp/aurum-mcp#v0.1.0"]
 ```
 
 Every version of `aurum-mcp` ships the manifest from the matching Aurum
@@ -150,7 +150,7 @@ lives in [`docs/architecture.md`](docs/architecture.md#distribution).
 ## Local development
 
 ```bash
-git clone https://github.com/atri-jar/aurum-mcp.git
+git clone https://github.com/Changejarapp/aurum-mcp.git
 cd aurum-mcp
 pnpm install
 pnpm dev          # run the server via tsx + stdio
