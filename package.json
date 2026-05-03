@@ -1,0 +1,51 @@
+{
+  "name": "aurum-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for the Aurum Design System — talk to Aurum from your LLM client",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "aurum-mcp": "./dist/server.js"
+  },
+  "files": [
+    "dist",
+    "data",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/server.ts",
+    "inspect": "npx --yes @modelcontextprotocol/inspector tsx src/server.ts",
+    "manifest:fetch": "node scripts/fetch-manifest.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "prepare": "tsc"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "lunr": "^2.3.9",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/lunr": "^2.3.7",
+    "@types/node": "^22.10.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=18.18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atri-jar/aurum-mcp.git"
+  },
+  "homepage": "https://github.com/atri-jar/aurum-mcp",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "aurum",
+    "design-system",
+    "compose",
+    "android"
+  ]
+}

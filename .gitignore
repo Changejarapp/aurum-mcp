@@ -1,0 +1,21 @@
+node_modules/
+*.log
+.DS_Store
+.env
+.env.local
+
+# Coverage / build caches
+coverage/
+.nyc_output/
+.tsbuildinfo
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# NOTE: dist/ is COMMITTED on tagged releases (npx-from-Git installs read it
+# directly without running a build step). Local development uses `pnpm dev`
+# (tsx) and doesn't need dist/, so we gitignore it during the dev cycle and
+# rebuild via CI (build.yml) on every merge to main.
+dist/

@@ -1,0 +1,58 @@
+name: Deploy docs
+
+# Renders docs/ to GitHub Pages. The Pages site lives at
+# https://atri-jar.github.io/aurum-mcp/ in Stage 1, then
+# https://changejarapp.github.io/aurum-mcp/ after the org migration.
+
+on:
+  push:
+    branches: [main]
+    paths: ['docs/**', 'README.md', '.github/workflows/docs.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: docs
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Build static docs site
+        run: |
+          mkdir -p _site
+          cp README.md _site/index.md
+          cp -r docs _site/
+
+          # Minimal HTML wrapper for GitHub-flavored-markdown rendering.
+          # Pages auto-renders .md files when no theme is configured.
+          # We use a `_config.yml` to pick a Jekyll theme that GH Pages
+          # supports out of the box.
+          cat > _site/_config.yml <<'EOF'
+          theme: jekyll-theme-cayman
+          title: aurum-mcp
+          description: MCP server for the Aurum Design System
+          show_downloads: false
+          EOF
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

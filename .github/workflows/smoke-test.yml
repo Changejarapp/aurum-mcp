@@ -1,0 +1,56 @@
+name: Smoke test (npx-from-Git)
+
+# On every PR, perform an actual `npx -y github:atri-jar/aurum-mcp#${SHA}`
+# install on a fresh Ubuntu runner — exactly the path real users hit. Then
+# pipe a `tools/list` JSON-RPC request and verify the server boots and
+# returns ≥7 tools. Catches install-format regressions (subdirectory
+# syntax, `prepare` hook breakage, missing bin field, etc.) before they
+# reach users.
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - name: Install + smoke from Git URL
+        run: |
+          # Use the merge-commit SHA so we test the PR's actual content.
+          SHA="${{ github.event.pull_request.head.sha || github.sha }}"
+          echo "Testing install path: github:${{ github.repository }}#${SHA}"
+
+          # Spawn the server via npx and pipe a real MCP handshake to it.
+          # Timeout the spawn so a hung server fails the workflow.
+          mkdir -p /tmp/install-test && cd /tmp/install-test
+          INSTALL_TARGET="github:${{ github.repository }}#${SHA}"
+
+          # Send: initialize → notifications/initialized → tools/list, then close stdin.
+          OUT=$(printf '%s\n%s\n%s\n' \
+            '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"smoke","version":"0.0.1"}}}' \
+            '{"jsonrpc":"2.0","method":"notifications/initialized","params":{}}' \
+            '{"jsonrpc":"2.0","id":2,"method":"tools/list"}' \
+            | timeout 90 npx -y "${INSTALL_TARGET}" 2>&1 || true)
+
+          echo "── server output ─────────────────"
+          echo "$OUT" | head -60
+          echo "──────────────────────────────────"
+
+          # Parse the tools/list response (id=2) and assert ≥7 tools.
+          COUNT=$(echo "$OUT" | grep -E '^\{"jsonrpc":"2\.0","id":2,"result"' \
+            | jq '.result.tools | length' 2>/dev/null || echo 0)
+          if [ -z "$COUNT" ] || [ "$COUNT" -lt 7 ]; then
+            echo "::error::Expected ≥7 tools, got: '$COUNT'."
+            exit 1
+          fi
+          echo "✓ tools/list returned $COUNT tools"

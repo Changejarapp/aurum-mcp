@@ -1,0 +1,42 @@
+name: Build
+
+# Verifies the TypeScript compile and an end-to-end smoke run on every PR
+# and every push to main. Does NOT commit dist/ — dist/ is gitignored, and
+# user installs build it via the package's `prepare` hook on demand.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript compile
+        run: pnpm build
+
+      - name: Smoke test
+        run: pnpm smoke

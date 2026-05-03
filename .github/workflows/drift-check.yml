@@ -1,0 +1,37 @@
+name: Drift check
+
+# Fails any PR whose `data/manifest.json` is out of sync with the live
+# gallery URL. Forces the auto-merging sync-manifest PR to land first
+# before unrelated changes can ship.
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Fetch live manifest
+        run: |
+          curl -sSf https://changejarapp.github.io/aurum-android/data/manifest.json \
+            -o /tmp/live-manifest.json
+
+      - name: Compare
+        run: |
+          # We compare the parsed JSON (canonical formatting) so trivial
+          # whitespace differences don't trip the check.
+          jq --sort-keys . data/manifest.json > /tmp/local-canon.json
+          jq --sort-keys . /tmp/live-manifest.json > /tmp/live-canon.json
+          if ! diff -q /tmp/local-canon.json /tmp/live-canon.json > /dev/null; then
+            echo "::error::Bundled manifest is out of sync with the live gallery."
+            echo "Run \`make manifest-fetch\` (or wait for the auto-PR from sync-manifest.yml) before merging."
+            diff -u /tmp/local-canon.json /tmp/live-canon.json | head -60 || true
+            exit 1
+          fi
+          echo "✓ Bundled manifest matches live gallery."

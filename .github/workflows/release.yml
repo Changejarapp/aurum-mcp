@@ -1,0 +1,91 @@
+name: Release
+
+# Creates a tagged release. Steps:
+#   1. Bumps package.json (patch / minor / major).
+#   2. Pushes the version-bump commit + the new tag to main.
+#   3. Force-moves the `latest-stable` tag to point at the new release.
+#   4. Creates a GitHub Release with auto-generated notes.
+#
+# Trigger only via `workflow_dispatch` — humans own release cadence
+# (matches the upstream aurum-android policy).
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: "Version bump"
+        type: choice
+        required: true
+        default: patch
+        options: [patch, minor, major]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build (verify before tagging)
+        run: pnpm build && pnpm smoke
+
+      - name: Configure git identity
+        run: |
+          git config user.name "aurum-mcp-release-bot"
+          git config user.email "noreply@github.com"
+
+      - name: Bump version
+        id: bump
+        run: |
+          NEW=$(npm version ${{ inputs.bump }} -m "release: %s")
+          echo "new_version=${NEW#v}" >> "$GITHUB_OUTPUT"
+          echo "tag=${NEW}" >> "$GITHUB_OUTPUT"
+
+      - name: Push commit + tag
+        run: |
+          git push origin main --follow-tags
+
+      - name: Force-move latest-stable
+        run: |
+          git tag -f latest-stable ${{ steps.bump.outputs.tag }}
+          git push -f origin latest-stable
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.bump.outputs.tag }}
+          name: ${{ steps.bump.outputs.tag }}
+          generate_release_notes: true
+          body: |
+            Auto-generated release of `aurum-mcp` ${{ steps.bump.outputs.tag }}.
+
+            Install:
+            ```jsonc
+            { "mcpServers": { "aurum": { "command": "npx",
+              "args": ["-y", "github:atri-jar/aurum-mcp#${{ steps.bump.outputs.tag }}"] } } }
+            ```
+            Or stay on the rolling tag:
+            ```jsonc
+            "args": ["-y", "github:atri-jar/aurum-mcp#latest-stable"]
+            ```
