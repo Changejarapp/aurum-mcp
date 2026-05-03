@@ -26,26 +26,31 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Build static docs site
+      - name: Stage source for Jekyll
+        # Pages with `Source: GitHub Actions` doesn't run Jekyll for us —
+        # the upload-pages-artifact action just serves whatever we put in
+        # the upload directory verbatim. We have to build markdown → HTML
+        # ourselves via actions/jekyll-build-pages.
         run: |
-          mkdir -p _site
-          cp README.md _site/index.md
-          cp -r docs _site/
-
-          # Minimal HTML wrapper for GitHub-flavored-markdown rendering.
-          # Pages auto-renders .md files when no theme is configured.
-          # We use a `_config.yml` to pick a Jekyll theme that GH Pages
-          # supports out of the box.
-          cat > _site/_config.yml <<'EOF'
+          mkdir -p src
+          cp README.md src/index.md
+          cp -r docs src/
+          cat > src/_config.yml <<'EOF'
           theme: jekyll-theme-cayman
           title: aurum-mcp
           description: MCP server for the Aurum Design System
           show_downloads: false
           EOF
 
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./src
+          destination: ./_site
+
       - uses: actions/upload-pages-artifact@v5
         with:
-          path: _site
+          path: ./_site
 
   deploy:
     needs: build
