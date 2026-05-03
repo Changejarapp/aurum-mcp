@@ -21,8 +21,8 @@ To verify the version your client is actually talking to, ask:
 
 > What aurum-mcp version is loaded?
 
-It should call `get_aurum_version` and report the manifest version +
-SHA + timestamp.
+It should call `aurum_get_aurum_version` and report the manifest
+version + SHA + timestamp.
 
 ## "I want to test a branch / WIP feature"
 
@@ -88,7 +88,7 @@ Useful for testing schema changes before they land in `aurum-android`.
 Bug reports → <https://github.com/Changejarapp/aurum-mcp/issues> (or, after
 the org migration, `Changejarapp/aurum-mcp`). Include:
 
-- Output of `get_aurum_version` (run it from your LLM client)
+- Output of `aurum_get_aurum_version` (run it from your LLM client)
 - Your client name + version (Claude Code / Cursor / Copilot CLI / Gemini)
 - The full mcp.json snippet you're using
 - The `aurum-mcp ready ...` line your client prints to stderr on startup

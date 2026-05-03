@@ -57,33 +57,56 @@ async function main() {
   }
 
   try {
-    // Handshake
-    await call("initialize", {
+    // Handshake — confirm `instructions` is exposed on initialize.
+    const initResult = await call("initialize", {
       protocolVersion: "2024-11-05",
       capabilities: {},
-      clientInfo: { name: "aurum-mcp-smoke", version: "0.1.0" },
+      clientInfo: { name: "aurum-mcp-smoke", version: "0.2.0" },
     });
+    if (!initResult.instructions || initResult.instructions.length < 50) {
+      throw new Error(`initialize.instructions missing or too short (${initResult.instructions?.length ?? 0} chars)`);
+    }
+    console.log(`✓ initialize: instructions ${initResult.instructions.length} chars`);
     notify(child, "notifications/initialized", {});
 
-    // tools/list
+    // tools/list — confirm count + annotations + outputSchema presence.
     const tools = await call("tools/list", {});
     if (!tools.tools || tools.tools.length === 0) {
       throw new Error("tools/list returned no tools");
     }
     console.log(`✓ tools/list: ${tools.tools.length} tools`);
-    for (const t of tools.tools) console.log(`  - ${t.name}`);
+    let withAnnotations = 0;
+    let withOutputSchema = 0;
+    for (const t of tools.tools) {
+      if (!t.name.startsWith("aurum_")) {
+        throw new Error(`tool ${t.name} is not aurum_* prefixed`);
+      }
+      if (t.annotations) withAnnotations++;
+      if (t.outputSchema) withOutputSchema++;
+      console.log(`  - ${t.name}${t.annotations ? " [annotations]" : ""}${t.outputSchema ? " [outputSchema]" : ""}`);
+    }
+    if (withAnnotations !== tools.tools.length) {
+      throw new Error(`expected all ${tools.tools.length} tools to have annotations, got ${withAnnotations}`);
+    }
+    if (withOutputSchema < 9) {
+      throw new Error(`expected ≥9 tools with outputSchema, got ${withOutputSchema}`);
+    }
+    console.log(`✓ ${withAnnotations}/${tools.tools.length} annotated · ${withOutputSchema}/${tools.tools.length} with outputSchema`);
 
     // tools/call: hit each tool with a minimal valid input
     const calls = [
-      { name: "list_components", args: {} },
-      { name: "get_component", args: { name: "AurumChip" } },
-      { name: "list_tokens", args: { category: "color" } },
-      { name: "search_icons", args: { query: "arrow" } },
-      { name: "get_icon", args: { name: "ChevronRight" } },
-      { name: "get_changelog", args: { version: "Unreleased" } },
-      { name: "lookup_figma_node", args: { nodeIdOrUrl: "5126:2507" } },
-      { name: "search", args: { query: "negative feedback" } },
-      { name: "get_aurum_version", args: {} },
+      { name: "aurum_list_components", args: {} },
+      { name: "aurum_get_component", args: { name: "AurumChip" } },
+      { name: "aurum_list_tokens", args: { category: "color" } },
+      { name: "aurum_get_token_value", args: { name: "surface.bgPageBase" } },
+      { name: "aurum_find_components_by_token", args: { token: "bgPageBase" } },
+      { name: "aurum_search_icons", args: { query: "arrow" } },
+      { name: "aurum_get_icon", args: { name: "ChevronRight" } },
+      { name: "aurum_get_changelog", args: { version: "Unreleased" } },
+      { name: "aurum_lookup_figma_node", args: { nodeIdOrUrl: "5126:2507" } },
+      { name: "aurum_get_code_connect_snippet", args: { component: "AurumChip" } },
+      { name: "aurum_search", args: { query: "negative feedback" } },
+      { name: "aurum_get_aurum_version", args: {} },
     ];
     for (const { name, args } of calls) {
       const result = await call("tools/call", { name, arguments: args });
@@ -92,7 +115,8 @@ async function main() {
         throw new Error(`${name} returned empty text`);
       }
       const isError = result.isError ? " (isError)" : "";
-      console.log(`✓ tools/call ${name}: ${text.length} chars${isError}`);
+      const struct = result.structuredContent ? " [structuredContent]" : "";
+      console.log(`✓ tools/call ${name}: ${text.length} chars${struct}${isError}`);
     }
 
     console.log("\nALL TOOLS GREEN");

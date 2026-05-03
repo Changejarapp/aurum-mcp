@@ -21,6 +21,7 @@ import {
 
 import { loadManifest } from "./manifest.js";
 import { tools, dispatchTool } from "./tools/index.js";
+import { AURUM_PLAYBOOK } from "./playbook.js";
 
 async function main(): Promise<void> {
   const manifest = await loadManifest();
@@ -28,21 +29,23 @@ async function main(): Promise<void> {
   const server = new Server(
     {
       name: "aurum-mcp",
-      version: "0.1.0",
+      version: "0.2.0",
     },
     {
       capabilities: {
         tools: {},
       },
+      instructions: AURUM_PLAYBOOK,
     },
   );
 
   server.setRequestHandler(ListToolsRequestSchema, async () => ({
-    tools: tools.map(({ name, description, inputSchema }) => ({
-      name,
-      description,
-      inputSchema,
-    })),
+    tools: tools.map(({ name, description, inputSchema, outputSchema, annotations }) => {
+      const descriptor: Record<string, unknown> = { name, description, inputSchema };
+      if (outputSchema) descriptor.outputSchema = outputSchema;
+      if (annotations) descriptor.annotations = annotations;
+      return descriptor;
+    }),
   }));
 
   server.setRequestHandler(CallToolRequestSchema, async (request) => {

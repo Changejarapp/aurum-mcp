@@ -29,7 +29,7 @@
                        aurum-mcp/src/server.ts (this repo)
                                        │
                                        ▼
-                          stdio MCP server, 9 tools
+                          stdio MCP server, 12 tools
                                        │
                                        ▼
                           Claude Code / Cursor / Copilot CLI / etc.
@@ -46,13 +46,63 @@ architecture doesn't move.
 
 ## Cross-platform
 
-Each component carries a `platforms[]` field. v0.1 sets it to
+Each component carries a `platforms[]` field. v0.1/v0.2 set it to
 `["android"]` for everything. When `aurum-ios` ships, its gallery
 generator emits a sibling manifest. This MCP's
 `sync-manifest.yml` workflow merges both into a single
 `data/manifest.json` keyed by platform. Tools that already accept
-`platform` (e.g. `list_components`, `get_component`) start returning
-iOS data. Same install URL, same tools, no architectural change.
+`platform` (e.g. `aurum_list_components`, `aurum_get_component`) start
+returning iOS data. Same install URL, same tools, no architectural
+change.
+
+## Tool surface
+
+12 tools, all read-only and prefixed `aurum_`. See
+[`tools.md`](tools.md) for the per-tool reference and
+[`cookbook.md`](cookbook.md) for prompt patterns.
+
+Each tool descriptor (advertised on `tools/list`) carries:
+
+- **`description`** — 3–4 sentence Anthropic-template prose:
+  what it does, when to use, when NOT to use, param format quirks.
+- **`inputSchema`** — JSON Schema for arguments.
+- **`outputSchema`** — JSON Schema for the structured payload (10/12
+  tools; the two narrative tools `aurum_get_changelog` and
+  `aurum_get_code_connect_snippet` are markdown-only).
+- **`annotations`** — `readOnlyHint: true`, `idempotentHint: true`,
+  `destructiveHint: false`, `openWorldHint: false`, plus a
+  human-readable `title`. Clients use these to skip auto-approve
+  prompts.
+
+Each `tools/call` response carries:
+
+- **`content[]`** — the markdown text block (every tool).
+- **`structuredContent`** — the parsable JSON object matching the
+  declared `outputSchema` (10/12 tools). Models that support
+  structured output get both in one call.
+
+The server also advertises a server-level `instructions` block on
+`initialize` (`src/playbook.ts`) that ~tells the model the routing
+rules between tools. Concise (~1 KB) so it doesn't dominate the
+system context on every connection.
+
+## Schema versioning
+
+The bundled manifest is validated against
+[`tooling/manifest/schema.json`](https://github.com/Changejarapp/aurum-android/blob/main/tooling/manifest/schema.json)
+in `aurum-android`. v0.2 reads `schemaVersion: "1"`. Planned
+schema-v2 additions:
+
+- `component.intendedUse: string` — when-to-reach-for copy
+- `component.usage: { do: string[]; dont: string[] }` — guardrails
+- `component.relatedTokens: string[]` — exact reverse-index for
+  `aurum_find_components_by_token` (today: best-effort regex)
+- `icon.tags: string[]` — search synonyms
+- `previews[*].snapshotUrl: string` — direct gallery PNG links
+
+All optional and additive — v0.2 stays forward-compatible. The MCP
+will surface the new fields once schema-v2 lands upstream and the
+manifest is regenerated.
 
 ## Distribution
 

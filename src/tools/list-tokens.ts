@@ -7,10 +7,21 @@ const ALL_CATEGORIES: TokenCategory[] = [
 ];
 
 export const listTokensTool: ToolDef = {
-  name: "list_tokens",
+  name: "aurum_list_tokens",
   description:
-    "List Aurum design tokens by category: color (semantic + visual palette), spacing, radius, borderWidth, iconSize, elevation, typography. " +
-    "Omit `category` to get a summary of all categories with counts. Pass a category for the full table.",
+    "List Aurum design tokens by category: `color` (semantic + visual palette), `spacing`, `radius`, " +
+    "`borderWidth`, `iconSize`, `elevation`, `typography`. Use when the user wants the full table for a " +
+    "category (e.g. 'show me all the spacing values'); for a single-token point-lookup, use " +
+    "`aurum_get_token_value` instead — it's much cheaper. Use to answer 'is there a token for X?' or " +
+    "to enumerate semantic groups. " +
+    "Omit `category` for a counts-only summary across all categories. Hex values include alpha when alpha < 1 (8-digit form).",
+  annotations: {
+    title: "List Aurum Tokens",
+    readOnlyHint: true,
+    idempotentHint: true,
+    destructiveHint: false,
+    openWorldHint: false,
+  },
   inputSchema: {
     type: "object",
     properties: {
@@ -21,6 +32,15 @@ export const listTokensTool: ToolDef = {
       },
     },
     additionalProperties: false,
+  },
+  outputSchema: {
+    type: "object",
+    properties: {
+      category: { type: ["string", "null"] },
+      tokens: {
+        description: "Either a category-keyed summary (when category omitted) or the raw token group for that category.",
+      },
+    },
   },
   async handler(manifest, args) {
     const category = args.category as TokenCategory | undefined;
@@ -41,9 +61,26 @@ export const listTokensTool: ToolDef = {
         `- **elevation**: ${t.elevation.length} levels`,
         `- **typography**: ${t.typography.length} roles`,
         "",
-        "Call `list_tokens({ category: \"...\" })` for a specific table.",
+        "Call `aurum_list_tokens({ category: \"...\" })` for a specific table, or `aurum_get_token_value({ name: \"...\" })` for a single token.",
       ];
-      return { content: [{ type: "text", text: withFooter(manifest, lines.join("\n")) }] };
+      return {
+        content: [{ type: "text", text: withFooter(manifest, lines.join("\n")) }],
+        structuredContent: {
+          category: null,
+          tokens: {
+            colorSemanticGroups: Object.keys(t.color.semantic).length,
+            colorSemanticCount: semCount,
+            colorVisualFamilies: Object.keys(t.color.visual).length,
+            colorVisualCount: visCount,
+            spacing: t.spacing.length,
+            radius: t.radius.length,
+            borderWidth: t.borderWidth.length,
+            iconSize: t.iconSize.length,
+            elevation: t.elevation.length,
+            typography: t.typography.length,
+          },
+        },
+      };
     }
 
     const lines: string[] = [`# Aurum tokens · ${category}`, ""];
@@ -92,6 +129,12 @@ export const listTokensTool: ToolDef = {
       ]));
     }
 
-    return { content: [{ type: "text", text: withFooter(manifest, lines.join("\n")) }] };
+    return {
+      content: [{ type: "text", text: withFooter(manifest, lines.join("\n")) }],
+      structuredContent: {
+        category,
+        tokens: manifest.tokens[category],
+      },
+    };
   },
 };

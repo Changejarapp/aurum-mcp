@@ -2,12 +2,22 @@ import type { ToolDef } from "./index.js";
 import { fence, withFooter } from "../format.js";
 
 export const getComponentTool: ToolDef = {
-  name: "get_component",
+  name: "aurum_get_component",
   description:
-    "Fetch the full details of a single Aurum component by name: KDoc, Compose signature, " +
-    "every parameter (with types, defaults, and per-param docs), preview function names, " +
-    "Figma deeplink, Code Connect path, and gallery URL. Use after `list_components` or " +
-    "`search` to get the canonical snippet for a component.",
+    "Fetch full details of a single Aurum component by name: KDoc, Compose signature, every parameter " +
+    "(types/defaults/per-param docs), preview function names, Figma deeplink, Code Connect path, gallery URL. " +
+    "Use after `aurum_list_components` or `aurum_search` once you know the exact composable name; " +
+    "this is the primary source for 'how do I use AurumX?'. " +
+    "Do NOT use this if the user wants the bare canonical-usage Kotlin snippet only — `aurum_get_code_connect_snippet` " +
+    "is leaner. " +
+    "The `name` argument is case-sensitive and must match the composable name exactly (e.g. `AurumChip`, not `aurumChip`).",
+  annotations: {
+    title: "Get Aurum Component",
+    readOnlyHint: true,
+    idempotentHint: true,
+    destructiveHint: false,
+    openWorldHint: false,
+  },
   inputSchema: {
     type: "object",
     required: ["name"],
@@ -20,10 +30,35 @@ export const getComponentTool: ToolDef = {
         type: "string",
         enum: ["android", "ios", "all"],
         default: "all",
-        description: "Reserved for future cross-platform manifests.",
+        description: "Reserved for future cross-platform manifests. Currently always resolves to `android`.",
       },
     },
     additionalProperties: false,
+  },
+  outputSchema: {
+    type: "object",
+    required: ["component"],
+    properties: {
+      component: {
+        type: "object",
+        required: ["name", "family", "summary", "platforms", "sourcePath"],
+        properties: {
+          name: { type: "string" },
+          family: { type: "string" },
+          summary: { type: "string" },
+          platforms: { type: "array", items: { type: "string" } },
+          kdoc: { type: "string" },
+          signature: { type: "string" },
+          params: { type: "array" },
+          previews: { type: "array", items: { type: "string" } },
+          figmaNodeId: { type: ["string", "null"] },
+          figmaUrl: { type: ["string", "null"] },
+          codeConnectPath: { type: ["string", "null"] },
+          galleryUrl: { type: ["string", "null"] },
+          sourcePath: { type: "string" },
+        },
+      },
+    },
   },
   async handler(manifest, args) {
     const name = String(args.name ?? "").trim();
@@ -95,6 +130,7 @@ export const getComponentTool: ToolDef = {
 
     return {
       content: [{ type: "text", text: withFooter(manifest, lines.join("\n")) }],
+      structuredContent: { component: c },
     };
   },
 };
