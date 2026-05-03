@@ -11,9 +11,11 @@ make help
 
 ## Daily workflow
 
-Most code changes: edit `src/`, run `pnpm dev` (the inspector spawns the
-server + a UI to drive it), iterate, run `pnpm smoke` to verify nothing
-regressed, push.
+Most code changes: edit `src/`, run `pnpm inspect` (spawns the server
+under the official MCP Inspector UI to drive it), iterate, run
+`pnpm smoke` to verify nothing regressed, push. `pnpm dev` runs the
+server alone over stdio if you want to drive it from a manual JSON-RPC
+client.
 
 The `dist/` directory is gitignored — `pnpm dev` runs TypeScript via
 `tsx` directly, no build needed. CI runs `pnpm build` to verify the

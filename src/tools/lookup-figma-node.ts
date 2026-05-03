@@ -4,11 +4,21 @@ import { withFooter } from "../format.js";
 const NODE_ID_RE = /(\d+)[:\-](\d+)/;
 
 export const lookupFigmaNodeTool: ToolDef = {
-  name: "lookup_figma_node",
+  name: "aurum_lookup_figma_node",
   description:
-    "Reverse-lookup: given a Figma node ID (`5126:2507` or `5126-2507`) or a full Figma URL, " +
-    "return the matching Aurum components, Code Connect mappings, or icons. " +
-    "Designed for the designer workflow: 'I'm looking at this Figma node, what code is it?'.",
+    "Reverse-lookup from a Figma node ID (`5126:2507` or `5126-2507`) or any Figma URL containing one " +
+    "to the matching Aurum content: components, Code Connect mappings, and/or icons that reference that node. " +
+    "Designed for the designer flow — 'I'm looking at this Figma node, what code is it?'. Pair with " +
+    "`aurum_get_component` or `aurum_get_code_connect_snippet` for full code once a match is found. " +
+    "Both `:` and `-` separators are accepted. Pasting a full Figma URL is fine — the node ID is extracted " +
+    "from the `node-id=` query param or path.",
+  annotations: {
+    title: "Look Up Figma Node",
+    readOnlyHint: true,
+    idempotentHint: true,
+    destructiveHint: false,
+    openWorldHint: false,
+  },
   inputSchema: {
     type: "object",
     required: ["nodeIdOrUrl"],
@@ -19,6 +29,16 @@ export const lookupFigmaNodeTool: ToolDef = {
       },
     },
     additionalProperties: false,
+  },
+  outputSchema: {
+    type: "object",
+    required: ["nodeId", "components", "icons", "codeConnect"],
+    properties: {
+      nodeId: { type: "string" },
+      components: { type: "array", items: { type: "object" } },
+      icons: { type: "array", items: { type: "object" } },
+      codeConnect: { type: "array", items: { type: "object" } },
+    },
   },
   async handler(manifest, args) {
     const raw = String(args.nodeIdOrUrl ?? "").trim();
@@ -43,6 +63,7 @@ export const lookupFigmaNodeTool: ToolDef = {
     if (matchedComponents.length + matchedCodeConnect.length + matchedIcons.length === 0) {
       return {
         content: [{ type: "text", text: `No Aurum content references node \`${nodeId}\`.` }],
+        structuredContent: { nodeId, components: [], icons: [], codeConnect: [] },
       };
     }
 
@@ -77,6 +98,27 @@ export const lookupFigmaNodeTool: ToolDef = {
       lines.push("");
     }
 
-    return { content: [{ type: "text", text: withFooter(manifest, lines.join("\n")) }] };
+    return {
+      content: [{ type: "text", text: withFooter(manifest, lines.join("\n")) }],
+      structuredContent: {
+        nodeId,
+        components: matchedComponents.map((c) => ({
+          name: c.name,
+          family: c.family,
+          summary: c.summary,
+          galleryUrl: c.galleryUrl,
+          sourcePath: c.sourcePath,
+        })),
+        icons: matchedIcons.map((ic) => ({
+          name: ic.name,
+          category: ic.category,
+          variant: ic.lineFigmaNodeId === nodeId ? "line" : "fill",
+        })),
+        codeConnect: matchedCodeConnect.map((cc) => ({
+          component: cc.component,
+          kotlinPath: cc.kotlinPath,
+        })),
+      },
+    };
   },
 };

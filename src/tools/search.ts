@@ -25,7 +25,7 @@ function buildIndex(manifest: Manifest): { index: lunr.Index; docs: Map<string, 
       kind: "component",
       title: c.name,
       body: `${c.summary} ${c.family} ${c.kdoc ?? ""} ${(c.params ?? []).map((p) => p.name + " " + p.type).join(" ")}`,
-      next: `Call \`get_component({ name: "${c.name}" })\``,
+      next: `Call \`aurum_get_component({ name: "${c.name}" })\``,
     });
   }
 
@@ -36,7 +36,7 @@ function buildIndex(manifest: Manifest): { index: lunr.Index; docs: Map<string, 
         kind: "token",
         title: `${group}.${s.name}`,
         body: `${s.path} ${s.hex} ${group}`,
-        next: `Call \`list_tokens({ category: "color" })\``,
+        next: `Call \`aurum_get_token_value({ name: "${group}.${s.name}" })\``,
       });
     }
   }
@@ -47,7 +47,7 @@ function buildIndex(manifest: Manifest): { index: lunr.Index; docs: Map<string, 
         kind: "token",
         title: `palette.${s.name}`,
         body: `${family} ${s.hex}`,
-        next: `Call \`list_tokens({ category: "color" })\``,
+        next: `Call \`aurum_list_tokens({ category: "color" })\``,
       });
     }
   }
@@ -58,7 +58,7 @@ function buildIndex(manifest: Manifest): { index: lunr.Index; docs: Map<string, 
         kind: "token",
         title: `${cat}.${d.name}`,
         body: `${d.dp}dp ${d.comment ?? ""}`,
-        next: `Call \`list_tokens({ category: "${cat}" })\``,
+        next: `Call \`aurum_get_token_value({ name: "${cat}.${d.name}" })\``,
       });
     }
   }
@@ -68,7 +68,7 @@ function buildIndex(manifest: Manifest): { index: lunr.Index; docs: Map<string, 
       kind: "token",
       title: `typography.${t.name}`,
       body: `${t.sizeSp}/${t.lineHeightSp}sp ${t.weight} ${t.family}`,
-      next: `Call \`list_tokens({ category: "typography" })\``,
+      next: `Call \`aurum_get_token_value({ name: "typography.${t.name}" })\``,
     });
   }
   for (const e of manifest.tokens.elevation) {
@@ -77,7 +77,7 @@ function buildIndex(manifest: Manifest): { index: lunr.Index; docs: Map<string, 
       kind: "token",
       title: `elevation.${e.name}`,
       body: `offsetY ${e.offsetY} blur ${e.blur} tint ${e.tintName}`,
-      next: `Call \`list_tokens({ category: "elevation" })\``,
+      next: `Call \`aurum_get_token_value({ name: "elevation.${e.name}" })\``,
     });
   }
 
@@ -87,7 +87,7 @@ function buildIndex(manifest: Manifest): { index: lunr.Index; docs: Map<string, 
       kind: "icon",
       title: `${ic.category}.${ic.name}`,
       body: `${ic.lineDrawable} ${ic.fillDrawable} ${ic.category}`,
-      next: `Call \`get_icon({ name: "${ic.name}" })\``,
+      next: `Call \`aurum_get_icon({ name: "${ic.name}" })\``,
     });
   }
 
@@ -100,7 +100,7 @@ function buildIndex(manifest: Manifest): { index: lunr.Index; docs: Map<string, 
       kind: "changelog",
       title: `Changelog ${e.version}`,
       body: flat,
-      next: `Call \`get_changelog({ version: "${e.version}" })\``,
+      next: `Call \`aurum_get_changelog({ version: "${e.version}" })\``,
     });
   }
 
@@ -126,11 +126,22 @@ function ensureIndex(manifest: Manifest): { index: lunr.Index; docs: Map<string,
 }
 
 export const searchTool: ToolDef = {
-  name: "search",
+  name: "aurum_search",
   description:
-    "Free-text search across all Aurum content (components, tokens, icons, changelog). " +
-    "Returns the top hits with the next-tool to call for details. Use this when you don't " +
-    "know which specific tool to start with.",
+    "Free-text search across all Aurum content — components, tokens, icons, and changelog entries — " +
+    "powered by a lunr.js index over titles + bodies. Returns the top hits with a `next-tool-to-call` " +
+    "hint per result. Use this as the starting point for vague queries ('I need something for showing " +
+    "negative feedback', 'is there a chip-like component?'). " +
+    "Do NOT use this for icon-shaped queries — `aurum_search_icons` has stronger name-token matching and " +
+    "returns Figma metadata. For known component names use `aurum_get_component` directly. " +
+    "The `query` accepts lunr's syntax: boosts (`field:term^2`), fuzzy (`term~1`), prefix (`term*`).",
+  annotations: {
+    title: "Search Aurum",
+    readOnlyHint: true,
+    idempotentHint: true,
+    destructiveHint: false,
+    openWorldHint: false,
+  },
   inputSchema: {
     type: "object",
     required: ["query"],
@@ -149,6 +160,27 @@ export const searchTool: ToolDef = {
     },
     additionalProperties: false,
   },
+  outputSchema: {
+    type: "object",
+    required: ["query", "results", "count"],
+    properties: {
+      query: { type: "string" },
+      results: {
+        type: "array",
+        items: {
+          type: "object",
+          required: ["title", "kind", "next"],
+          properties: {
+            title: { type: "string" },
+            kind: { type: "string", enum: ["component", "token", "icon", "changelog"] },
+            next: { type: "string" },
+            score: { type: "number" },
+          },
+        },
+      },
+      count: { type: "integer" },
+    },
+  },
   async handler(manifest, args) {
     const query = String(args.query ?? "").trim();
     const limit = Math.min(20, Math.max(1, Number(args.limit ?? 5)));
@@ -165,16 +197,24 @@ export const searchTool: ToolDef = {
       if (escaped) results = index.search(escaped).slice(0, limit);
     }
     if (results.length === 0) {
-      return { content: [{ type: "text", text: `No matches for \`${query}\`.` }] };
+      return {
+        content: [{ type: "text", text: `No matches for \`${query}\`.` }],
+        structuredContent: { query, results: [], count: 0 },
+      };
     }
     const lines: string[] = [`# Search · "${query}"`, "", `${results.length} result${results.length === 1 ? "" : "s"}`, ""];
+    const structured: Array<{ title: string; kind: string; next: string; score: number }> = [];
     for (const r of results) {
       const doc = docs.get(r.ref);
       if (!doc) continue;
       lines.push(`### ${doc.title} _(${doc.kind})_`);
       lines.push(`${doc.next}`);
       lines.push("");
+      structured.push({ title: doc.title, kind: doc.kind, next: doc.next, score: r.score });
     }
-    return { content: [{ type: "text", text: withFooter(manifest, lines.join("\n")) }] };
+    return {
+      content: [{ type: "text", text: withFooter(manifest, lines.join("\n")) }],
+      structuredContent: { query, results: structured, count: structured.length },
+    };
   },
 };

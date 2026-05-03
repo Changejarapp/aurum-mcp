@@ -2,10 +2,21 @@ import type { ToolDef } from "./index.js";
 import { withFooter } from "../format.js";
 
 export const getChangelogTool: ToolDef = {
-  name: "get_changelog",
+  name: "aurum_get_changelog",
   description:
-    "Return one or more Aurum changelog entries as markdown. Default returns the [Unreleased] section. " +
-    "Pass a specific version (e.g. `0.1.5`) for that release, or `all` for the full history.",
+    "Return one or more Aurum changelog entries as markdown. Default returns the `[Unreleased]` section. " +
+    "Pass a specific version (e.g. `0.1.5`) for that release, or `all` for the full history. Use to answer " +
+    "'what changed in vX?', 'is feature Y shipped?', or 'what's pending in the next release?'. " +
+    "Do NOT use this to browse the implementation — use `aurum_get_component` for the current API surface " +
+    "of a specific composable. " +
+    "Version strings are case-insensitive (`unreleased`, `Unreleased`, `UNRELEASED` all work).",
+  annotations: {
+    title: "Get Aurum Changelog",
+    readOnlyHint: true,
+    idempotentHint: true,
+    destructiveHint: false,
+    openWorldHint: false,
+  },
   inputSchema: {
     type: "object",
     properties: {

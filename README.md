@@ -8,13 +8,14 @@
 server that surfaces the Aurum design system catalogue to LLMs. It reads a
 bundled JSON manifest (auto-synced from
 [`changejarapp.github.io/aurum-android`](https://changejarapp.github.io/aurum-android/))
-and exposes 9 tools the LLM can call to answer questions like:
+and exposes **12 tools** the LLM can call to answer questions like:
 
-- "Show me how to use AurumChip."
-- "What colour token do we have for negative-feedback text?"
-- "What's the Figma node for AurumTopAppBar?"
-- "Give me the icon for a back arrow."
-- "What changed in the most recent release?"
+- *"Show me how to use AurumChip."*
+- *"What hex value is `surface.bgPageBase`?"*
+- *"Which Aurum components consume `interactive.bgPrimary`?"*
+- *"Find the back-arrow icon."*
+- *"What's the Figma node for AurumTopAppBar?"*
+- *"What changed in the latest release?"*
 
 ---
 
@@ -80,7 +81,66 @@ restart the client.
 Same shape — drop the snippet above into `mcpServers`. Restart the app.
 
 That's it. **No npm registry, no `~/.npmrc`, no PAT, no environment
-variables.** Public Git, public `npx`.
+variables.** Public Git, public `npx`. See
+[`docs/quickstart.md`](docs/quickstart.md) for the 60-second flow per
+client, including where each config file lives on Windows.
+
+---
+
+## 60-second tour
+
+After installing, restart your client and try these natural-language
+prompts. The model picks the right tool from the description hints — you
+don't need to call them by name.
+
+| Ask… | …and the model calls |
+|---|---|
+| "List all Aurum components." | `aurum_list_components` |
+| "How do I use `AurumChip`?" | `aurum_search` → `aurum_get_component` |
+| "What hex is `surface.bgPageBase`?" | `aurum_get_token_value` |
+| "Which components use `interactive.bgPrimary`?" | `aurum_find_components_by_token` |
+| "Show me an icon for delete/trash." | `aurum_search_icons` → `aurum_get_icon` |
+| "I'm looking at Figma node `5126:2507`, what code is it?" | `aurum_lookup_figma_node` |
+| "Just paste the canonical `AurumChip` usage code." | `aurum_get_code_connect_snippet` |
+| "What changed in the most recent release?" | `aurum_get_changelog` |
+| "What version of Aurum am I on?" | `aurum_get_aurum_version` |
+
+The full prompt cookbook lives in [`docs/cookbook.md`](docs/cookbook.md).
+
+---
+
+## Tools
+
+All tools are read-only, side-effect-free, and prefixed `aurum_` for
+collision-proofing in mixed-MCP setups.
+
+| Tool | Purpose |
+|---|---|
+| `aurum_list_components` | Enumerate components grouped by family with one-line summaries |
+| `aurum_get_component` | Full component spec — KDoc, signature, params, Figma deeplink, Code Connect path |
+| `aurum_list_tokens` | Token tables: color (semantic + visual), spacing, radius, borderWidth, iconSize, elevation, typography |
+| `aurum_get_token_value` | Point-lookup a single token by qualified name (`surface.bgPageBase`, `spacing.s12`, …) |
+| `aurum_find_components_by_token` | Reverse index: given a token, return components that consume it |
+| `aurum_search_icons` | Find icons by name fragment and/or category — returns line+fill drawables and Figma IDs |
+| `aurum_get_icon` | Single icon: drawables, Compose accessor, line+fill Figma deeplinks, ready-to-paste snippet |
+| `aurum_get_changelog` | Per-version changelog as markdown — defaults to `[Unreleased]` |
+| `aurum_lookup_figma_node` | Reverse-lookup: Figma node ID / URL → matching components and icons |
+| `aurum_get_code_connect_snippet` | The canonical `Example()` body for a component as a Kotlin code fence — no preamble |
+| `aurum_search` | Free-text search across all content with next-tool-to-call hints |
+| `aurum_get_aurum_version` | Manifest provenance: version, source SHA, manifest SHA, generation timestamp |
+
+Every content tool returns a markdown response, plus a parsable
+`structuredContent` JSON payload (declared via `outputSchema`) for the
+9 enumerable tools — clients that support structured output get both
+in one call. Each response ends with a version footer:
+
+```
+---
+*aurum aurum-android@0.1.5 · manifest sha `9af3b21c` · generated 2026-05-03 12:00:00 UTC*
+```
+
+Full per-tool reference with example prompts, params, and example
+responses: [`docs/tools.md`](docs/tools.md).
 
 ---
 
@@ -95,32 +155,13 @@ For reproducibility — automated scripts, audited setups — pin to an
 explicit tag:
 
 ```jsonc
-"args": ["-y", "github:Changejarapp/aurum-mcp#v0.1.0"]
+"args": ["-y", "github:Changejarapp/aurum-mcp#v0.2.0"]
 ```
 
 Every version of `aurum-mcp` ships the manifest from the matching Aurum
-library version (`@aurum-mcp:0.1.6` ⇄ `aurum:0.1.6`). Call
-`get_aurum_version` from your LLM client to see exactly what you're
-talking to.
-
----
-
-## Tools
-
-| Tool | Purpose |
-|---|---|
-| `list_components` | Enumerate all Aurum components, grouped by family |
-| `get_component` | Full component spec — KDoc, signature, params, Figma deeplink |
-| `list_tokens` | Token tables: color (semantic + visual), spacing, radius, borderWidth, iconSize, elevation, typography |
-| `search_icons` | Find icons by name fragment or category |
-| `get_icon` | Single icon: drawables, Compose path, line+fill Figma deeplinks |
-| `get_changelog` | Per-version changelog as markdown — defaults to `[Unreleased]` |
-| `lookup_figma_node` | Reverse-lookup: Figma node ID / URL → matching Aurum components & icons |
-| `search` | Free-text search across all content with next-tool suggestions |
-| `get_aurum_version` | Manifest provenance: version, SHA, generation timestamp |
-
-See [`docs/tools.md`](docs/tools.md) for full input schemas and example
-responses.
+library version (`aurum-mcp@0.1.6` ⇄ `aurum@0.1.6`). Call
+`aurum_get_aurum_version` from your LLM client to see exactly what
+you're talking to.
 
 ---
 
@@ -156,7 +197,7 @@ pnpm install
 pnpm dev          # run the server via tsx + stdio
 pnpm inspect      # spawn the official MCP Inspector UI
 pnpm build        # tsc → dist/
-pnpm smoke        # end-to-end tools/list + tools/call test
+pnpm smoke        # end-to-end tools/list + tools/call test (12 tools)
 ```
 
 The server reads `data/manifest.json` (committed). To pull the latest
@@ -182,7 +223,7 @@ parsers. We added a `--emit-manifest` flag that produces a structured
 JSON projection of the same data — the contract is
 `tooling/manifest/schema.json` in `aurum-android`. This MCP server is
 the JSON's read-side: it loads the manifest at boot, indexes it, and
-serves the 9 tools above. One source of truth, two render targets
+serves the 12 tools above. One source of truth, two render targets
 (HTML for humans, JSON for agents). When `aurum-ios` ships, its
 manifest plugs in as a sibling source — the MCP code is platform-
 agnostic.
