@@ -7,7 +7,10 @@
 export type Platform = "android" | "ios" | "web";
 
 export interface Manifest {
-  schemaVersion: "1";
+  /** "1" — original schema; "2" — adds optional component.intendedUse,
+   *  component.usage, component.relatedTokens, icon.tags. v0.3 readers
+   *  accept either; tools degrade gracefully when v2 fields are absent. */
+  schemaVersion: "1" | "2";
   aurum: {
     library: string;
     version: string;
@@ -44,6 +47,15 @@ export interface Component {
   codeConnectPath: string | null;
   galleryUrl: string | null;
   sourcePath: string;
+  // ─── schema v2 additions (all optional) ─────────────────────────────────
+  /** When-to-reach-for prose authored in `@AurumIntendedUse` KDoc. */
+  intendedUse?: string;
+  /** Do/Don't guardrails authored in `@AurumDo` / `@AurumDont` KDoc. */
+  usage?: { do: string[]; dont: string[] };
+  /** Qualified token names this component reads (e.g. `surface.bgPageBase`,
+   *  `spacing.s12`, `typography.bodyMRegular`). Static-analyzed by the
+   *  gallery generator; round-trips through `aurum_get_token_value`. */
+  relatedTokens?: string[];
 }
 
 export interface Param {
@@ -114,6 +126,9 @@ export interface Icon {
   fillFigmaUrl: string | null;
   lineSvg?: string;
   fillSvg?: string;
+  /** schema v2: hand-curated synonyms for icon search (e.g. `Delete` →
+   *  `["trash","remove","bin"]`). Sourced from `aurum/icons/tags.yaml`. */
+  tags?: string[];
 }
 
 export interface CodeConnectMapping {

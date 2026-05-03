@@ -82,11 +82,12 @@ function buildIndex(manifest: Manifest): { index: lunr.Index; docs: Map<string, 
   }
 
   for (const ic of manifest.icons) {
+    const tagsBody = ic.tags && ic.tags.length > 0 ? ic.tags.join(" ") : "";
     docs.push({
       id: `icon:${ic.category}.${ic.name}`,
       kind: "icon",
       title: `${ic.category}.${ic.name}`,
-      body: `${ic.lineDrawable} ${ic.fillDrawable} ${ic.category}`,
+      body: `${ic.lineDrawable} ${ic.fillDrawable} ${ic.category} ${tagsBody}`.trim(),
       next: `Call \`aurum_get_icon({ name: "${ic.name}" })\``,
     });
   }
