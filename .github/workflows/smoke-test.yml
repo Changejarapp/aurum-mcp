@@ -22,7 +22,12 @@ jobs:
 
       - uses: actions/setup-node@v5
         with:
-          node-version: '22'
+          # Node 24 ships npm 11 — Node 22's bundled npm 10 has a known
+          # GitFetcher/Arborist bug that breaks `npx -y github:...#sha`
+          # installs whose `prepare` hook runs `tsc`. Tag installs are
+          # unaffected (dist/ is committed at tag time), so this only
+          # matters for the PR-branch path the smoke test exercises.
+          node-version: '24'
 
       - name: Install + smoke from Git URL
         run: |
