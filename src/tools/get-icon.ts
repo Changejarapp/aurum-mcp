@@ -50,6 +50,7 @@ export const getIconTool: ToolDef = {
           lineFigmaUrl: { type: ["string", "null"] },
           fillFigmaUrl: { type: ["string", "null"] },
           composeAccessor: { type: "string" },
+          tags: { type: "array", items: { type: "string" } },
         },
       },
       weight: { type: "string" },
@@ -82,8 +83,11 @@ export const getIconTool: ToolDef = {
       `# AurumIcons.${ic.category}.${ic.name}`,
       "",
       `**Category:** ${ic.category}  `,
-      "",
     ];
+    if (ic.tags && ic.tags.length > 0) {
+      lines.push(`**Tags:** ${ic.tags.map((t) => `\`${t}\``).join(", ")}  `);
+    }
+    lines.push("");
     if (weight === "line" || weight === "both") {
       lines.push(`### Line variant`);
       lines.push(`- Drawable: \`${ic.lineDrawable}\``);
@@ -117,6 +121,7 @@ export const getIconTool: ToolDef = {
           lineFigmaUrl: ic.lineFigmaUrl,
           fillFigmaUrl: ic.fillFigmaUrl,
           composeAccessor: `AurumIcons.${ic.category}.${ic.name}`,
+          ...(ic.tags && ic.tags.length > 0 ? { tags: ic.tags } : {}),
         },
         weight,
       },

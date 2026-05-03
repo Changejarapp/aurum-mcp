@@ -56,6 +56,16 @@ export const getComponentTool: ToolDef = {
           codeConnectPath: { type: ["string", "null"] },
           galleryUrl: { type: ["string", "null"] },
           sourcePath: { type: "string" },
+          // schema v2 (optional)
+          intendedUse: { type: "string" },
+          usage: {
+            type: "object",
+            properties: {
+              do: { type: "array", items: { type: "string" } },
+              dont: { type: "array", items: { type: "string" } },
+            },
+          },
+          relatedTokens: { type: "array", items: { type: "string" } },
         },
       },
     },
@@ -103,6 +113,30 @@ export const getComponentTool: ToolDef = {
       lines.push("");
     }
 
+    if (c.intendedUse) {
+      lines.push("## Intended use");
+      lines.push("");
+      lines.push(c.intendedUse);
+      lines.push("");
+    }
+
+    if (c.usage && (c.usage.do.length > 0 || c.usage.dont.length > 0)) {
+      lines.push("## Usage");
+      lines.push("");
+      if (c.usage.do.length > 0) {
+        lines.push("**Do**");
+        lines.push("");
+        for (const item of c.usage.do) lines.push(`- ${item}`);
+        lines.push("");
+      }
+      if (c.usage.dont.length > 0) {
+        lines.push("**Don't**");
+        lines.push("");
+        for (const item of c.usage.dont) lines.push(`- ${item}`);
+        lines.push("");
+      }
+    }
+
     if (c.signature) {
       lines.push("## Signature");
       lines.push("");
@@ -125,6 +159,18 @@ export const getComponentTool: ToolDef = {
       lines.push("## Previews");
       lines.push("");
       lines.push(c.previews.map((p) => `\`${p}\``).join(", "));
+      lines.push("");
+    }
+
+    if (c.relatedTokens && c.relatedTokens.length > 0) {
+      lines.push("## Related tokens");
+      lines.push("");
+      lines.push(
+        "Tokens this component reads from `Aurum.*`. Look up details with " +
+          "`aurum_get_token_value({ name: \"…\" })`.",
+      );
+      lines.push("");
+      for (const t of c.relatedTokens) lines.push(`- \`${t}\``);
       lines.push("");
     }
 

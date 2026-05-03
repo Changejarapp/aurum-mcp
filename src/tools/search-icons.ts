@@ -4,11 +4,12 @@ import { withFooter } from "../format.js";
 export const searchIconsTool: ToolDef = {
   name: "aurum_search_icons",
   description:
-    "Substring search across the Aurum icon catalog by name fragment and/or category. Returns each match " +
-    "with both line and fill drawable resource names, paired Figma node IDs, and Compose accessor. " +
-    "Use this — NOT `aurum_search` — for any icon-shaped query (e.g. 'find the trash icon', 'do we have " +
-    "an arrow-right icon?'); `aurum_search` indexes icons too but with weaker name-token boosting and " +
-    "without the per-variant Figma metadata. " +
+    "Substring search across the Aurum icon catalog by name fragment, category, and (on schema-v2 manifests) " +
+    "hand-curated synonym tags. Returns each match with both line and fill drawable resource names, " +
+    "paired Figma node IDs, Compose accessor, and tags when available. " +
+    "Use this — NOT `aurum_search` — for any icon-shaped query (e.g. 'find the trash icon' resolves via " +
+    "the `Delete` icon's tag list); `aurum_search` indexes icons too but with weaker name-token boosting " +
+    "and without per-variant Figma metadata. " +
     "Both `query` and `category` are matched case-insensitively. Pass an empty `query` with a `category` " +
     "filter to enumerate every icon in that category.",
   annotations: {
@@ -54,6 +55,7 @@ export const searchIconsTool: ToolDef = {
             lineFigmaUrl: { type: ["string", "null"] },
             fillFigmaUrl: { type: ["string", "null"] },
             composeAccessor: { type: "string" },
+            tags: { type: "array", items: { type: "string" } },
           },
         },
       },
@@ -66,8 +68,11 @@ export const searchIconsTool: ToolDef = {
 
     const matches = manifest.icons.filter((ic) => {
       if (category && ic.category.toLowerCase() !== category.toLowerCase()) return false;
-      const hay = `${ic.name} ${ic.category}`.toLowerCase();
-      return query === "" || hay.includes(query);
+      if (query === "") return true;
+      const inName = ic.name.toLowerCase().includes(query) ||
+        ic.category.toLowerCase().includes(query);
+      const inTags = ic.tags ? ic.tags.some((t) => t.toLowerCase().includes(query)) : false;
+      return inName || inTags;
     });
 
     if (matches.length === 0) {
@@ -90,6 +95,9 @@ export const searchIconsTool: ToolDef = {
       if (ic.lineFigmaUrl) lines.push(`- **Figma (line):** [${ic.lineFigmaNodeId}](${ic.lineFigmaUrl})`);
       if (ic.fillFigmaUrl) lines.push(`- **Figma (fill):** [${ic.fillFigmaNodeId}](${ic.fillFigmaUrl})`);
       lines.push(`- **Compose:** \`AurumIcons.${ic.category}.${ic.name}\``);
+      if (ic.tags && ic.tags.length > 0) {
+        lines.push(`- **Tags:** ${ic.tags.map((t) => `\`${t}\``).join(", ")}`);
+      }
       lines.push("");
     }
 
@@ -108,6 +116,7 @@ export const searchIconsTool: ToolDef = {
           lineFigmaUrl: ic.lineFigmaUrl,
           fillFigmaUrl: ic.fillFigmaUrl,
           composeAccessor: `AurumIcons.${ic.category}.${ic.name}`,
+          ...(ic.tags && ic.tags.length > 0 ? { tags: ic.tags } : {}),
         })),
         count: matches.length,
       },
