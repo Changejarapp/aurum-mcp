@@ -3,14 +3,14 @@
   "aurum": {
     "library": "aurum-android",
     "version": "0.2.0",
-    "sha": "abe053e42c927c56d05dc718125746dec739d1d8",
+    "sha": "606f6bc660eec03e9522bf69d5a320fe839afff9",
     "platforms": [
       "android"
     ]
   },
   "meta": {
-    "generatedAt": "2026-05-04T07:08:01+00:00",
-    "manifestSha": "fe3206d40d6c6eac950843e598f44cf59f6dc70255bac3b1333c45c5353fa182",
+    "generatedAt": "2026-05-04T07:33:52+00:00",
+    "manifestSha": "93f661e8333439451cc564e0bc1f356193fff84bb7ca86481209e8dc83b65837",
     "figmaFileKey": "YvIxqu2oTlM6UnkL0OloHc",
     "galleryUrl": "https://changejarapp.github.io/aurum-android/"
   },
