@@ -294,6 +294,58 @@ CI does this automatically (see `.github/workflows/sync-manifest.yml`).
 
 ---
 
+## CI workflows
+
+Seven workflows in [`.github/workflows/`](.github/workflows/) cover PR
+validation, content propagation from `aurum-android`, releases, and a
+release-cadence safety valve. Mirrors the producer-side inventory in
+[`Changejarapp/aurum-android`](https://github.com/Changejarapp/aurum-android#ci-workflows).
+The summary table is the at-a-glance view; the per-workflow notes
+below cover edge cases, secrets / permissions, and what each workflow
+explicitly *doesn't* do.
+
+| Workflow | Triggers | What it does |
+|---|---|---|
+| [`build.yml`](.github/workflows/build.yml) | PR · push `main` | TypeScript compile · `pnpm smoke` (real MCP handshake against the in-tree `dist/`). Concurrency cancels superseded runs. |
+| [`smoke-test.yml`](.github/workflows/smoke-test.yml) | PR | Real `npx -y github:Changejarapp/aurum-mcp#<sha>` install on a fresh Ubuntu runner with Node 24, then JSON-RPC handshake — exactly the path real users hit. Asserts ≥7 tools and acceptable response shape. |
+| [`drift-check.yml`](.github/workflows/drift-check.yml) | PR | Compares bundled `data/manifest.json` byte-for-byte against the live gallery URL (<https://changejarapp.github.io/aurum-android/data/manifest.json>). Soft-skips with a warning when the URL is 404 (an upstream gap, not a per-PR concern). |
+| [`sync-manifest.yml`](.github/workflows/sync-manifest.yml) | `repository_dispatch: aurum-content-changed` from aurum-android · cron `0 6 * * *` (06:00 UTC daily) · manual | Fetches the live manifest, diffs against bundled, opens an auto-PR (`auto/manifest-sync` branch, labelled `manifest-sync` + `auto-merge`) if anything changed. |
+| [`release.yml`](.github/workflows/release.yml) | manual dispatch only (`bump: patch \| minor \| major`) | `npm version` bump → tag → force-move `latest-stable` → create GitHub Release with auto-generated notes. The single source of `package.json` version changes. |
+| [`stale-main.yml`](.github/workflows/stale-main.yml) | weekday cron `0 9 * * 1-5` (09:00 UTC) · manual | Opens (or updates) a single `release-stale`-labelled tracking issue when `main` is ≥7 days ahead of latest tag on release-relevant paths. Auto-closes any open issue when fresh. |
+| [`docs.yml`](.github/workflows/docs.yml) | push `main` (paths `docs/**`, `README.md`, this workflow) · manual | Builds `README.md` + `docs/` via `actions/jekyll-build-pages` and deploys to <https://changejarapp.github.io/aurum-mcp/>. |
+
+### Per-workflow notes
+
+#### [`build.yml`](.github/workflows/build.yml) — local-shape compile + smoke
+
+PR-time gate that runs `tsc` followed by `pnpm smoke` (a real MCP handshake against the just-built `dist/server.js`). **Doesn't** commit `dist/` — it's gitignored on dev branches and rebuilt on demand by the package's `prepare` hook on user installs. **Doesn't** test the real npx-from-Git install path — that's `smoke-test.yml`.
+
+#### [`smoke-test.yml`](.github/workflows/smoke-test.yml) — real-install verification
+
+Pinned to **Node 24** because Node 22 ships npm 10, which has a known GitFetcher/Arborist bug that breaks `npx -y github:...#sha` installs whose `prepare` hook runs `tsc`. This bug doesn't affect tag installs (where users hit a tagged ref whose `dist/` is committed at tag-time), only the PR-branch path the smoke test exercises. The JSON-RPC parser is order-independent (`awk … | jq -s 'map(select(.result.tools)) …'`) — newer `@modelcontextprotocol/sdk` versions emit `{"result":...,"jsonrpc":"2.0","id":N}` rather than the older field ordering, and the previous brittle prefix grep was silently dropping responses.
+
+#### [`drift-check.yml`](.github/workflows/drift-check.yml) — manifest currency gate
+
+Soft-skips on 404 because the upstream Pages manifest URL hasn't always existed historically; failing every PR over an upstream gap was net-negative. When the URL is reachable, comparison is byte-exact via `jq --sort-keys`. [`scripts/fetch-manifest.mjs`](scripts/fetch-manifest.mjs) deliberately preserves the upstream's raw bytes (rather than re-serializing through `JSON.parse → JSON.stringify`) so Python-emitted `1.0` doesn't normalise to `1` and break the diff. **Doesn't** auto-fix drift — it forces the auto-PR from `sync-manifest.yml` to merge first.
+
+#### [`sync-manifest.yml`](.github/workflows/sync-manifest.yml) — content propagation
+
+Three triggers, in order of latency: (1) `repository_dispatch` from `aurum-android/notify-mcp.yml` (~1 min, requires the upstream PAT to be properly scoped), (2) daily cron at 06:00 UTC (≤24 h, the safety net), (3) manual `workflow_dispatch` (instant, useful for ad-hoc syncs). The repo's "Allow GitHub Actions to create and approve pull requests" setting is currently **off**, so the workflow successfully pushes the `auto/manifest-sync` branch but its PR-creation step exits failure — recovery is one `gh pr create --head auto/manifest-sync` from a maintainer. **Doesn't** bump `package.json` (the original `npm version <aurum_version>` step was deliberately removed — the MCP and Aurum library versions are independent SemVer tracks; the version footer on tool responses already prints both). Permissions: `contents: write`, `pull-requests: write`.
+
+#### [`release.yml`](.github/workflows/release.yml) — the only place version changes
+
+Manual `workflow_dispatch` only by design — humans own release cadence (matches the upstream Aurum policy). Steps after dispatch: `pnpm install --frozen-lockfile` → `pnpm build && pnpm smoke` (gate before tagging) → `npm version <bump>` → `git push --follow-tags` → `git tag -f latest-stable <new-tag> && git push -f origin latest-stable` → `softprops/action-gh-release@v2` with `generate_release_notes: true`. **Doesn't** auto-fire on any event. **Doesn't** publish to npm (we're npx-from-Git, not npm registry — see `docs/architecture.md`). **Doesn't** edit `data/manifest.json` (that's `sync-manifest.yml`'s job).
+
+#### [`stale-main.yml`](.github/workflows/stale-main.yml) — release-cadence safety valve
+
+Counts commits ahead of the latest `v*.*.*` tag on `data/manifest.json`, `src/**`, `package.json`, `CHANGELOG.md` only — non-release-relevant changes don't count (no point nagging about a workflow tweak). Weekday-only cron so weekends don't generate Saturday-morning issue spam. Single tracking issue updated in place rather than spawning duplicates daily; auto-closes after a fresh release lands. **Doesn't** auto-release (the whole point — release stays manual).
+
+#### [`docs.yml`](.github/workflows/docs.yml) — public docs site
+
+GitHub Pages with "Source: GitHub Actions" doesn't auto-run Jekyll — `actions/upload-pages-artifact@v5` serves whatever directory it's pointed at, verbatim. We invoke `actions/jekyll-build-pages@v1` explicitly to render markdown to HTML before upload. Path-filtered to `docs/**` / `README.md` / this workflow so unrelated PR merges don't trigger redeploys. Permissions: `pages: write`, `id-token: write`.
+
+---
+
 ## Architecture in one paragraph
 
 The Aurum design system lives in
