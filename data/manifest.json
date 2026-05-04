@@ -1,16 +1,16 @@
 {
-  "schemaVersion": "1",
+  "schemaVersion": "2",
   "aurum": {
     "library": "aurum-android",
     "version": "0.1.5",
-    "sha": "8d98af9bc5d46cca0d5f39423a0af47937740e9a",
+    "sha": "2015b4aed3f2c8b0891d43412018289fd5e5d0e7",
     "platforms": [
       "android"
     ]
   },
   "meta": {
-    "generatedAt": "2026-05-03T07:24:15+00:00",
-    "manifestSha": "69e6b85f2c82b599cb9205b3c3b279429a79edae435de0d53129b681ecd389bc",
+    "generatedAt": "2026-05-04T04:16:08+00:00",
+    "manifestSha": "9525031985d4e5064ae52bf4e7a9c17f11104aab052425bb97849584c234d28c",
     "figmaFileKey": "YvIxqu2oTlM6UnkL0OloHc",
     "galleryUrl": "https://changejarapp.github.io/aurum-android/"
   },
@@ -96,7 +96,27 @@
       "figmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=4692-1074",
       "codeConnectPath": "aurum/src/main/kotlin/com/jar/app/aurum/component/button/AurumButton.figma.kt",
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/button/AurumButton.html",
-      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/button/AurumButton.kt"
+      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/button/AurumButton.kt",
+      "intendedUse": "Use when the user is performing a deliberate, named action (submit, confirm, continue, retry). One [AurumButtonVariant.Primary] per surface — pair Primary with Secondary or Tertiary for additional actions. Prefer [AurumLinkButton] for low-emphasis inline actions and [AurumIconButton] for icon-only top-bar slots.",
+      "usage": {
+        "do": [
+          "Use one [AurumButtonVariant.Primary] per screen for the dominant CTA.",
+          "Choose [AurumButtonSize.Medium] as the default; [Large] only for full-width hero CTAs; [Small] for inline / compact rows.",
+          "Set `isLoading = true` synchronously when the action starts a network round-trip — don't render a separate spinner alongside."
+        ],
+        "dont": [
+          "Stack two `Primary` buttons next to each other — pair `Primary` with `Secondary`.",
+          "Use a button to navigate without a side-effect; use [AurumLinkButton] or a plain tap target.",
+          "Pass `Modifier.fillMaxWidth()` — use `isFullWidth = true` so the Aurum padding / touch-target rules apply."
+        ]
+      },
+      "relatedTokens": [
+        "iconSize.lg",
+        "interactive.textOnPrimaryNormal",
+        "spacing.s3",
+        "surface.textDefaultSubtle",
+        "typography.labelL1"
+      ]
     },
     {
       "name": "AurumIconButton",
@@ -140,7 +160,11 @@
       "figmaUrl": null,
       "codeConnectPath": null,
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/button/AurumIconButton.html",
-      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/button/AurumIconButton.kt"
+      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/button/AurumIconButton.kt",
+      "relatedTokens": [
+        "spacing.s3",
+        "surface.iconDefaultDisabled"
+      ]
     },
     {
       "name": "AurumLinkButton",
@@ -196,7 +220,15 @@
       "figmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=4784-1286",
       "codeConnectPath": "aurum/src/main/kotlin/com/jar/app/aurum/component/button/AurumLinkButton.figma.kt",
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/button/AurumLinkButton.html",
-      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/button/AurumLinkButton.kt"
+      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/button/AurumLinkButton.kt",
+      "relatedTokens": [
+        "iconSize.lg",
+        "interactive.textPrimaryNormal",
+        "spacing.s3",
+        "spacing.s5",
+        "surface.textDefaultSubtle",
+        "typography.labelL1"
+      ]
     },
     {
       "name": "AurumChip",
@@ -269,7 +301,44 @@
       "figmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=4446-701",
       "codeConnectPath": "aurum/src/main/kotlin/com/jar/app/aurum/component/chip/AurumChip.figma.kt",
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/chip/AurumChip.html",
-      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/chip/AurumChip.kt"
+      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/chip/AurumChip.kt",
+      "intendedUse": "Use as a single tappable category/filter selector or a brand-aligned action surface in dense layouts. Stick to short labels (1–2 words). Prefer [com.jar.app.aurum.component.button.AurumButton] for primary actions and [com.jar.app.aurum.component.selection.AurumRadioGroup] for mutually-exclusive choices.",
+      "usage": {
+        "do": [
+          "Pair `leadingIcon` with monosemic glyphs (filter, sort, history) — never decorative ones.",
+          "Use `Small` size in dense lists and chip rows; `Large` for one-off CTAs in section headers.",
+          "Reserve `Brand` type for the user's primary CTA on a surface (≤1 per screen)."
+        ],
+        "dont": [
+          "Use multiple chips as form input — switch to `AurumRadioGroup` for mutually-exclusive choices.",
+          "Override colours by wrapping in `Modifier.background` / `tint`; recolour through `type` only.",
+          "Stack chips vertically — they're meant to flow horizontally with `Row(horizontalArrangement = Arrangement.spacedBy(s2))`."
+        ]
+      },
+      "relatedTokens": [
+        "borderWidth.sm",
+        "iconSize.md",
+        "interactive.bgNeutralDefault",
+        "interactive.bgNeutralDisabled",
+        "interactive.bgNeutralInverse",
+        "interactive.bgPrimaryDefault",
+        "interactive.bgPrimaryHighlighted",
+        "interactive.bgStaticWhiteDefault",
+        "interactive.bgStaticWhiteHighlighted",
+        "interactive.textNeutralDisabled",
+        "interactive.textNeutralNormal",
+        "interactive.textOnPrimaryNormal",
+        "spacing.s2",
+        "spacing.s3",
+        "spacing.s4",
+        "surface.bgSurfaceHighContrast",
+        "surface.textDefaultNormal",
+        "surface.textOnBrandNormal",
+        "surface.textStaticWhiteNormal",
+        "typography.bodySmall",
+        "typography.titleT1",
+        "typography.titleT2"
+      ]
     },
     {
       "name": "AurumDivider",
@@ -307,7 +376,17 @@
       "figmaUrl": null,
       "codeConnectPath": null,
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/divider/AurumDivider.html",
-      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/divider/AurumDivider.kt"
+      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/divider/AurumDivider.kt",
+      "relatedTokens": [
+        "borderWidth.lg",
+        "borderWidth.xs",
+        "spacing.s3",
+        "spacing.s7",
+        "surface.borderBrandNormal",
+        "surface.borderSurfaceLowContrast",
+        "typography.bodyB3",
+        "typography.labelL2"
+      ]
     },
     {
       "name": "AurumBadge",
@@ -365,7 +444,16 @@
       "figmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=4240-10542",
       "codeConnectPath": "aurum/src/main/kotlin/com/jar/app/aurum/component/feedback/AurumBadge.figma.kt",
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/feedback/AurumBadge.html",
-      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/feedback/AurumBadge.kt"
+      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/feedback/AurumBadge.kt",
+      "relatedTokens": [
+        "iconSize.md",
+        "spacing.s2",
+        "spacing.s3",
+        "spacing.s4",
+        "spacing.s7",
+        "spacing.s8",
+        "typography.labelL2"
+      ]
     },
     {
       "name": "AurumLoader",
@@ -415,7 +503,17 @@
       "figmaUrl": null,
       "codeConnectPath": null,
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/feedback/AurumLoader.html",
-      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/feedback/AurumLoader.kt"
+      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/feedback/AurumLoader.kt",
+      "relatedTokens": [
+        "borderWidth.lg",
+        "borderWidth.xl",
+        "iconSize.xxl",
+        "interactive.bgPositiveDefault",
+        "interactive.bgPrimaryDefault",
+        "spacing.s10",
+        "surface.bgSurfaceLowContrast",
+        "surface.bgSurfaceMidContrast"
+      ]
     },
     {
       "name": "AurumSkeleton",
@@ -447,7 +545,14 @@
       "figmaUrl": null,
       "codeConnectPath": null,
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/feedback/AurumSkeleton.html",
-      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/feedback/AurumSkeleton.kt"
+      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/feedback/AurumSkeleton.kt",
+      "relatedTokens": [
+        "spacing.s4",
+        "spacing.s5",
+        "spacing.s9",
+        "surface.bgSurfaceHighContrast",
+        "surface.bgSurfaceMidContrast"
+      ]
     },
     {
       "name": "AurumOtpInput",
@@ -522,7 +627,41 @@
       "figmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=4975-1630",
       "codeConnectPath": "aurum/src/main/kotlin/com/jar/app/aurum/component/field/AurumOtpInput.figma.kt",
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/field/AurumOtpInput.html",
-      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/field/AurumOtpInput.kt"
+      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/field/AurumOtpInput.kt",
+      "intendedUse": "Use whenever the user must enter a numeric one-time password — login OTP, payment authorisation, transaction confirmation. The cell count ([Length.Four] or [Length.Six]) should match the OTP length your backend issues. Don't compose digit cells from `AurumTextField` — this component already handles paste, autofill, and resend-timer UX correctly.",
+      "usage": {
+        "do": [
+          "Use `validationState = Error` together with a meaningful `helperText` to guide retries — never silently mark the OTP wrong.",
+          "Track resend countdown with `validationState = Timer` so the helper colour reflects the wait state without changing layout.",
+          "Hook `onComplete` to auto-submit when all cells are filled — saves the user a tap."
+        ],
+        "dont": [
+          "Pass non-digit characters via `onValueChange`; the cells render but the underlying keyboard is numeric and behaviour is undefined.",
+          "Render multiple OTP inputs on one screen — there's only ever one active OTP context.",
+          "Use this for non-numeric verification (e.g. invitation codes); use `AurumTextField` instead."
+        ]
+      },
+      "relatedTokens": [
+        "feedback.bgPositiveIntense",
+        "feedback.borderNegativeIntense",
+        "feedback.textNegativeIntense",
+        "feedback.textPositiveIntense",
+        "spacing.s10",
+        "spacing.s2",
+        "spacing.s4",
+        "spacing.s5",
+        "spacing.s7",
+        "surface.borderBrandNormal",
+        "surface.borderSurfaceHighContrast",
+        "surface.borderSurfaceLowContrast",
+        "surface.borderSurfaceMidContrast",
+        "surface.textDefaultDisabled",
+        "surface.textDefaultNormal",
+        "surface.textDefaultSubtle",
+        "typography.bodyLarge",
+        "typography.labelL2",
+        "typography.titleT1"
+      ]
     },
     {
       "name": "AurumPhoneNumberInput",
@@ -643,7 +782,13 @@
       "figmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=4904-2455",
       "codeConnectPath": "aurum/src/main/kotlin/com/jar/app/aurum/component/field/AurumPhoneNumberInput.figma.kt",
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/field/AurumPhoneNumberInput.html",
-      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/field/AurumPhoneNumberInput.kt"
+      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/field/AurumPhoneNumberInput.kt",
+      "relatedTokens": [
+        "borderWidth.sm",
+        "surface.borderSurfaceMidContrast",
+        "surface.textDefaultNormal",
+        "typography.bodyLarge"
+      ]
     },
     {
       "name": "AurumSearchField",
@@ -702,7 +847,11 @@
       "figmaUrl": null,
       "codeConnectPath": null,
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/field/AurumSearchField.html",
-      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/field/AurumSearchField.kt"
+      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/field/AurumSearchField.kt",
+      "relatedTokens": [
+        "surface.iconDefaultNormal",
+        "surface.iconDefaultSubtle"
+      ]
     },
     {
       "name": "AurumTextField",
@@ -856,7 +1005,29 @@
       "figmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=4623-373",
       "codeConnectPath": "aurum/src/main/kotlin/com/jar/app/aurum/component/field/AurumTextField.figma.kt",
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/field/AurumTextField.html",
-      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/field/AurumTextField.kt"
+      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/field/AurumTextField.kt",
+      "relatedTokens": [
+        "feedback.borderNegativeIntense",
+        "feedback.borderPositiveIntense",
+        "feedback.textNegativeIntense",
+        "feedback.textPositiveIntense",
+        "interactive.bgPrimaryDefault",
+        "interactive.borderPrimaryDefault",
+        "interactive.textPrimaryNormal",
+        "spacing.s3",
+        "spacing.s5",
+        "surface.bgSurfaceMidContrast",
+        "surface.borderSurfaceLowContrast",
+        "surface.borderSurfaceMidContrast",
+        "surface.iconDefaultSubtle",
+        "surface.textDefaultDisabled",
+        "surface.textDefaultNormal",
+        "surface.textDefaultSubtle",
+        "typography.bodyLarge",
+        "typography.bodySmall",
+        "typography.bodyXSmall",
+        "typography.titleT1"
+      ]
     },
     {
       "name": "AurumIcon",
@@ -904,7 +1075,11 @@
       "figmaUrl": null,
       "codeConnectPath": null,
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/icon/AurumIcon.html",
-      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/icon/AurumIcon.kt"
+      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/icon/AurumIcon.kt",
+      "relatedTokens": [
+        "iconSize.xl",
+        "surface.iconDefaultNormal"
+      ]
     },
     {
       "name": "AurumStepper",
@@ -967,7 +1142,33 @@
       "figmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=4506-201",
       "codeConnectPath": "aurum/src/main/kotlin/com/jar/app/aurum/component/input/AurumStepper.figma.kt",
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/input/AurumStepper.html",
-      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/input/AurumStepper.kt"
+      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/input/AurumStepper.kt",
+      "relatedTokens": [
+        "borderWidth.sm",
+        "iconSize.xl",
+        "interactive.bgNeutralDefault",
+        "interactive.bgNeutralDisabled",
+        "interactive.bgPrimaryDefault",
+        "interactive.borderNeutralMuted",
+        "interactive.iconNeutralDisabled",
+        "interactive.iconNeutralNormal",
+        "interactive.textNeutralNormal",
+        "interactive.textOnPrimaryNormal",
+        "spacing.s3",
+        "spacing.s5",
+        "spacing.s8",
+        "surface.bgBrandSubtle",
+        "surface.bgSurfaceLowContrast",
+        "surface.borderBrandMuted",
+        "surface.borderBrandNormal",
+        "surface.borderSurfaceHighContrast",
+        "surface.borderSurfaceLowContrast",
+        "surface.iconDefaultNormal",
+        "surface.textDefaultDisabled",
+        "surface.textOnBrandSubtle",
+        "typography.titleT1",
+        "typography.titleT2"
+      ]
     },
     {
       "name": "AurumSectionHeader",
@@ -1016,7 +1217,25 @@
       "figmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=3702-162190",
       "codeConnectPath": "aurum/src/main/kotlin/com/jar/app/aurum/component/navigation/AurumSectionHeader.figma.kt",
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/navigation/AurumSectionHeader.html",
-      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/navigation/AurumSectionHeader.kt"
+      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/navigation/AurumSectionHeader.kt",
+      "relatedTokens": [
+        "iconSize.lg",
+        "iconSize.xl",
+        "interactive.iconNeutralNormal",
+        "interactive.iconPrimaryNormal",
+        "interactive.textPrimaryNormal",
+        "spacing.s1",
+        "spacing.s10",
+        "spacing.s2",
+        "spacing.s3",
+        "spacing.s5",
+        "surface.textBrandNormal",
+        "surface.textDefaultNormal",
+        "surface.textDefaultSubtle",
+        "typography.bodyB3",
+        "typography.titleT1",
+        "typography.titleT2"
+      ]
     },
     {
       "name": "AurumTopAppBar",
@@ -1109,7 +1328,39 @@
       "figmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=4826-1058",
       "codeConnectPath": "aurum/src/main/kotlin/com/jar/app/aurum/component/navigation/AurumTopAppBar.figma.kt",
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/navigation/AurumTopAppBar.html",
-      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/navigation/AurumTopAppBar.kt"
+      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/navigation/AurumTopAppBar.kt",
+      "intendedUse": "Use at the top of every full-screen surface in the app. The 10 Figma `Type` variants cover every combination of trailing controls (primary button, 1 / 2 icons, overflow) — pick the variant that matches the screen's needs. Don't introduce a custom header; this is the canonical Page Header.",
+      "usage": {
+        "do": [
+          "Provide an explicit `contentDescription` for every [AurumTopAppBarAction] icon (a back arrow with `null` content description fails accessibility audits).",
+          "Reserve the `actionButton` slot for a single high-emphasis screen action (e.g. \"Save\", \"Skip\"); use icons + overflow for everything else.",
+          "Keep titles to one line; Aurum truncates with ellipsis at the design max width — long titles should be condensed at copy review, not at render time."
+        ],
+        "dont": [
+          "Wrap `material3.TopAppBar` and tint it with Aurum colours — this component exists to prevent that anti-pattern.",
+          "Hand-roll Figma's other header variants (centred title, large header) until they're added to this component.",
+          "Stack multiple `AurumTopAppBar`s in a single Composition — one per screen."
+        ]
+      },
+      "relatedTokens": [
+        "iconSize.xl",
+        "interactive.bgPrimaryDefault",
+        "interactive.iconNeutralNormal",
+        "interactive.textOnPrimaryNormal",
+        "spacing.s1",
+        "spacing.s10",
+        "spacing.s11",
+        "spacing.s3",
+        "spacing.s4",
+        "spacing.s5",
+        "spacing.s8",
+        "spacing.s9",
+        "surface.bgPageBase",
+        "surface.textDefaultNormal",
+        "typography.bodyB3",
+        "typography.titleT1",
+        "typography.titleT2"
+      ]
     },
     {
       "name": "AurumScreen",
@@ -1179,7 +1430,17 @@
       "figmaUrl": null,
       "codeConnectPath": null,
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/scaffold/AurumScreen.html",
-      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/scaffold/AurumScreen.kt"
+      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/scaffold/AurumScreen.kt",
+      "relatedTokens": [
+        "overlay.bgNormal",
+        "spacing.s11",
+        "spacing.s3",
+        "spacing.s5",
+        "surface.bgPageBase",
+        "surface.textDefaultSubtle",
+        "typography.bodySmall",
+        "typography.titleT1"
+      ]
     },
     {
       "name": "AurumSnackbar",
@@ -1209,7 +1470,13 @@
       "figmaUrl": null,
       "codeConnectPath": null,
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/scaffold/AurumSnackbar.html",
-      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/scaffold/AurumSnackbar.kt"
+      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/scaffold/AurumSnackbar.kt",
+      "relatedTokens": [
+        "interactive.textPrimaryNormal",
+        "surface.bgSurfaceHighContrast",
+        "surface.iconDefaultInverse",
+        "surface.textDefaultInverse"
+      ]
     },
     {
       "name": "AurumRadioButton",
@@ -1283,7 +1550,32 @@
       "figmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5126-2507",
       "codeConnectPath": "aurum/src/main/kotlin/com/jar/app/aurum/component/selection/AurumRadioButton.figma.kt",
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/selection/AurumRadioButton.html",
-      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/selection/AurumRadioButton.kt"
+      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/selection/AurumRadioButton.kt",
+      "intendedUse": "Use as the building block inside [AurumRadioGroup]. Reach for it directly only when you need a single radio circle outside a group context (e.g. an option summary card). For sets of mutually-exclusive options, always compose them via [AurumRadioGroup] so selection state stays consistent.",
+      "usage": {
+        "do": [
+          "Place the label `End` (default) for vertical lists; switch to `Start` only inside full-width list rows where the radio anchors the trailing edge.",
+          "Use `subtext` for short helper copy that disambiguates the option — keep it under one line.",
+          "Pair `error = true` with a `feedback-negative` helper line on the parent surface to communicate validation failure."
+        ],
+        "dont": [
+          "Use a single radio button to represent a binary toggle — use `AurumSwitch` instead.",
+          "Render multiple `AurumRadioButton`s manually side-by-side; compose them via [AurumRadioGroup] so the group enforces single-selection invariants.",
+          "Hand-roll a \"radio fill\" colour by overlaying `Aurum.colors.*`; recolour through `error` only."
+        ]
+      },
+      "relatedTokens": [
+        "feedback.borderNegativeIntense",
+        "interactive.bgPrimaryDefault",
+        "interactive.bgPrimaryDisabled",
+        "spacing.s3",
+        "spacing.s4",
+        "spacing.s8",
+        "surface.borderSurfaceHighContrast",
+        "surface.textDefaultDisabled",
+        "surface.textDefaultNormal",
+        "typography.bodyMedium"
+      ]
     },
     {
       "name": "AurumRadioGroup",
@@ -1361,7 +1653,29 @@
       "figmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5157-2034",
       "codeConnectPath": "aurum/src/main/kotlin/com/jar/app/aurum/component/selection/AurumRadioGroup.figma.kt",
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/selection/AurumRadioGroup.html",
-      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/selection/AurumRadioGroup.kt"
+      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/selection/AurumRadioGroup.kt",
+      "intendedUse": "Use to present 2–7 mutually-exclusive options in a vertical list (form choice, plan picker, sort order). For more than 7 options switch to a dropdown / `AurumSelect` (when available) to keep the surface scannable. For exactly 2 balanced options, prefer a segmented control (when available).",
+      "usage": {
+        "do": [
+          "Keep `options` to a stable, bounded set — radios are not meant for paginated or remotely-fetched data.",
+          "Set `errorText` together with `feedback-negative` styling to communicate validation failure; clear it the moment the user picks a valid option.",
+          "Place the group near its own contextual header — don't rely on `label` alone for grouping cues in dense forms."
+        ],
+        "dont": [
+          "Mix per-option `enabled = false` with a top-level `enabled = false`; pick one disable mode and stick to it.",
+          "Use a radio group to fire actions on each tap — use a row of `AurumChip`s for filter behaviour.",
+          "Render the same option twice; the group assumes `value` uniqueness for selection comparisons."
+        ]
+      },
+      "relatedTokens": [
+        "feedback.textNegativeIntense",
+        "spacing.s3",
+        "spacing.s4",
+        "surface.textDefaultDisabled",
+        "surface.textDefaultNormal",
+        "typography.bodySmall",
+        "typography.labelL2"
+      ]
     },
     {
       "name": "AurumSwitch",
@@ -1405,7 +1719,19 @@
       "figmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=4018-557",
       "codeConnectPath": "aurum/src/main/kotlin/com/jar/app/aurum/component/selection/AurumSwitch.figma.kt",
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/selection/AurumSwitch.html",
-      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/selection/AurumSwitch.kt"
+      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/selection/AurumSwitch.kt",
+      "relatedTokens": [
+        "iconSize.md",
+        "interactive.bgNeutralDefault",
+        "interactive.bgNeutralDisabled",
+        "interactive.bgNeutralInverse",
+        "interactive.bgPrimaryDefault",
+        "interactive.iconNeutralDisabled",
+        "interactive.iconPrimaryNormal",
+        "spacing.s3",
+        "surface.textDefaultNormal",
+        "typography.bodyMedium"
+      ]
     },
     {
       "name": "AurumSurface",
@@ -1467,7 +1793,18 @@
       "figmaUrl": null,
       "codeConnectPath": null,
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/surface/AurumSurface.html",
-      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/surface/AurumSurface.kt"
+      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/surface/AurumSurface.kt",
+      "relatedTokens": [
+        "borderWidth.sm",
+        "elevation.lowRaised",
+        "elevation.midRaised",
+        "spacing.s4",
+        "spacing.s5",
+        "surface.bgBrandIntense",
+        "surface.bgSurfaceLowContrast",
+        "surface.borderSurfaceMidContrast",
+        "surface.textOnBrandNormal"
+      ]
     },
     {
       "name": "AurumLabel",
@@ -1511,7 +1848,16 @@
       "figmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=3774-137816",
       "codeConnectPath": "aurum/src/main/kotlin/com/jar/app/aurum/component/text/AurumLabel.figma.kt",
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/text/AurumLabel.html",
-      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/text/AurumLabel.kt"
+      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/text/AurumLabel.kt",
+      "relatedTokens": [
+        "feedback.textPrimaryIntense",
+        "spacing.s3",
+        "spacing.s5",
+        "surface.textDefaultNormal",
+        "surface.textDefaultSubtle",
+        "typography.bodyB3",
+        "typography.labelL2"
+      ]
     },
     {
       "name": "AurumText",
@@ -1585,7 +1931,22 @@
       "figmaUrl": null,
       "codeConnectPath": null,
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/text/AurumText.html",
-      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/text/AurumText.kt"
+      "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/text/AurumText.kt",
+      "relatedTokens": [
+        "spacing.s3",
+        "surface.textBrandNormal",
+        "surface.textDefaultDisabled",
+        "surface.textDefaultNormal",
+        "surface.textDefaultSubtle",
+        "typography.bodyB3",
+        "typography.bodyMedium",
+        "typography.captionMedium",
+        "typography.displayLarge",
+        "typography.displayXLarge",
+        "typography.foo",
+        "typography.labelL1",
+        "typography.titleT1"
+      ]
     }
   ],
   "tokens": {
@@ -3605,7 +3966,12 @@
       "lineFigmaNodeId": "5162:1059",
       "fillFigmaNodeId": "5162:944",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1059",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-944"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-944",
+      "tags": [
+        "down",
+        "south",
+        "below"
+      ]
     },
     {
       "name": "ArrowLeft",
@@ -3615,7 +3981,13 @@
       "lineFigmaNodeId": "5162:1053",
       "fillFigmaNodeId": "5162:938",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1053",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-938"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-938",
+      "tags": [
+        "left",
+        "back",
+        "west",
+        "previous"
+      ]
     },
     {
       "name": "ArrowRight",
@@ -3625,7 +3997,14 @@
       "lineFigmaNodeId": "5162:1055",
       "fillFigmaNodeId": "5162:940",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1055",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-940"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-940",
+      "tags": [
+        "right",
+        "forward",
+        "east",
+        "next",
+        "send"
+      ]
     },
     {
       "name": "ArrowUp",
@@ -3635,7 +4014,12 @@
       "lineFigmaNodeId": "5162:1057",
       "fillFigmaNodeId": "5162:942",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1057",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-942"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-942",
+      "tags": [
+        "up",
+        "north",
+        "above"
+      ]
     },
     {
       "name": "ChevronDown",
@@ -3645,7 +4029,13 @@
       "lineFigmaNodeId": "5162:1067",
       "fillFigmaNodeId": "5162:952",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1067",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-952"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-952",
+      "tags": [
+        "down",
+        "expand",
+        "open",
+        "collapse"
+      ]
     },
     {
       "name": "ChevronLeft",
@@ -3655,7 +4045,12 @@
       "lineFigmaNodeId": "5162:1063",
       "fillFigmaNodeId": "5162:948",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1063",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-948"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-948",
+      "tags": [
+        "back",
+        "previous",
+        "collapse-left"
+      ]
     },
     {
       "name": "ChevronRight",
@@ -3665,7 +4060,12 @@
       "lineFigmaNodeId": "5162:1061",
       "fillFigmaNodeId": "5162:946",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1061",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-946"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-946",
+      "tags": [
+        "forward",
+        "next",
+        "expand-right"
+      ]
     },
     {
       "name": "ChevronUp",
@@ -3675,7 +4075,12 @@
       "lineFigmaNodeId": "5162:1065",
       "fillFigmaNodeId": "5162:950",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1065",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-950"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-950",
+      "tags": [
+        "up",
+        "collapse",
+        "close"
+      ]
     },
     {
       "name": "Close",
@@ -3685,7 +4090,14 @@
       "lineFigmaNodeId": "5162:1069",
       "fillFigmaNodeId": "5162:954",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1069",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-954"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-954",
+      "tags": [
+        "x",
+        "cross",
+        "dismiss",
+        "exit",
+        "cancel"
+      ]
     },
     {
       "name": "Copy",
@@ -3695,7 +4107,11 @@
       "lineFigmaNodeId": "5162:1075",
       "fillFigmaNodeId": "5162:960",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1075",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-960"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-960",
+      "tags": [
+        "duplicate",
+        "clone"
+      ]
     },
     {
       "name": "Delete",
@@ -3705,7 +4121,14 @@
       "lineFigmaNodeId": "5162:1107",
       "fillFigmaNodeId": "5162:992",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1107",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-992"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-992",
+      "tags": [
+        "trash",
+        "remove",
+        "bin",
+        "garbage",
+        "discard"
+      ]
     },
     {
       "name": "Download",
@@ -3715,7 +4138,12 @@
       "lineFigmaNodeId": "5162:1071",
       "fillFigmaNodeId": "5162:956",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1071",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-956"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-956",
+      "tags": [
+        "save",
+        "export",
+        "fetch"
+      ]
     },
     {
       "name": "Edit",
@@ -3725,7 +4153,13 @@
       "lineFigmaNodeId": "5162:1051",
       "fillFigmaNodeId": "5162:936",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1051",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-936"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-936",
+      "tags": [
+        "pencil",
+        "modify",
+        "compose",
+        "write"
+      ]
     },
     {
       "name": "History",
@@ -3735,7 +4169,13 @@
       "lineFigmaNodeId": "5162:1083",
       "fillFigmaNodeId": "5162:968",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1083",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-968"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-968",
+      "tags": [
+        "clock",
+        "recent",
+        "past",
+        "log"
+      ]
     },
     {
       "name": "Link",
@@ -3745,7 +4185,12 @@
       "lineFigmaNodeId": "5162:1077",
       "fillFigmaNodeId": "5162:962",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1077",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-962"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-962",
+      "tags": [
+        "chain",
+        "url",
+        "hyperlink"
+      ]
     },
     {
       "name": "QrCode",
@@ -3755,7 +4200,12 @@
       "lineFigmaNodeId": "5162:1093",
       "fillFigmaNodeId": "5162:978",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1093",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-978"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-978",
+      "tags": [
+        "qr",
+        "scan",
+        "barcode"
+      ]
     },
     {
       "name": "Refresh",
@@ -3765,7 +4215,13 @@
       "lineFigmaNodeId": "5162:1085",
       "fillFigmaNodeId": "5162:970",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1085",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-970"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-970",
+      "tags": [
+        "reload",
+        "sync",
+        "update",
+        "retry"
+      ]
     },
     {
       "name": "Search",
@@ -3775,7 +4231,12 @@
       "lineFigmaNodeId": "5162:1089",
       "fillFigmaNodeId": "5162:974",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1089",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-974"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-974",
+      "tags": [
+        "find",
+        "magnify",
+        "lookup"
+      ]
     },
     {
       "name": "Share",
@@ -3785,7 +4246,12 @@
       "lineFigmaNodeId": "5162:1049",
       "fillFigmaNodeId": "5162:934",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1049",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-934"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-934",
+      "tags": [
+        "send",
+        "forward",
+        "publish"
+      ]
     },
     {
       "name": "SortAscending",
@@ -3795,7 +4261,12 @@
       "lineFigmaNodeId": "5162:1097",
       "fillFigmaNodeId": "5162:982",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1097",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-982"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-982",
+      "tags": [
+        "sort",
+        "asc",
+        "az"
+      ]
     },
     {
       "name": "SortDescending",
@@ -3805,7 +4276,12 @@
       "lineFigmaNodeId": "5162:1095",
       "fillFigmaNodeId": "5162:980",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1095",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-980"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-980",
+      "tags": [
+        "sort",
+        "desc",
+        "za"
+      ]
     },
     {
       "name": "Upload",
@@ -3815,7 +4291,12 @@
       "lineFigmaNodeId": "5162:1073",
       "fillFigmaNodeId": "5162:958",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1073",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-958"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-958",
+      "tags": [
+        "import",
+        "send-up",
+        "publish"
+      ]
     },
     {
       "name": "Add",
@@ -3825,7 +4306,12 @@
       "lineFigmaNodeId": null,
       "fillFigmaNodeId": null,
       "lineFigmaUrl": null,
-      "fillFigmaUrl": null
+      "fillFigmaUrl": null,
+      "tags": [
+        "plus",
+        "create",
+        "new"
+      ]
     },
     {
       "name": "Overflow",
@@ -3835,7 +4321,14 @@
       "lineFigmaNodeId": null,
       "fillFigmaNodeId": null,
       "lineFigmaUrl": null,
-      "fillFigmaUrl": null
+      "fillFigmaUrl": null,
+      "tags": [
+        "more",
+        "menu",
+        "kebab",
+        "dots",
+        "ellipsis"
+      ]
     },
     {
       "name": "Bookmark",
@@ -3845,7 +4338,13 @@
       "lineFigmaNodeId": "5162:1047",
       "fillFigmaNodeId": "5162:932",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1047",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-932"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-932",
+      "tags": [
+        "save",
+        "favourite",
+        "pin",
+        "ribbon"
+      ]
     },
     {
       "name": "Broadcast",
@@ -3855,7 +4354,13 @@
       "lineFigmaNodeId": "5162:1037",
       "fillFigmaNodeId": "5162:922",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1037",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-922"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-922",
+      "tags": [
+        "antenna",
+        "wifi",
+        "live",
+        "signal"
+      ]
     },
     {
       "name": "Chat",
@@ -3865,7 +4370,13 @@
       "lineFigmaNodeId": "5162:1137",
       "fillFigmaNodeId": "5162:1023",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1137",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1023"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1023",
+      "tags": [
+        "message",
+        "talk",
+        "conversation",
+        "speech"
+      ]
     },
     {
       "name": "Document",
@@ -3875,7 +4386,12 @@
       "lineFigmaNodeId": "5162:1031",
       "fillFigmaNodeId": "5162:916",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1031",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-916"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-916",
+      "tags": [
+        "file",
+        "page",
+        "paper"
+      ]
     },
     {
       "name": "Gift",
@@ -3885,7 +4401,13 @@
       "lineFigmaNodeId": "5162:1033",
       "fillFigmaNodeId": "5162:918",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1033",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-918"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-918",
+      "tags": [
+        "present",
+        "reward",
+        "voucher",
+        "box"
+      ]
     },
     {
       "name": "Heart",
@@ -3895,7 +4417,12 @@
       "lineFigmaNodeId": "5162:1045",
       "fillFigmaNodeId": "5162:930",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1045",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-930"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-930",
+      "tags": [
+        "like",
+        "love",
+        "favourite"
+      ]
     },
     {
       "name": "List",
@@ -3905,7 +4432,13 @@
       "lineFigmaNodeId": "5162:1035",
       "fillFigmaNodeId": "5162:920",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1035",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-920"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-920",
+      "tags": [
+        "menu",
+        "items",
+        "rows",
+        "lines"
+      ]
     },
     {
       "name": "Camera",
@@ -3915,7 +4448,13 @@
       "lineFigmaNodeId": "5162:1113",
       "fillFigmaNodeId": "5162:998",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1113",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-998"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-998",
+      "tags": [
+        "photo",
+        "picture",
+        "snap",
+        "shot"
+      ]
     },
     {
       "name": "Microphone",
@@ -3925,7 +4464,13 @@
       "lineFigmaNodeId": "5162:1123",
       "fillFigmaNodeId": "5162:1008",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1123",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1008"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1008",
+      "tags": [
+        "mic",
+        "record",
+        "voice",
+        "audio"
+      ]
     },
     {
       "name": "Pause",
@@ -3935,7 +4480,11 @@
       "lineFigmaNodeId": "5162:1111",
       "fillFigmaNodeId": "5162:996",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1111",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-996"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-996",
+      "tags": [
+        "stop",
+        "halt"
+      ]
     },
     {
       "name": "Play",
@@ -3945,7 +4494,12 @@
       "lineFigmaNodeId": "5162:1109",
       "fillFigmaNodeId": "5162:994",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1109",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-994"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-994",
+      "tags": [
+        "start",
+        "resume",
+        "go"
+      ]
     },
     {
       "name": "VolumeOff",
@@ -3955,7 +4509,12 @@
       "lineFigmaNodeId": "5162:1133",
       "fillFigmaNodeId": "5162:1018",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1133",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1018"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1018",
+      "tags": [
+        "mute",
+        "silent",
+        "quiet"
+      ]
     },
     {
       "name": "VolumeOn",
@@ -3965,7 +4524,12 @@
       "lineFigmaNodeId": "5162:1131",
       "fillFigmaNodeId": "5162:1016",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1131",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1016"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1016",
+      "tags": [
+        "unmute",
+        "loud",
+        "sound"
+      ]
     },
     {
       "name": "Cart",
@@ -3975,7 +4539,13 @@
       "lineFigmaNodeId": "5162:1079",
       "fillFigmaNodeId": "5162:964",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1079",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-964"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-964",
+      "tags": [
+        "basket",
+        "shop",
+        "trolley",
+        "bag"
+      ]
     },
     {
       "name": "Rupee",
@@ -3985,7 +4555,13 @@
       "lineFigmaNodeId": "5162:1139",
       "fillFigmaNodeId": "5162:1025",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1139",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1025"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1025",
+      "tags": [
+        "inr",
+        "money",
+        "currency",
+        "price"
+      ]
     },
     {
       "name": "Wallet",
@@ -3995,7 +4571,13 @@
       "lineFigmaNodeId": "5162:1081",
       "fillFigmaNodeId": "5162:966",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1081",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-966"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-966",
+      "tags": [
+        "money",
+        "balance",
+        "purse",
+        "funds"
+      ]
     },
     {
       "name": "Compress",
@@ -4005,7 +4587,13 @@
       "lineFigmaNodeId": "5162:1129",
       "fillFigmaNodeId": "5162:1014",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1129",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1014"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1014",
+      "tags": [
+        "minimise",
+        "collapse",
+        "shrink",
+        "small"
+      ]
     },
     {
       "name": "Expand",
@@ -4015,7 +4603,13 @@
       "lineFigmaNodeId": "5162:1127",
       "fillFigmaNodeId": "5162:1012",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1127",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1012"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1012",
+      "tags": [
+        "maximise",
+        "fullscreen",
+        "grow",
+        "large"
+      ]
     },
     {
       "name": "Lock",
@@ -4025,7 +4619,13 @@
       "lineFigmaNodeId": "5162:1115",
       "fillFigmaNodeId": "5162:1000",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1115",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1000"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1000",
+      "tags": [
+        "secure",
+        "locked",
+        "private",
+        "padlock"
+      ]
     },
     {
       "name": "Settings",
@@ -4035,7 +4635,14 @@
       "lineFigmaNodeId": "5162:1141",
       "fillFigmaNodeId": "5162:1027",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1141",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1027"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1027",
+      "tags": [
+        "gear",
+        "cog",
+        "preferences",
+        "config",
+        "options"
+      ]
     },
     {
       "name": "SignIn",
@@ -4045,7 +4652,12 @@
       "lineFigmaNodeId": "5162:1121",
       "fillFigmaNodeId": "5162:1006",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1121",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1006"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1006",
+      "tags": [
+        "login",
+        "enter",
+        "log-in"
+      ]
     },
     {
       "name": "SignOut",
@@ -4055,7 +4667,13 @@
       "lineFigmaNodeId": "5162:1119",
       "fillFigmaNodeId": "5162:1004",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1119",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1004"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1004",
+      "tags": [
+        "logout",
+        "exit",
+        "leave",
+        "log-out"
+      ]
     },
     {
       "name": "Unlock",
@@ -4065,7 +4683,12 @@
       "lineFigmaNodeId": "5162:1117",
       "fillFigmaNodeId": "5162:1002",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1117",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1002"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1002",
+      "tags": [
+        "unlocked",
+        "open",
+        "padlock-open"
+      ]
     },
     {
       "name": "Bell",
@@ -4075,7 +4698,13 @@
       "lineFigmaNodeId": "5162:1039",
       "fillFigmaNodeId": "5162:924",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1039",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-924"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-924",
+      "tags": [
+        "notification",
+        "alert",
+        "alarm",
+        "ring"
+      ]
     },
     {
       "name": "Discount",
@@ -4085,7 +4714,14 @@
       "lineFigmaNodeId": "5162:1103",
       "fillFigmaNodeId": "5162:988",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1103",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-988"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-988",
+      "tags": [
+        "offer",
+        "deal",
+        "tag",
+        "promo",
+        "sale"
+      ]
     },
     {
       "name": "Help",
@@ -4095,7 +4731,14 @@
       "lineFigmaNodeId": "5162:1091",
       "fillFigmaNodeId": "5162:976",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1091",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-976"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-976",
+      "tags": [
+        "question",
+        "support",
+        "info",
+        "doubt",
+        "faq"
+      ]
     },
     {
       "name": "Info",
@@ -4105,7 +4748,12 @@
       "lineFigmaNodeId": "5162:1043",
       "fillFigmaNodeId": "5162:928",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1043",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-928"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-928",
+      "tags": [
+        "i",
+        "details",
+        "about"
+      ]
     },
     {
       "name": "Shield",
@@ -4115,7 +4763,13 @@
       "lineFigmaNodeId": "5162:1105",
       "fillFigmaNodeId": "5162:990",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1105",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-990"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-990",
+      "tags": [
+        "secure",
+        "protect",
+        "guard",
+        "safety"
+      ]
     },
     {
       "name": "Verified",
@@ -4125,7 +4779,14 @@
       "lineFigmaNodeId": "5162:1099",
       "fillFigmaNodeId": "5162:984",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1099",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-984"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-984",
+      "tags": [
+        "badge",
+        "trusted",
+        "approved",
+        "official",
+        "tick"
+      ]
     },
     {
       "name": "Calendar",
@@ -4135,7 +4796,13 @@
       "lineFigmaNodeId": "5162:1125",
       "fillFigmaNodeId": "5162:1010",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1125",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1010"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1010",
+      "tags": [
+        "date",
+        "schedule",
+        "month",
+        "day"
+      ]
     },
     {
       "name": "Home",
@@ -4145,7 +4812,12 @@
       "lineFigmaNodeId": "5162:1029",
       "fillFigmaNodeId": "5162:914",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1029",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-914"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-914",
+      "tags": [
+        "house",
+        "main",
+        "dashboard"
+      ]
     },
     {
       "name": "Location",
@@ -4155,7 +4827,14 @@
       "lineFigmaNodeId": "5162:1135",
       "fillFigmaNodeId": "5162:1021",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1135",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1021"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1021",
+      "tags": [
+        "pin",
+        "map",
+        "place",
+        "marker",
+        "gps"
+      ]
     },
     {
       "name": "Support",
@@ -4165,7 +4844,13 @@
       "lineFigmaNodeId": "5162:1087",
       "fillFigmaNodeId": "5162:972",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1087",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-972"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-972",
+      "tags": [
+        "headset",
+        "agent",
+        "help",
+        "service"
+      ]
     },
     {
       "name": "Translate",
@@ -4175,7 +4860,12 @@
       "lineFigmaNodeId": "5162:1101",
       "fillFigmaNodeId": "5162:986",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1101",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-986"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-986",
+      "tags": [
+        "language",
+        "globe",
+        "locale"
+      ]
     },
     {
       "name": "User",
@@ -4185,7 +4875,13 @@
       "lineFigmaNodeId": "5162:1041",
       "fillFigmaNodeId": "5162:926",
       "lineFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-1041",
-      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-926"
+      "fillFigmaUrl": "https://www.figma.com/design/YvIxqu2oTlM6UnkL0OloHc/?node-id=5162-926",
+      "tags": [
+        "person",
+        "profile",
+        "account",
+        "avatar"
+      ]
     },
     {
       "name": "Check",
@@ -4195,7 +4891,14 @@
       "lineFigmaNodeId": null,
       "fillFigmaNodeId": null,
       "lineFigmaUrl": null,
-      "fillFigmaUrl": null
+      "fillFigmaUrl": null,
+      "tags": [
+        "tick",
+        "done",
+        "ok",
+        "confirm",
+        "success"
+      ]
     }
   ],
   "codeConnect": [
@@ -4969,12 +5672,15 @@
     }
   ],
   "changelog": {
-    "raw": "# Aurum Changelog\n\nAll notable changes to the Aurum design system are documented here.\nFormat follows [Keep a Changelog](https://keepachangelog.com/).\n\n## [Unreleased]\n\n### Changed\n- **`AurumTopAppBar` API constrained to exactly the Figma `4826:1058` axes.** Removed the open-ended `actions: ImmutableList<AurumTopAppBarAction>` parameter; the trailing-action group is now expressed as three named slots — `icon1`, `icon2`, `overflow` — directly mirroring Figma's three boolean axes (`icon1` × `icon2` × `isOverflow`). Combined with the existing `primaryButton` slot, callers can compose all 10 of Figma's `Type` variants (Default, With Icon, With Icons, With Overflow, 1icon+overflow, icons+overflow, With Button, Button + Icon, Button + Icons, Button + Overflow) and nothing beyond. Out-of-spec configurations like four trailing items become impossible to express.\n- **Previews expanded 4 → 14**, covering each of the 10 `Type` variants individually plus four \"axis isolation\" tiles for `backButton` × `subtitle` on Type=Default plus a long-title ellipsis test. Catalog `NavigationDemo` migrated to the new slot API.\n\n### Added\n- **`AurumRadioButton` + `AurumRadioGroup`** — single-choice selection control + group, mapped to the Figma `radioButton` (`5126:2507`) and `RadioGroup` (`5157:2034`) component_sets. `AurumRadioButton` supports `selected`, `enabled`, `error`, optional `label` + `subtext`, and `labelPosition` (`End` = Figma `leftAligned`, `Start` = Figma `rightAligned`); `null` label renders the `withoutLabel` circle-only variant. The 24 dp circle is drawn via `Canvas` (no SVG asset) — outline tints by state (default-neutral, selected/primary, error/negative-intense, disabled-faded), 10 dp inner dot when selected, focus state-layer ring on press. `AurumRadioGroup<T>` takes an `ImmutableList<AurumRadioOption<T>>` plus optional `label`/`helperText`/`errorText`; passing `errorText` switches the group into the validation-error visual. Both ship Code Connect mappings (`AurumRadioButton.figma.kt`, `AurumRadioGroup.figma.kt`) and 8 + 5 `@AurumPreview` previews. Catalog `SelectionDemo` extended with a single-radio row plus a plan-picker radio group.\n\n### Fixed\n- **`AurumTopAppBar` aligned with the canonical Figma \"Page Header\" variant set** (`YvIxqu2oTlM6UnkL0OloHc`, set `4826:1058`). Re-audited against the new component_set after spotting two coexisting Page Header sets in the file. Drifts corrected:\n  - Title: now `Title/S-SemiBold` semantics — 16/24, **SemiBold 600**, primary family (was Medium). Achieved with `titleT1.copy(fontWeight = SemiBold)` until typography tokens get a SemiBold S/XS scale.\n  - Subtitle: now 12/16 **Medium 500** primary family (was Regular `bodyB3`); colour cascades from `contentColor` (matches Figma — hierarchy comes from weight/size, not colour).\n  - Primary button label: now `Title/XS-SemiBold` — 14/20, **SemiBold 600** (was Medium).\n  - Primary button: pinned 32 dp tall × ≤120 dp wide, horizontal-only padding, `interactive/background/primary/default` background — matches the canonical `4826:1812` \"Button + Icons\" instance.\n  - Right-group start padding removed — `justify-between` is already implied by the left's `weight(1f)`.\n  - Stray whitespace cleanup at the right-group block.\n  - Code Connect URL re-pointed to `4826:1058` (was a stale `4238:10259` set with a `Type=Type11` orphan). Per-axis `@FigmaProperty` mappings dropped because `4826:1058` has no `componentPropertyDefinitions` defined on the parent set — its 10 variants exist only as individually-named components, not property combinations. The Code Connect example now renders the canonical \"Button + Icons + back + subtitle\" configuration unconditionally; designers see the same snippet for any variant they instance. Flagged the missing-property-definitions issue in a Figma comment for the design team.\n  - Subtitle-colour API simplified: dropped the short-lived `subtitleColor` parameter — Figma cascades a single colour to the Title group; `contentColor` now governs both lines.\n- **Previews expanded** from 4 → 8 to span the new variant matrix: `Default`, `WithBack`, `WithSubtitle`, `WithBackAndSubtitle`, `WithButton`, `WithOverflowOnly`, `WithIcons`, `FullHeader`.\n\n### Changed\n- **`@AurumPreview` trimmed to two phone tiles.** Foldable (600 dp), tablet (840 dp), and a11y font-scale (1.5×, 2.0×) variants commented out — they cluttered Studio's preview pane on every Composable, and we're not currently solving for those surfaces from design. Active tiles are now just `phone-narrow(320dp)` and `phone-compact(360dp)`. Roborazzi captures only the active tiles. Re-enable any tile later by uncommenting in `AurumPreview.kt`. Knock-on: gallery `DEVICE_META` updated, README updated, all old baselines regenerated on CI.\n- **`/icons.html` UI polish.** Each card now shows the line and filled weights as two clearly-divided cells with `LINE` / `FILLED` captions, the symbol name as the primary heading, and the `AurumIcons.<Cat>.<Symbol>` path as a discrete, button-styled copy chip with a copy icon and proper hover/focus/active states. Reads correctly in both light and dark themes.\n\n### Tooling\n- **Gallery deploy gated on a green Check.** `pages.yml` now triggers on `Check` workflow success (via `workflow_run`) instead of on every push. Eliminates the broken-intermediate-state window when baselines are mid-rollout (e.g. during a structural rename or bulk re-record). `record.yml` no longer dispatches `pages.yml` directly — `Check` succeeding does that automatically.\n\n## [0.1.5] - 2026-04-28\n\n### Fixed\n- **All 114 icons re-rendered to match Figma.** The previous import pipeline used Figma MCP asset URLs that returned only the inner SVG path with `viewBox` set to the path's tight bounding box (e.g. `7.5 × 13.5` for ChevronRight). Combined with `width/height = 24dp`, this caused non-uniform stretch and stripped the surrounding 24×24 frame padding — the chevron rendered fat and squashed, every other non-square icon was distorted, and even square-bbox icons lost their intended 2-3 dp inset.\n- **Stroke-only icons no longer get a fill.** Phosphor regular-weight SVGs carry `fill=\"none\"` at the `<svg>` root, cascading to children. The previous import didn't honour the cascade and emitted both `fillColor` and `strokeColor` — so e.g. `Home` rendered as a solid black house instead of the intended outline.\n\n### Changed\n- **Icon import pipeline rewritten** to fetch via the Figma REST API (`/v1/images?…&format=svg`) using `$FIGMA_ACCESS_TOKEN`. REST exports include the 24×24 frame and proper SVG-level fill cascade, so the conversion is a clean 1:1 to Vector Drawable. The per-icon `COMPOUND_TRANSLATES` workaround (previously hand-coded for SpeakerSimpleX) is no longer needed and was removed. The stale `figma-icon-urls.json` URL manifest was deleted.\n\n### Added\n- **`/icons.html` page** on the gallery website — every icon's line + fill weights side by side, grouped by category, with live search and click-to-copy on `AurumIcons.<Category>.<Symbol>`. Reads `AurumIcons.kt` and inlines each Vector Drawable as `currentColor` SVG so icons follow the page theme. No longer need to install the catalog APK to scan the icon set.\n\n## [0.1.4] - 2026-04-28\n\n### Changed\n- **`AurumChip`** realigned with the Figma \"Action\" chip component (`YvIxqu2oTlM6UnkL0OloHc`, node `4446-701`). Adds `size` (`AurumChipSize.Large` / `Small`) and `leadingIcon` parameters; height tightened to 38 dp Large / 30 dp Small (from 40 dp); padding now asymmetric (12 dp text-side, 8 dp icon-side); inter-element gap reduced 8 → 4 dp; text style varies by size (`titleT2` / `bodySmall`). Existing call sites are unaffected — new parameters default to the prior behaviour. Previews regrouped into Large-trailing / Large-leading / Large-both / Large-text-only / Small / Disabled.\n- **Code Connect** for `AurumChip` picks up the new `Size` axis (`large` ↔ `Large`, `small` ↔ `Small`).\n\n## [0.1.3] - 2026-04-27\n\n### Added\n- **Compose perf guardrails.** Detekt + [`mrmans0n/compose-rules`](https://github.com/mrmans0n/compose-rules) wired in, with the perf/stability rules active (`UnstableCollections`, `MutableStateAutoboxing`, `MutableParams`, `MutableStateParam`, `LambdaParameterInRestartableEffect`, `Material2`). Compose Compiler Metrics enabled on `:aurum` and `:aurum-catalog` (`build/compose_compiler/`).\n- **Compose stability CI gate.** New `verifyComposeStability` Gradle task in `:aurum` fails the build when `aurum_release-classes.txt` reports more inferred-unstable classes than `composeStabilityThreshold` (currently `0`). Wired into `check.yml` after detekt.\n- **Compose metrics dashboard** deployed alongside the gallery at [changejarapp.github.io/aurum-android/metrics/](https://changejarapp.github.io/aurum-android/metrics/), rendered from `build/compose_compiler/` via [`PatilShreyas/compose-report-to-html`](https://github.com/PatilShreyas/compose-report-to-html). Per-PR `compose-metrics` artifact uploaded by `check.yml`.\n- **Aurum icon set** — 57 icons × 2 weights = 114 vector drawables imported from the Figma \"Component Icons\" frame, exposed under `AurumIcons.<Category>.<Name>` (and `<Name>Filled` for the fill variant). 8 categories: `Navigation`, `Action`, `Content`, `Media`, `Commerce`, `System`, `Status`, `User`. Ingested by the new `tooling/icons/import_from_figma.py` script (`make icons-import`); idempotent re-runs.\n- **`IconGallery`** screen in the catalog showing every icon × weight, grouped by category.\n- **114 Code Connect mappings** for the new icons under `aurum/src/main/kotlin/com/jar/app/aurum/component/icon/figma_connect/AurumIcon*.figma.kt`. Auto-published to Figma via the `figma-code-connect.yml` workflow.\n\n### Changed\n- **6 overlapping icons replaced** from the Figma source-of-truth: `Navigation.Back`→`ArrowLeft`, `Navigation.ChevronForward`→`ChevronRight`, `Media.Like`→`Content.Heart` (renames; 12 call-site migrations across `AurumTopAppBar`, `AurumChip`, `AurumSectionHeader`, `AurumLinkButton`, and the catalog gallery). `Navigation.Close`, `Action.Edit`, `Action.Search` kept their names — only their underlying XML content was replaced.\n- **5 components marked codebase-only**: `AurumSearchField`, `AurumIconButton`, `AurumDivider`, `AurumLoader`, `AurumSkeleton` — verified absent from the Figma library via MCP search. File-level marker added so future Code-Connect audits don't keep flagging them.\n- **`AurumIcons.kt` regenerated** from the import script. The 3 legacy entries that lack a Figma counterpart (`Action.Add`, `Action.Overflow`, `Selection.Check`) remain hand-authored under `res/drawable/` and are flagged in-file pending design escalation.\n- **`record.yml` now also dispatches `pages.yml`** after committing fresh baselines on `main`, so the gallery's snapshot embeds redeploy without a manual trigger.\n\n### Fixed\n- **`AurumOtpInput`**: keyed `LaunchedEffect` on the completion-boundary transition (`value.length == maxLength`) instead of `value` itself, so the coroutine no longer relaunches on every keystroke.\n- **`AurumSkeleton`**: moved the `shimmerProgress` state read out of the `drawWithCache` cache block and into `onDrawBehind`, so the cache is no longer invalidated on every animation frame. The gradient `colors` list is now `remember`-ed.\n- **`AurumText`**: `inlineContent` parameter typed as `ImmutableMap<…>` instead of `Map<…>`, restoring skippability (caught by the new compose-rules `UnstableCollections` rule).\n- **CI Java mismatch**: `compose-report-to-html` v1.5.0 JAR is built against Java 21; `check.yml` and `pages.yml` now install JDK 21 alongside JDK 17 and invoke the JAR via `$JAVA_HOME_21_X64/bin/java`.\n\n### Tooling\n- New Makefile targets: `make lint-compose`, `make compose-metrics`, `make compose-metrics-html`, `make icons-import`, `make icons-brand` (rename of the prior `make icons` for clarity vs the new icon-set sync).\n- New tooling scripts: `tooling/icons/import_from_figma.py` (Figma SVG → Vector Drawable + AurumIcons.kt + Code Connect codegen) and `tooling/gallery/render_metrics_index.py` (gallery `/metrics/` landing page).\n\n## [0.1.2] - 2026-04-23\n\n### Added\n- **Screenshot testing** via Roborazzi + ComposablePreviewScanner. 334 baseline\n  PNGs committed under `aurum/src/test/snapshots/` (Git LFS-tracked) covering\n  every `@Preview` and every tile of the `@AurumPreview` 6-device fan-out.\n  Any visual regression fails CI before merge. Tasks: `recordRoborazziDebug`\n  (refresh baselines), `verifyRoborazziDebug` (CI check), `compareRoborazziDebug`\n  (diff without failing).\n- **`.github/workflows/check.yml`** — PR + main-push workflow running library +\n  catalog build, lint, and snapshot verification. Diff PNGs uploaded as a\n  workflow artifact on any screenshot drift so design reviewers can eyeball\n  the exact delta.\n- **Git LFS** (`.gitattributes`) tracking `aurum/src/test/snapshots/**/*.png`\n  — keeps pack files small, surfaces binary diffs in PR UIs.\n\n## [0.1.1] - 2026-04-23\n\n### Changed\n- **Maven coordinate realigned** with Jar's library convention.\n  - Before: `com.jarapp:aurum:<ver>`\n  - After:  `com.jar.internal.library.aurum-android:core:<ver>`\n  - Kotlin import package inside the AAR stays `com.jar.app.aurum.*` — no source rename.\n  - This lets consumers resolve Aurum via the existing `Changejarapp/*` wildcard\n    Maven repo in `jar-android/settings.gradle.kts`, identical to how\n    `com.jar.internal.library.core-network:shared` and siblings are resolved.\n  - The previous `com.jarapp:aurum:0.1.0` artifact is stale and should not be\n    consumed — it's kept in GitHub Packages only to avoid the \"published once,\n    cannot re-publish the same coord\" rule.\n\n### Removed\n- `AurumElevation.toast` + `ElevationTintColors.toast` + `AurumLightElevation.toast` entry + `AurumLightColors.elevationTint.toast` value — Figma ships only a tint for `elevation/_toast` (no dedicated dims) and the fallback shape matched `lowRaised`, so the Kotlin surface added API surface without semantic value. Snackbars/toasts now use `Aurum.elevation.lowRaised` directly. The plugin mapping (`figma-plugin-aurum-sync`) marks `_toast` as an explicitly skipped elevation token and bumps to `0.1.1`.\n\n### Added\n- `AurumColors.visual` — new decorative palette subgroup exposing 77 chromatic tokens (blue/green/orange/pink/purple/red/yellow × shades 50…1000). Mirrors Figma's `visual_colors` collection 1:1 and sources values from `AurumPalette` primitives. Feature code uses `Aurum.colors.visual.<family><shade>` for palette-keyed decorative colours that have no semantic meaning. Raw `AurumPalette` stays `internal`.\n- `AurumPhoneNumberInput` — phone-number variant of `AurumTextField` with country-code prefix slot, optional flag composable, digit-only input filter, `KeyboardType.Phone`, and a default 10-digit max length. Mirrors the Figma \"Phone Number Input\" component set.\n- `AurumTextField.figma.kt` — Code Connect stub against Figma `4623:373` mapping `state`, `validationState`, `multi_line`, `label`, `showHelpText` to `AurumTextField` API props.\n- `AurumPhoneNumberInput.figma.kt` — Code Connect stub against Figma `4904:2455` mapping `state`, `validationState`, `hasValue`, `label`, `showHelpText`.\n- `AurumOtpValidationState.Timer` — fourth validation state for resend-countdown UX. Renders identically to `None` but provides a semantic channel matching the Figma `validationState=timer` variant.\n- `Modifier.aurumHardShadow(color, offsetY, shape)` — solid-colour offset drop shadow for skeuomorphic \"stacked card\" effects (matches Figma's `shadow(0, Ypx, 0, 0, color)` spec). Encapsulates the double-box idiom into a single modifier that expands layout by `offsetY` and paints the shape outline behind content.\n\n### Fixed\n- `AurumOtpInput` disabled digits now use `surface.textDefaultDisabled` (matching Figma `text/default/disabled`) instead of `textDefaultNormal` at 10% alpha.\n- `AurumTopAppBar` synced to Figma `4826:1057` Page Header: title uses SemiBold (was Medium); subtitle uses `labelL2` Medium 12/16 in `textDefaultNormal` (was `bodyB3` Normal in `textDefaultSubtle`); primary button uses SemiBold label and natural 36 dp height from 8 dp padding (was fixed 32 dp, Medium); back + action icons tint via `interactive.iconNeutralNormal` (was `surface.textDefaultNormal` — same hex, correct token). Docstring fix: icon wrapper is 32 × 40 dp (w × h), not 40 × 32.\n- `AurumBadge` synced to Figma `4240:10843`: both emphases now render at `Label/L-Medium` (12/16 Inter Medium) — previously had a 18 sp line-height and Intense emphasis rendered Normal weight. Emphasis-specific text styles collapsed to a single shared style.\n- `AurumSectionHeader` synced to Figma `3702:162168`: title, link label, and text-action label render SemiBold (`Title/S-SemiBold` / `Title/XS-SemiBold`); icon-action tint uses `interactive.iconNeutralNormal` (was `surface.iconDefaultNormal` — same hex, correct semantic).\n- `AurumSwitch` synced to Figma `4018:557`: thumb now uses `interactive.bgNeutralInverse` (was `surface.bgPageBase` — same hex, correct semantic); checked icon uses `interactive.iconPrimaryNormal` (was `bgPrimaryDefault`); disabled-checked icon uses `interactive.iconNeutralDisabled` (was `bgNeutralDisabled` — **real hex drift** fixed).\n- `AurumStepper` synced to Figma `3834:139631`: numeric value and ± symbols render Bold (`Num/XS`); Neutral and Brand state colours moved to the `interactive.*` token family; disabled-state bg/border/icon hexes corrected (`#6C849D17` / `#C3C7D1` were previously rendering as `#ECEEF3` / `#848A99`).\n- `AurumLabel` synced to Figma `3774:137816`: all variants render Medium weight (was SemiBold); `Strong` variant now uses `labelL2` size (was `labelL1`) and `feedback.textPrimaryIntense` colour (was `surface.textDefaultNormal`).\n- `AurumButton` synced to Figma `4692:1074`: primary-disabled text token changed to `textPrimaryDisabled` (was `textOnPrimaryDisabled`); secondary variant border uses `borderPrimaryDefault` when enabled and `borderNeutralMuted` when disabled (was `borderNeutralDefault` / `borderNeutralDisabled`).\n\n## [0.2.0] - 2026-04-16\n\n### Added\n- **Figma Code Connect** infrastructure: Gradle plugin, CLI, `*.figma.kt` pattern\n- `AurumIcons` namespace with 8 XML Vector Drawables from Figma exports\n- `AurumLinkButton` — new component from Figma Button page\n- `AurumBadge` — 6 colors × 2 emphases × 2 sizes from Figma\n- `AurumOtpInput` — digit-by-digit OTP from Figma spec\n- `AurumStepper` — numeric +/− from Figma spec\n- `AurumLabel` — styled text label from Figma spec\n- `AurumSectionHeader` — section divider from Figma spec\n- `AurumSwitch` — toggle from Figma spec\n- `version.properties` for semver tracking\n\n### Changed\n- **AurumButton** rebuilt from Figma spec: 3 variants (removed Ghost/Destructive), corrected heights (40/48/56dp), added `isFullWidth` + `isLoading`, 12dp corner radius\n- **AurumTypography** restructured to match Figma type scale: 14 scale composites (Display/Heading/Body/Caption) + 6 component-level styles\n- **AurumTextField** audited: added success state, readonly treatment, character counter, fixed error token layer\n- All Material Icons replaced with `AurumIcons.*` (XML Vector Drawables loaded via `ImageVector.vectorResource()`)\n- Button size enum renamed `Sm/Md/Lg` → `Small/Medium/Large`\n- Button style enum renamed `AurumButtonStyle` → `AurumButtonVariant`\n\n### Fixed\n- Secondary button was filled grey — now transparent bg + outline border per Figma\n- Typography composites were engineering assumptions — now 14 match actual Figma scale\n- Hand-drawn `ImageVector.Builder` paths replaced with proper XML drawables\n\n## [0.1.0] - 2026-04-16\n\n### Added\n- Initial Aurum module scaffold (`:core-designsystem` + `:core-designsystem-catalog`)\n- 196 semantic colour tokens from Figma export (6 sub-structs)\n- Spacing, radius, border-width, icon-size, elevation, motion, opacity tokens\n- `AurumTheme` composable with `MaterialBridge` (hybrid M3 architecture)\n- Foundation primitives: `AurumText`, `AurumIcon`, `AurumSurface`, `AurumDivider`\n- Interactive primitives: `AurumButton`, `AurumIconButton`, `AurumTextField`, `AurumSearchField`\n- Navigation: `AurumTopAppBar` (10 Figma variants)\n- Feedback: `AurumLoader`, `AurumSkeleton`\n- Preview infrastructure: `@AurumPreview`, `AurumPreviewSurface`\n- `Modifier.aurumShadow()` for elevation rendering\n- CLAUDE.md module guide + 30 documentation files\n- Catalog app with 6 foundation gallery screens\n",
+    "raw": "# Aurum Changelog\n\nAll notable changes to the Aurum design system are documented here.\nFormat follows [Keep a Changelog](https://keepachangelog.com/).\n\n## [Unreleased]\n\n### Tooling\n- **MCP manifest schema v2 — enrichment fields for `aurum-mcp` v0.3.** Bumped `tooling/manifest/schema.json` `schemaVersion` enum from `[\"1\"]` to `[\"1\",\"2\"]` and added four optional, additive fields:\n  - `component.intendedUse: string` — when-to-reach-for prose authored in a new `@AurumIntendedUse` KDoc tag.\n  - `component.usage: { do: string[]; dont: string[] }` — guardrails authored in `@AurumDo` / `@AurumDont` KDoc tags (one bullet per tag instance).\n  - `component.relatedTokens: string[]` — qualified Aurum token names (`surface.bgPageBase`, `spacing.s12`, `typography.bodyMedium`) the component references in its source. Static-analyzed by `analyze_token_refs(source)` against `Aurum.{colors,space,type,radius,borderWidth,elevation,iconSize}.<leaf>` accessors.\n  - `icon.tags: string[]` — hand-curated synonyms (`Delete` → `[trash, remove, bin, garbage, discard]`) sourced from a new `aurum/icons/tags.toml` file. Powers the synonym-aware `aurum_search_icons` tool.\n  All four are absent from v1 manifests and ignored gracefully by older readers. The generator emits `schemaVersion: \"2\"` whenever any of them are populated, otherwise stays on `\"1\"`.\n- **`@AurumIntendedUse` / `@AurumDo` / `@AurumDont` KDoc tags authored on 6 priority components.** `AurumChip`, `AurumButton`, `AurumRadioButton`, `AurumRadioGroup`, `AurumTopAppBar`, `AurumOtpInput` carry intended-use prose plus 3 do / 3 dont guardrails each. The tags are stripped from the rendered KDoc body (so the description doesn't double-print them) and re-emitted as structured fields. Other components remain ungilded for now — extend opportunistically as conversations surface gaps.\n- **`aurum/icons/tags.toml` — curated synonyms for all 60 icons across 9 categories** (Action / Commerce / Content / Media / Navigation / Selection / Status / System / User). 222 tags total. Format is TOML keyed by category → icon name → tag list.\n- **Pages workflow now publishes the manifest.** `.github/workflows/pages.yml` invokes `generate.py --emit-manifest build/gallery/data/manifest.json --also-build-gallery --validate` on every deploy, exposing `https://changejarapp.github.io/aurum-android/data/manifest.json` (previously 404). Closes the cross-repo sync gap that left `aurum-mcp`'s drift-check soft-failing on every PR.\n- **MCP manifest pipeline.** Added `tooling/manifest/schema.json` defining a JSON Schema for an LLM-consumable Aurum manifest, and extended `tooling/gallery/generate.py` with `--emit-manifest <path>` and `--validate` flags. The same parsers that drive the static gallery now also emit a structured JSON describing every component (KDoc + signature + params + Figma deeplink + Code Connect path + gallery URL), every token (semantic colour / visual palette / spacing / radius / border-width / icon-size / elevation / typography), every icon (with paired line/fill Figma node IDs), every Code Connect mapping, and the full Keep-a-Changelog history. Single source of truth, two render targets — HTML for humans, JSON for agents. Consumed by the new `atri-jar/aurum-mcp` (and later `Changejarapp/aurum-mcp`) MCP server. Manifest carries a `platforms[]` field on each component for forward-compatible cross-platform support (`aurum-ios` plugs in as a sibling manifest source without restructuring).\n\n### Changed\n- **`AurumTopAppBar` API constrained to exactly the Figma `4826:1058` axes.** Removed the open-ended `actions: ImmutableList<AurumTopAppBarAction>` parameter; the trailing-action group is now expressed as three named slots — `icon1`, `icon2`, `overflow` — directly mirroring Figma's three boolean axes (`icon1` × `icon2` × `isOverflow`). Combined with the existing `primaryButton` slot, callers can compose all 10 of Figma's `Type` variants (Default, With Icon, With Icons, With Overflow, 1icon+overflow, icons+overflow, With Button, Button + Icon, Button + Icons, Button + Overflow) and nothing beyond. Out-of-spec configurations like four trailing items become impossible to express.\n- **Previews expanded 4 → 14**, covering each of the 10 `Type` variants individually plus four \"axis isolation\" tiles for `backButton` × `subtitle` on Type=Default plus a long-title ellipsis test. Catalog `NavigationDemo` migrated to the new slot API.\n\n### Added\n- **`AurumRadioButton` + `AurumRadioGroup`** — single-choice selection control + group, mapped to the Figma `radioButton` (`5126:2507`) and `RadioGroup` (`5157:2034`) component_sets. `AurumRadioButton` supports `selected`, `enabled`, `error`, optional `label` + `subtext`, and `labelPosition` (`End` = Figma `leftAligned`, `Start` = Figma `rightAligned`); `null` label renders the `withoutLabel` circle-only variant. The 24 dp circle is drawn via `Canvas` (no SVG asset) — outline tints by state (default-neutral, selected/primary, error/negative-intense, disabled-faded), 10 dp inner dot when selected, focus state-layer ring on press. `AurumRadioGroup<T>` takes an `ImmutableList<AurumRadioOption<T>>` plus optional `label`/`helperText`/`errorText`; passing `errorText` switches the group into the validation-error visual. Both ship Code Connect mappings (`AurumRadioButton.figma.kt`, `AurumRadioGroup.figma.kt`) and 8 + 5 `@AurumPreview` previews. Catalog `SelectionDemo` extended with a single-radio row plus a plan-picker radio group.\n\n### Fixed\n- **`AurumTopAppBar` aligned with the canonical Figma \"Page Header\" variant set** (`YvIxqu2oTlM6UnkL0OloHc`, set `4826:1058`). Re-audited against the new component_set after spotting two coexisting Page Header sets in the file. Drifts corrected:\n  - Title: now `Title/S-SemiBold` semantics — 16/24, **SemiBold 600**, primary family (was Medium). Achieved with `titleT1.copy(fontWeight = SemiBold)` until typography tokens get a SemiBold S/XS scale.\n  - Subtitle: now 12/16 **Medium 500** primary family (was Regular `bodyB3`); colour cascades from `contentColor` (matches Figma — hierarchy comes from weight/size, not colour).\n  - Primary button label: now `Title/XS-SemiBold` — 14/20, **SemiBold 600** (was Medium).\n  - Primary button: pinned 32 dp tall × ≤120 dp wide, horizontal-only padding, `interactive/background/primary/default` background — matches the canonical `4826:1812` \"Button + Icons\" instance.\n  - Right-group start padding removed — `justify-between` is already implied by the left's `weight(1f)`.\n  - Stray whitespace cleanup at the right-group block.\n  - Code Connect URL re-pointed to `4826:1058` (was a stale `4238:10259` set with a `Type=Type11` orphan). Per-axis `@FigmaProperty` mappings dropped because `4826:1058` has no `componentPropertyDefinitions` defined on the parent set — its 10 variants exist only as individually-named components, not property combinations. The Code Connect example now renders the canonical \"Button + Icons + back + subtitle\" configuration unconditionally; designers see the same snippet for any variant they instance. Flagged the missing-property-definitions issue in a Figma comment for the design team.\n  - Subtitle-colour API simplified: dropped the short-lived `subtitleColor` parameter — Figma cascades a single colour to the Title group; `contentColor` now governs both lines.\n- **Previews expanded** from 4 → 8 to span the new variant matrix: `Default`, `WithBack`, `WithSubtitle`, `WithBackAndSubtitle`, `WithButton`, `WithOverflowOnly`, `WithIcons`, `FullHeader`.\n\n### Changed\n- **`@AurumPreview` trimmed to two phone tiles.** Foldable (600 dp), tablet (840 dp), and a11y font-scale (1.5×, 2.0×) variants commented out — they cluttered Studio's preview pane on every Composable, and we're not currently solving for those surfaces from design. Active tiles are now just `phone-narrow(320dp)` and `phone-compact(360dp)`. Roborazzi captures only the active tiles. Re-enable any tile later by uncommenting in `AurumPreview.kt`. Knock-on: gallery `DEVICE_META` updated, README updated, all old baselines regenerated on CI.\n- **`/icons.html` UI polish.** Each card now shows the line and filled weights as two clearly-divided cells with `LINE` / `FILLED` captions, the symbol name as the primary heading, and the `AurumIcons.<Cat>.<Symbol>` path as a discrete, button-styled copy chip with a copy icon and proper hover/focus/active states. Reads correctly in both light and dark themes.\n\n### Tooling\n- **Gallery deploy gated on a green Check.** `pages.yml` now triggers on `Check` workflow success (via `workflow_run`) instead of on every push. Eliminates the broken-intermediate-state window when baselines are mid-rollout (e.g. during a structural rename or bulk re-record). `record.yml` no longer dispatches `pages.yml` directly — `Check` succeeding does that automatically.\n\n## [0.1.5] - 2026-04-28\n\n### Fixed\n- **All 114 icons re-rendered to match Figma.** The previous import pipeline used Figma MCP asset URLs that returned only the inner SVG path with `viewBox` set to the path's tight bounding box (e.g. `7.5 × 13.5` for ChevronRight). Combined with `width/height = 24dp`, this caused non-uniform stretch and stripped the surrounding 24×24 frame padding — the chevron rendered fat and squashed, every other non-square icon was distorted, and even square-bbox icons lost their intended 2-3 dp inset.\n- **Stroke-only icons no longer get a fill.** Phosphor regular-weight SVGs carry `fill=\"none\"` at the `<svg>` root, cascading to children. The previous import didn't honour the cascade and emitted both `fillColor` and `strokeColor` — so e.g. `Home` rendered as a solid black house instead of the intended outline.\n\n### Changed\n- **Icon import pipeline rewritten** to fetch via the Figma REST API (`/v1/images?…&format=svg`) using `$FIGMA_ACCESS_TOKEN`. REST exports include the 24×24 frame and proper SVG-level fill cascade, so the conversion is a clean 1:1 to Vector Drawable. The per-icon `COMPOUND_TRANSLATES` workaround (previously hand-coded for SpeakerSimpleX) is no longer needed and was removed. The stale `figma-icon-urls.json` URL manifest was deleted.\n\n### Added\n- **`/icons.html` page** on the gallery website — every icon's line + fill weights side by side, grouped by category, with live search and click-to-copy on `AurumIcons.<Category>.<Symbol>`. Reads `AurumIcons.kt` and inlines each Vector Drawable as `currentColor` SVG so icons follow the page theme. No longer need to install the catalog APK to scan the icon set.\n\n## [0.1.4] - 2026-04-28\n\n### Changed\n- **`AurumChip`** realigned with the Figma \"Action\" chip component (`YvIxqu2oTlM6UnkL0OloHc`, node `4446-701`). Adds `size` (`AurumChipSize.Large` / `Small`) and `leadingIcon` parameters; height tightened to 38 dp Large / 30 dp Small (from 40 dp); padding now asymmetric (12 dp text-side, 8 dp icon-side); inter-element gap reduced 8 → 4 dp; text style varies by size (`titleT2` / `bodySmall`). Existing call sites are unaffected — new parameters default to the prior behaviour. Previews regrouped into Large-trailing / Large-leading / Large-both / Large-text-only / Small / Disabled.\n- **Code Connect** for `AurumChip` picks up the new `Size` axis (`large` ↔ `Large`, `small` ↔ `Small`).\n\n## [0.1.3] - 2026-04-27\n\n### Added\n- **Compose perf guardrails.** Detekt + [`mrmans0n/compose-rules`](https://github.com/mrmans0n/compose-rules) wired in, with the perf/stability rules active (`UnstableCollections`, `MutableStateAutoboxing`, `MutableParams`, `MutableStateParam`, `LambdaParameterInRestartableEffect`, `Material2`). Compose Compiler Metrics enabled on `:aurum` and `:aurum-catalog` (`build/compose_compiler/`).\n- **Compose stability CI gate.** New `verifyComposeStability` Gradle task in `:aurum` fails the build when `aurum_release-classes.txt` reports more inferred-unstable classes than `composeStabilityThreshold` (currently `0`). Wired into `check.yml` after detekt.\n- **Compose metrics dashboard** deployed alongside the gallery at [changejarapp.github.io/aurum-android/metrics/](https://changejarapp.github.io/aurum-android/metrics/), rendered from `build/compose_compiler/` via [`PatilShreyas/compose-report-to-html`](https://github.com/PatilShreyas/compose-report-to-html). Per-PR `compose-metrics` artifact uploaded by `check.yml`.\n- **Aurum icon set** — 57 icons × 2 weights = 114 vector drawables imported from the Figma \"Component Icons\" frame, exposed under `AurumIcons.<Category>.<Name>` (and `<Name>Filled` for the fill variant). 8 categories: `Navigation`, `Action`, `Content`, `Media`, `Commerce`, `System`, `Status`, `User`. Ingested by the new `tooling/icons/import_from_figma.py` script (`make icons-import`); idempotent re-runs.\n- **`IconGallery`** screen in the catalog showing every icon × weight, grouped by category.\n- **114 Code Connect mappings** for the new icons under `aurum/src/main/kotlin/com/jar/app/aurum/component/icon/figma_connect/AurumIcon*.figma.kt`. Auto-published to Figma via the `figma-code-connect.yml` workflow.\n\n### Changed\n- **6 overlapping icons replaced** from the Figma source-of-truth: `Navigation.Back`→`ArrowLeft`, `Navigation.ChevronForward`→`ChevronRight`, `Media.Like`→`Content.Heart` (renames; 12 call-site migrations across `AurumTopAppBar`, `AurumChip`, `AurumSectionHeader`, `AurumLinkButton`, and the catalog gallery). `Navigation.Close`, `Action.Edit`, `Action.Search` kept their names — only their underlying XML content was replaced.\n- **5 components marked codebase-only**: `AurumSearchField`, `AurumIconButton`, `AurumDivider`, `AurumLoader`, `AurumSkeleton` — verified absent from the Figma library via MCP search. File-level marker added so future Code-Connect audits don't keep flagging them.\n- **`AurumIcons.kt` regenerated** from the import script. The 3 legacy entries that lack a Figma counterpart (`Action.Add`, `Action.Overflow`, `Selection.Check`) remain hand-authored under `res/drawable/` and are flagged in-file pending design escalation.\n- **`record.yml` now also dispatches `pages.yml`** after committing fresh baselines on `main`, so the gallery's snapshot embeds redeploy without a manual trigger.\n\n### Fixed\n- **`AurumOtpInput`**: keyed `LaunchedEffect` on the completion-boundary transition (`value.length == maxLength`) instead of `value` itself, so the coroutine no longer relaunches on every keystroke.\n- **`AurumSkeleton`**: moved the `shimmerProgress` state read out of the `drawWithCache` cache block and into `onDrawBehind`, so the cache is no longer invalidated on every animation frame. The gradient `colors` list is now `remember`-ed.\n- **`AurumText`**: `inlineContent` parameter typed as `ImmutableMap<…>` instead of `Map<…>`, restoring skippability (caught by the new compose-rules `UnstableCollections` rule).\n- **CI Java mismatch**: `compose-report-to-html` v1.5.0 JAR is built against Java 21; `check.yml` and `pages.yml` now install JDK 21 alongside JDK 17 and invoke the JAR via `$JAVA_HOME_21_X64/bin/java`.\n\n### Tooling\n- New Makefile targets: `make lint-compose`, `make compose-metrics`, `make compose-metrics-html`, `make icons-import`, `make icons-brand` (rename of the prior `make icons` for clarity vs the new icon-set sync).\n- New tooling scripts: `tooling/icons/import_from_figma.py` (Figma SVG → Vector Drawable + AurumIcons.kt + Code Connect codegen) and `tooling/gallery/render_metrics_index.py` (gallery `/metrics/` landing page).\n\n## [0.1.2] - 2026-04-23\n\n### Added\n- **Screenshot testing** via Roborazzi + ComposablePreviewScanner. 334 baseline\n  PNGs committed under `aurum/src/test/snapshots/` (Git LFS-tracked) covering\n  every `@Preview` and every tile of the `@AurumPreview` 6-device fan-out.\n  Any visual regression fails CI before merge. Tasks: `recordRoborazziDebug`\n  (refresh baselines), `verifyRoborazziDebug` (CI check), `compareRoborazziDebug`\n  (diff without failing).\n- **`.github/workflows/check.yml`** — PR + main-push workflow running library +\n  catalog build, lint, and snapshot verification. Diff PNGs uploaded as a\n  workflow artifact on any screenshot drift so design reviewers can eyeball\n  the exact delta.\n- **Git LFS** (`.gitattributes`) tracking `aurum/src/test/snapshots/**/*.png`\n  — keeps pack files small, surfaces binary diffs in PR UIs.\n\n## [0.1.1] - 2026-04-23\n\n### Changed\n- **Maven coordinate realigned** with Jar's library convention.\n  - Before: `com.jarapp:aurum:<ver>`\n  - After:  `com.jar.internal.library.aurum-android:core:<ver>`\n  - Kotlin import package inside the AAR stays `com.jar.app.aurum.*` — no source rename.\n  - This lets consumers resolve Aurum via the existing `Changejarapp/*` wildcard\n    Maven repo in `jar-android/settings.gradle.kts`, identical to how\n    `com.jar.internal.library.core-network:shared` and siblings are resolved.\n  - The previous `com.jarapp:aurum:0.1.0` artifact is stale and should not be\n    consumed — it's kept in GitHub Packages only to avoid the \"published once,\n    cannot re-publish the same coord\" rule.\n\n### Removed\n- `AurumElevation.toast` + `ElevationTintColors.toast` + `AurumLightElevation.toast` entry + `AurumLightColors.elevationTint.toast` value — Figma ships only a tint for `elevation/_toast` (no dedicated dims) and the fallback shape matched `lowRaised`, so the Kotlin surface added API surface without semantic value. Snackbars/toasts now use `Aurum.elevation.lowRaised` directly. The plugin mapping (`figma-plugin-aurum-sync`) marks `_toast` as an explicitly skipped elevation token and bumps to `0.1.1`.\n\n### Added\n- `AurumColors.visual` — new decorative palette subgroup exposing 77 chromatic tokens (blue/green/orange/pink/purple/red/yellow × shades 50…1000). Mirrors Figma's `visual_colors` collection 1:1 and sources values from `AurumPalette` primitives. Feature code uses `Aurum.colors.visual.<family><shade>` for palette-keyed decorative colours that have no semantic meaning. Raw `AurumPalette` stays `internal`.\n- `AurumPhoneNumberInput` — phone-number variant of `AurumTextField` with country-code prefix slot, optional flag composable, digit-only input filter, `KeyboardType.Phone`, and a default 10-digit max length. Mirrors the Figma \"Phone Number Input\" component set.\n- `AurumTextField.figma.kt` — Code Connect stub against Figma `4623:373` mapping `state`, `validationState`, `multi_line`, `label`, `showHelpText` to `AurumTextField` API props.\n- `AurumPhoneNumberInput.figma.kt` — Code Connect stub against Figma `4904:2455` mapping `state`, `validationState`, `hasValue`, `label`, `showHelpText`.\n- `AurumOtpValidationState.Timer` — fourth validation state for resend-countdown UX. Renders identically to `None` but provides a semantic channel matching the Figma `validationState=timer` variant.\n- `Modifier.aurumHardShadow(color, offsetY, shape)` — solid-colour offset drop shadow for skeuomorphic \"stacked card\" effects (matches Figma's `shadow(0, Ypx, 0, 0, color)` spec). Encapsulates the double-box idiom into a single modifier that expands layout by `offsetY` and paints the shape outline behind content.\n\n### Fixed\n- `AurumOtpInput` disabled digits now use `surface.textDefaultDisabled` (matching Figma `text/default/disabled`) instead of `textDefaultNormal` at 10% alpha.\n- `AurumTopAppBar` synced to Figma `4826:1057` Page Header: title uses SemiBold (was Medium); subtitle uses `labelL2` Medium 12/16 in `textDefaultNormal` (was `bodyB3` Normal in `textDefaultSubtle`); primary button uses SemiBold label and natural 36 dp height from 8 dp padding (was fixed 32 dp, Medium); back + action icons tint via `interactive.iconNeutralNormal` (was `surface.textDefaultNormal` — same hex, correct token). Docstring fix: icon wrapper is 32 × 40 dp (w × h), not 40 × 32.\n- `AurumBadge` synced to Figma `4240:10843`: both emphases now render at `Label/L-Medium` (12/16 Inter Medium) — previously had a 18 sp line-height and Intense emphasis rendered Normal weight. Emphasis-specific text styles collapsed to a single shared style.\n- `AurumSectionHeader` synced to Figma `3702:162168`: title, link label, and text-action label render SemiBold (`Title/S-SemiBold` / `Title/XS-SemiBold`); icon-action tint uses `interactive.iconNeutralNormal` (was `surface.iconDefaultNormal` — same hex, correct semantic).\n- `AurumSwitch` synced to Figma `4018:557`: thumb now uses `interactive.bgNeutralInverse` (was `surface.bgPageBase` — same hex, correct semantic); checked icon uses `interactive.iconPrimaryNormal` (was `bgPrimaryDefault`); disabled-checked icon uses `interactive.iconNeutralDisabled` (was `bgNeutralDisabled` — **real hex drift** fixed).\n- `AurumStepper` synced to Figma `3834:139631`: numeric value and ± symbols render Bold (`Num/XS`); Neutral and Brand state colours moved to the `interactive.*` token family; disabled-state bg/border/icon hexes corrected (`#6C849D17` / `#C3C7D1` were previously rendering as `#ECEEF3` / `#848A99`).\n- `AurumLabel` synced to Figma `3774:137816`: all variants render Medium weight (was SemiBold); `Strong` variant now uses `labelL2` size (was `labelL1`) and `feedback.textPrimaryIntense` colour (was `surface.textDefaultNormal`).\n- `AurumButton` synced to Figma `4692:1074`: primary-disabled text token changed to `textPrimaryDisabled` (was `textOnPrimaryDisabled`); secondary variant border uses `borderPrimaryDefault` when enabled and `borderNeutralMuted` when disabled (was `borderNeutralDefault` / `borderNeutralDisabled`).\n\n## [0.2.0] - 2026-04-16\n\n### Added\n- **Figma Code Connect** infrastructure: Gradle plugin, CLI, `*.figma.kt` pattern\n- `AurumIcons` namespace with 8 XML Vector Drawables from Figma exports\n- `AurumLinkButton` — new component from Figma Button page\n- `AurumBadge` — 6 colors × 2 emphases × 2 sizes from Figma\n- `AurumOtpInput` — digit-by-digit OTP from Figma spec\n- `AurumStepper` — numeric +/− from Figma spec\n- `AurumLabel` — styled text label from Figma spec\n- `AurumSectionHeader` — section divider from Figma spec\n- `AurumSwitch` — toggle from Figma spec\n- `version.properties` for semver tracking\n\n### Changed\n- **AurumButton** rebuilt from Figma spec: 3 variants (removed Ghost/Destructive), corrected heights (40/48/56dp), added `isFullWidth` + `isLoading`, 12dp corner radius\n- **AurumTypography** restructured to match Figma type scale: 14 scale composites (Display/Heading/Body/Caption) + 6 component-level styles\n- **AurumTextField** audited: added success state, readonly treatment, character counter, fixed error token layer\n- All Material Icons replaced with `AurumIcons.*` (XML Vector Drawables loaded via `ImageVector.vectorResource()`)\n- Button size enum renamed `Sm/Md/Lg` → `Small/Medium/Large`\n- Button style enum renamed `AurumButtonStyle` → `AurumButtonVariant`\n\n### Fixed\n- Secondary button was filled grey — now transparent bg + outline border per Figma\n- Typography composites were engineering assumptions — now 14 match actual Figma scale\n- Hand-drawn `ImageVector.Builder` paths replaced with proper XML drawables\n\n## [0.1.0] - 2026-04-16\n\n### Added\n- Initial Aurum module scaffold (`:core-designsystem` + `:core-designsystem-catalog`)\n- 196 semantic colour tokens from Figma export (6 sub-structs)\n- Spacing, radius, border-width, icon-size, elevation, motion, opacity tokens\n- `AurumTheme` composable with `MaterialBridge` (hybrid M3 architecture)\n- Foundation primitives: `AurumText`, `AurumIcon`, `AurumSurface`, `AurumDivider`\n- Interactive primitives: `AurumButton`, `AurumIconButton`, `AurumTextField`, `AurumSearchField`\n- Navigation: `AurumTopAppBar` (10 Figma variants)\n- Feedback: `AurumLoader`, `AurumSkeleton`\n- Preview infrastructure: `@AurumPreview`, `AurumPreviewSurface`\n- `Modifier.aurumShadow()` for elevation rendering\n- CLAUDE.md module guide + 30 documentation files\n- Catalog app with 6 foundation gallery screens\n",
     "entries": [
       {
         "version": "Unreleased",
         "date": null,
         "sections": {
+          "Tooling": [
+            "**Gallery deploy gated on a green Check.** `pages.yml` now triggers on `Check` workflow success (via `workflow_run`) instead of on every push. Eliminates the broken-intermediate-state window when baselines are mid-rollout (e.g. during a structural rename or bulk re-record). `record.yml` no longer dispatches `pages.yml` directly — `Check` succeeding does that automatically."
+          ],
           "Changed": [
             "**`@AurumPreview` trimmed to two phone tiles.** Foldable (600 dp), tablet (840 dp), and a11y font-scale (1.5×, 2.0×) variants commented out — they cluttered Studio's preview pane on every Composable, and we're not currently solving for those surfaces from design. Active tiles are now just `phone-narrow(320dp)` and `phone-compact(360dp)`. Roborazzi captures only the active tiles. Re-enable any tile later by uncommenting in `AurumPreview.kt`. Knock-on: gallery `DEVICE_META` updated, README updated, all old baselines regenerated on CI.",
             "**`/icons.html` UI polish.** Each card now shows the line and filled weights as two clearly-divided cells with `LINE` / `FILLED` captions, the symbol name as the primary heading, and the `AurumIcons.<Cat>.<Symbol>` path as a discrete, button-styled copy chip with a copy icon and proper hover/focus/active states. Reads correctly in both light and dark themes."
@@ -4985,9 +5691,6 @@
           "Fixed": [
             "**`AurumTopAppBar` aligned with the canonical Figma \"Page Header\" variant set** (`YvIxqu2oTlM6UnkL0OloHc`, set `4826:1058`). Re-audited against the new component_set after spotting two coexisting Page Header sets in the file. Drifts corrected:\n- Title: now `Title/S-SemiBold` semantics — 16/24, **SemiBold 600**, primary family (was Medium). Achieved with `titleT1.copy(fontWeight = SemiBold)` until typography tokens get a SemiBold S/XS scale.\n- Subtitle: now 12/16 **Medium 500** primary family (was Regular `bodyB3`); colour cascades from `contentColor` (matches Figma — hierarchy comes from weight/size, not colour).\n- Primary button label: now `Title/XS-SemiBold` — 14/20, **SemiBold 600** (was Medium).\n- Primary button: pinned 32 dp tall × ≤120 dp wide, horizontal-only padding, `interactive/background/primary/default` background — matches the canonical `4826:1812` \"Button + Icons\" instance.\n- Right-group start padding removed — `justify-between` is already implied by the left's `weight(1f)`.\n- Stray whitespace cleanup at the right-group block.\n- Code Connect URL re-pointed to `4826:1058` (was a stale `4238:10259` set with a `Type=Type11` orphan). Per-axis `@FigmaProperty` mappings dropped because `4826:1058` has no `componentPropertyDefinitions` defined on the parent set — its 10 variants exist only as individually-named components, not property combinations. The Code Connect example now renders the canonical \"Button + Icons + back + subtitle\" configuration unconditionally; designers see the same snippet for any variant they instance. Flagged the missing-property-definitions issue in a Figma comment for the design team.\n- Subtitle-colour API simplified: dropped the short-lived `subtitleColor` parameter — Figma cascades a single colour to the Title group; `contentColor` now governs both lines.",
             "**Previews expanded** from 4 → 8 to span the new variant matrix: `Default`, `WithBack`, `WithSubtitle`, `WithBackAndSubtitle`, `WithButton`, `WithOverflowOnly`, `WithIcons`, `FullHeader`."
-          ],
-          "Tooling": [
-            "**Gallery deploy gated on a green Check.** `pages.yml` now triggers on `Check` workflow success (via `workflow_run`) instead of on every push. Eliminates the broken-intermediate-state window when baselines are mid-rollout (e.g. during a structural rename or bulk re-record). `record.yml` no longer dispatches `pages.yml` directly — `Check` succeeding does that automatically."
           ]
         }
       },
