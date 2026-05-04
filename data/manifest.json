@@ -3,14 +3,14 @@
   "aurum": {
     "library": "aurum-android",
     "version": "0.1.5",
-    "sha": "2015b4aed3f2c8b0891d43412018289fd5e5d0e7",
+    "sha": "551f9b351ee9791ac430243a2da18a41a18dcb7a",
     "platforms": [
       "android"
     ]
   },
   "meta": {
-    "generatedAt": "2026-05-04T04:16:08+00:00",
-    "manifestSha": "9525031985d4e5064ae52bf4e7a9c17f11104aab052425bb97849584c234d28c",
+    "generatedAt": "2026-05-04T05:18:37+00:00",
+    "manifestSha": "5454510b303510c63adce1d159cb371dc8ff52cc42841e4e2438864b0343169d",
     "figmaFileKey": "YvIxqu2oTlM6UnkL0OloHc",
     "galleryUrl": "https://changejarapp.github.io/aurum-android/"
   },
@@ -161,6 +161,19 @@
       "codeConnectPath": null,
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/button/AurumIconButton.html",
       "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/button/AurumIconButton.kt",
+      "intendedUse": "Use as a top-bar action affordance, dense list-row trailing action, or any spot where a labelled button would crowd the layout. The 48 dp touch target is maintained even when the visible glyph is smaller. For label-bearing actions reach for [AurumButton]; for low-emphasis text actions use [AurumLinkButton].",
+      "usage": {
+        "do": [
+          "Provide an explicit `contentDescription` on the inner [AurumIcon] — icon-only buttons fail accessibility audits without one.",
+          "Use as the trailing-icon slot inside `AurumTopAppBarAction` / list rows where space is constrained.",
+          "Pick monosemic icons (close, more, edit) — never decorative ones whose meaning shifts by context."
+        ],
+        "dont": [
+          "Use as the screen's primary CTA — icon-only buttons read as utility, not commitment; use [AurumButton] for that.",
+          "Cluster more than 2 [AurumIconButton]s in a row without grouping under an `AurumTopAppBar` overflow — three is overflow territory.",
+          "Wrap `material3.IconButton` directly in feature code; that's exactly what this component prevents."
+        ]
+      },
       "relatedTokens": [
         "spacing.s3",
         "surface.iconDefaultDisabled"
@@ -221,6 +234,19 @@
       "codeConnectPath": "aurum/src/main/kotlin/com/jar/app/aurum/component/button/AurumLinkButton.figma.kt",
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/button/AurumLinkButton.html",
       "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/button/AurumLinkButton.kt",
+      "intendedUse": "Use for low-emphasis inline actions next to body copy (\"Skip\", \"Read more\", \"Resend OTP\", \"Forgot password?\"). The lack of fill / outline makes it read as text — not as a CTA — so users feel free to ignore it. For deliberate commitment actions (submit, confirm, continue) reach for [AurumButton]; for icon-only affordances use [AurumIconButton].",
+      "usage": {
+        "do": [
+          "Pair with longer prose context — \"Already have an account? Sign in\" reads naturally; a bare standalone link button looks orphaned.",
+          "Reserve for navigational + secondary actions — \"Forgot password?\", \"Resend code\", \"Learn more\".",
+          "Place inline with the surrounding paragraph copy at the same baseline; don't right-align it as a fake CTA."
+        ],
+        "dont": [
+          "Use as the form-submit button — that's [AurumButton] with `Primary` variant; users won't perceive the link as a commitment.",
+          "Stack two link buttons in the same row — they read as a list of links, losing the \"single low-emphasis action\" intent.",
+          "Render destructive actions (Delete, Cancel subscription) here — destructive flows need [AurumButton] with explicit confirmation, not text-styled affordances."
+        ]
+      },
       "relatedTokens": [
         "iconSize.lg",
         "interactive.textPrimaryNormal",
@@ -377,10 +403,22 @@
       "codeConnectPath": null,
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/divider/AurumDivider.html",
       "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/divider/AurumDivider.kt",
+      "intendedUse": "Use as a thin separator between rows in a list, or before/after a logical content group. Keeps the surface scannable without introducing a new section affordance. For section headings use [AurumSectionHeader]; for layout spacing use `Aurum.space.*` tokens (a Spacer with the right height is structurally cheaper than a divider).",
+      "usage": {
+        "do": [
+          "Use the default `borderSurfaceLowContrast` colour — it's tuned to be visible without competing with content.",
+          "Reach for `borderWidth.xs` (default, hairline) — thicker dividers read as decoration rather than separation."
+        ],
+        "dont": [
+          "Use as decorative page-break flourish — that's a typography or layout concern, not a divider.",
+          "Use for layout spacing — a `Spacer(Modifier.height(Aurum.space.s5))` is the right tool when you just need air, not a visible line."
+        ]
+      },
       "relatedTokens": [
         "borderWidth.lg",
         "borderWidth.xs",
         "spacing.s3",
+        "spacing.s5",
         "spacing.s7",
         "surface.borderBrandNormal",
         "surface.borderSurfaceLowContrast",
@@ -445,6 +483,19 @@
       "codeConnectPath": "aurum/src/main/kotlin/com/jar/app/aurum/component/feedback/AurumBadge.figma.kt",
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/feedback/AurumBadge.html",
       "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/feedback/AurumBadge.kt",
+      "intendedUse": "Use as a small status / categorisation / count indicator anchored to another piece of content — \"New\" pill on a list item, \"Verified\" stamp on a profile, unread count on an avatar. The `Intense` emphasis pulls the eye; `Subtle` is the same role at lower volume. For longer-running ephemeral feedback use [AurumSnackbar]; for tappable filters use [AurumChip].",
+      "usage": {
+        "do": [
+          "Pick the `color` from semantic intent — Positive for success, Negative for failure, Notice for warnings, Info for neutral context.",
+          "Anchor the badge to its subject (top-right of an icon, inline before a label) so the relationship is unambiguous.",
+          "Keep labels to 1–2 words; the pill clamps at `iconSize.md` height and long text wraps awkwardly."
+        ],
+        "dont": [
+          "Use as a tappable affordance — badges are non-interactive. For tap actions use [AurumChip] (filter / select) or [AurumIconButton] (action).",
+          "Stack badges vertically on a single subject; one anchored badge per item conveys status best.",
+          "Mix multiple `color` roles on the same surface for the same kind of subject — readers infer hierarchy from the role choice."
+        ]
+      },
       "relatedTokens": [
         "iconSize.md",
         "spacing.s2",
@@ -504,9 +555,23 @@
       "codeConnectPath": null,
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/feedback/AurumLoader.html",
       "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/feedback/AurumLoader.kt",
+      "intendedUse": "Use for short-duration, action-bound waits where the user has just initiated something — submitting a form, fetching a fresh result, retrying after an error. Rule of thumb: if the wait could exceed ~2 seconds and you have content shape to suggest, use [AurumSkeleton] instead so the surface keeps its perceived layout.",
+      "usage": {
+        "do": [
+          "Render inline next to the action that triggered the wait (e.g. inside [AurumButton]'s `isLoading` slot, in a list-row inline spinner).",
+          "Provide an accessibility label on the parent surface so screen readers announce \"Loading\" — the spinner itself is decorative.",
+          "Default size to [Aurum.iconSize.xxl] for screen-level waits; use [Aurum.iconSize.md] for inline-button spinners."
+        ],
+        "dont": [
+          "Use for long page loads — multi-second blank screens are perceived as broken; switch to [AurumSkeleton].",
+          "Render as decorative animation on idle surfaces — the spinner specifically signals \"something is in progress\".",
+          "Stack multiple spinners on the same screen for parallel requests; aggregate to one canonical \"loading\" affordance."
+        ]
+      },
       "relatedTokens": [
         "borderWidth.lg",
         "borderWidth.xl",
+        "iconSize.md",
         "iconSize.xxl",
         "interactive.bgPositiveDefault",
         "interactive.bgPrimaryDefault",
@@ -546,6 +611,19 @@
       "codeConnectPath": null,
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/feedback/AurumSkeleton.html",
       "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/feedback/AurumSkeleton.kt",
+      "intendedUse": "Use as a content-shaped placeholder during the initial fetch on list / detail surfaces, where the eventual layout is known and the wait is multi-second. Keeps the surface visually stable so users perceive less latency. For action-bound short waits use [AurumLoader] instead.",
+      "usage": {
+        "do": [
+          "Match the skeleton dimensions and shape to the eventual content (avatar circle, full-width text-line height) so the swap-in is invisible.",
+          "Render multiple skeletons with realistic variation in widths to mimic real text — uniform-width rows look fake.",
+          "Keep the shimmer running until real content is ready; never freeze on a static skeleton frame."
+        ],
+        "dont": [
+          "Use for short single-action waits — that's [AurumLoader].",
+          "Render skeletons indefinitely on error states — switch to a meaningful empty/error view after a reasonable timeout.",
+          "Replace text-line skeletons with bare horizontal lines — pad to the realistic line height so the layout doesn't jump on swap-in."
+        ]
+      },
       "relatedTokens": [
         "spacing.s4",
         "spacing.s5",
@@ -783,6 +861,19 @@
       "codeConnectPath": "aurum/src/main/kotlin/com/jar/app/aurum/component/field/AurumPhoneNumberInput.figma.kt",
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/field/AurumPhoneNumberInput.html",
       "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/field/AurumPhoneNumberInput.kt",
+      "intendedUse": "Use whenever capturing a phone number that needs an E.164-style country prefix — login, KYC, recipient details. The leading country-code slot is always visible so users see the dialing context even before typing. For bare numeric capture without country context, use [AurumTextField] with a numeric keyboard.",
+      "usage": {
+        "do": [
+          "Default `countryCode = \"+91\"` for India-first surfaces; pass an explicit value for international flows.",
+          "Pair with a country picker (when available) that updates `countryCode` + `flag` together — never let one drift from the other.",
+          "Use the `errorText` channel for \"phone already registered\" / \"invalid number\" feedback — keep the channel consistent with [AurumTextField]."
+        ],
+        "dont": [
+          "Bypass the country code — bare digit input loses E.164 context downstream and creates locale ambiguity.",
+          "Pre-format the value with spaces / hyphens; the underlying field stores raw digits and formatting belongs in display only.",
+          "Use this for OTP — [AurumOtpInput] is the right primitive for numeric one-time codes."
+        ]
+      },
       "relatedTokens": [
         "borderWidth.sm",
         "surface.borderSurfaceMidContrast",
@@ -848,6 +939,19 @@
       "codeConnectPath": null,
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/field/AurumSearchField.html",
       "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/field/AurumSearchField.kt",
+      "intendedUse": "Use as an in-screen search box at the top of a list / directory surface. The pill shape + leading magnifier glyph is the canonical \"search\" affordance — users recognise it instantly. For filtering by category use a row of [AurumChip]s instead; for free-form text input use [AurumTextField].",
+      "usage": {
+        "do": [
+          "Wire `onValueChange` to a debounced query (250–400 ms) — search-as-you-type without flooding the backend.",
+          "Provide `onClear` whenever the search has any state worth clearing — users expect the X to wipe the query and reset results.",
+          "Anchor at the top of the scrollable surface; sticky-on-scroll if the list is long."
+        ],
+        "dont": [
+          "Use as a generic single-line input — the pill shape signals search semantics; reusing it for unrelated text confuses users.",
+          "Submit on Enter without also surfacing real-time results; users expect search to feel live.",
+          "Stack two AurumSearchFields on the same surface — there should be one search context at a time."
+        ]
+      },
       "relatedTokens": [
         "surface.iconDefaultNormal",
         "surface.iconDefaultSubtle"
@@ -1006,6 +1110,19 @@
       "codeConnectPath": "aurum/src/main/kotlin/com/jar/app/aurum/component/field/AurumTextField.figma.kt",
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/field/AurumTextField.html",
       "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/field/AurumTextField.kt",
+      "intendedUse": "Use for free-text capture on form surfaces — name, address, notes, message body, anything that maps cleanly to a string. For specialised inputs reach for the dedicated component: [AurumOtpInput] for numeric one-time passwords, [AurumPhoneNumberInput] for phone numbers with country prefix, [AurumSearchField] for in-screen search boxes.",
+      "usage": {
+        "do": [
+          "Pair `errorText` with [AurumColors.feedback]-tinted helper styling and a clear validation message — never silently mark fields wrong.",
+          "Set `maxLength` together with the character counter for any field with backend-enforced length limits — gives users instant feedback.",
+          "Use `KeyboardOptions(keyboardType = …)` to surface the right keyboard for the data shape (numeric, email, URL)."
+        ],
+        "dont": [
+          "Use this for OTP entry — [AurumOtpInput] handles paste, autofill, and resend-timer UX correctly.",
+          "Wrap `material3.OutlinedTextField` directly anywhere in feature code — that's exactly what this component prevents.",
+          "Override `colors`/`shape` with raw values; recolour through validation state (`isError` / `isSuccess`) instead."
+        ]
+      },
       "relatedTokens": [
         "feedback.borderNegativeIntense",
         "feedback.borderPositiveIntense",
@@ -1076,8 +1193,22 @@
       "codeConnectPath": null,
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/icon/AurumIcon.html",
       "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/icon/AurumIcon.kt",
+      "intendedUse": "Use to render any `AurumIcons.*` ImageVector with Aurum-token tinting. The 24 dp default matches Figma's canonical icon size; pass `Aurum.iconSize.*` tokens for other scales. For interactive tap targets wrap in [AurumIconButton]; for decorative inline glyphs inside text, render via [AurumText] with an inline icon span.",
+      "usage": {
+        "do": [
+          "Provide a meaningful `contentDescription` whenever the icon conveys information not already present in nearby text — screen readers depend on it.",
+          "Use `Aurum.colors.surface.icon*` tokens for `tint` — they pair correctly with the surrounding background contrast.",
+          "Pick the `size` from `Aurum.iconSize.*` (sm / md / lg / xl / xxl); arbitrary dp values break the visual rhythm."
+        ],
+        "dont": [
+          "Use raw drawable resources or `painterResource` directly — `AurumIcons.*` is the canonical entry point and round-trips with the manifest's icon catalog.",
+          "Tint with raw `Color()` literals; recolour through `Aurum.colors.*` so light/dark/state variants flow.",
+          "Wrap `material3.Icon` directly anywhere in feature code; that's exactly what this primitive prevents."
+        ]
+      },
       "relatedTokens": [
         "iconSize.xl",
+        "surface.icon",
         "surface.iconDefaultNormal"
       ]
     },
@@ -1143,6 +1274,19 @@
       "codeConnectPath": "aurum/src/main/kotlin/com/jar/app/aurum/component/input/AurumStepper.figma.kt",
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/input/AurumStepper.html",
       "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/input/AurumStepper.kt",
+      "intendedUse": "Use for small bounded integer ranges where the user picks a count by incrementing — cart quantity, count of N selections, number of attendees. The \"Initial State\" / \"Add\" affordance handles the first-tap onboarding without the user needing to know the bounds. For free numeric input use [AurumTextField] with a numeric keyboard; for unbounded values use a slider (when available).",
+      "usage": {
+        "do": [
+          "Set `maxValue` to the real backend limit so the + button disables on the boundary instead of erroring after submission.",
+          "Use `Brand` type when the stepper is the surface's CTA-equivalent (e.g. \"add to cart\" flows); `Neutral` for inline edit-existing-quantity rows.",
+          "Mirror the value back to the user with a clear running total / subtotal nearby — steppers shine when the consequence is visible."
+        ],
+        "dont": [
+          "Use for free numeric capture — `AurumTextField` with a numeric keyboard is the right primitive when the value range is open.",
+          "Render multiple steppers in a row controlling the same backing value; one canonical control per quantity.",
+          "Skip the disabled state when the user hits `maxValue` — letting them tap and silently fail breaks the bound contract."
+        ]
+      },
       "relatedTokens": [
         "borderWidth.sm",
         "iconSize.xl",
@@ -1218,6 +1362,19 @@
       "codeConnectPath": "aurum/src/main/kotlin/com/jar/app/aurum/component/navigation/AurumSectionHeader.figma.kt",
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/navigation/AurumSectionHeader.html",
       "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/navigation/AurumSectionHeader.kt",
+      "intendedUse": "Use as the H2-style break between groups of related content within a scrollable surface — \"Recent transactions\", \"Your goals\", \"Suggested for you\". The optional right-aligned action lets a section advertise its own deeper view. For top-of-screen titles use [AurumTopAppBar]; for thin row separators use [AurumDivider].",
+      "usage": {
+        "do": [
+          "Use the [Link] action type for \"View All / See More\" navigation actions — the chevron signals \"drill in\".",
+          "Keep the title to one line and let ellipsis truncate overflow — section headers should be scannable.",
+          "Pair `subtitle` with the title for sections whose name alone isn't self-explanatory (e.g. \"Goals\" + \"Track your progress\")."
+        ],
+        "dont": [
+          "Use as a page-level header — that's [AurumTopAppBar]'s job; section headers are intra-screen.",
+          "Stack multiple action types on one header — pick one of [Link] / [TextAction] / [IconAction].",
+          "Use the [TextAction] type for navigation when [Link] is also fitting — the chevron tells users they're entering a new surface."
+        ]
+      },
       "relatedTokens": [
         "iconSize.lg",
         "iconSize.xl",
@@ -1431,6 +1588,19 @@
       "codeConnectPath": null,
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/scaffold/AurumScreen.html",
       "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/scaffold/AurumScreen.kt",
+      "intendedUse": "Use as the root composable for **every full-screen** surface in the app. Combines edge-to-edge rendering, top/bottom bar slots, IME handling, snackbar host, and a loading scrim — all the scaffolding a screen normally re-implements ad-hoc. For bottom-sheet content or fragment-internal sub-screens this is overkill; compose directly with [AurumSurface] or a plain Column.",
+      "usage": {
+        "do": [
+          "Pass an [AurumTopAppBar] to `topBar` — its variants cover every header layout the design system supports.",
+          "Use the provided `snackbarHostState` for transient feedback; never hand-roll a Snackbar host on top of `AurumScreen`.",
+          "Hook `isLoading` to your ViewModel's loading state — the built-in scrim + loader covers the whole screen including behind system bars."
+        ],
+        "dont": [
+          "Wrap `AurumScreen` inside another Scaffold — it IS the Scaffold; nesting breaks insets handling.",
+          "Apply `systemBarsPadding()` to the root — that defeats edge-to-edge. Top / bottom bars handle their own insets.",
+          "Use for non-full-screen surfaces (modals, bottom sheets, fragment-internal panes) — those should compose with [AurumSurface] directly."
+        ]
+      },
       "relatedTokens": [
         "overlay.bgNormal",
         "spacing.s11",
@@ -1471,6 +1641,19 @@
       "codeConnectPath": null,
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/scaffold/AurumSnackbar.html",
       "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/scaffold/AurumSnackbar.kt",
+      "intendedUse": "Use for transient bottom-anchored confirmations and non-blocking errors — \"Saved\", \"Copied\", \"Couldn't connect, retrying\". Reach via [AurumScreen]'s `snackbarHostState.showSnackbar(...)`; this composable is internal scaffolding. For persistent inline messaging (validation errors on a field) use that field's own `errorText`; for required user confirmation use a dialog.",
+      "usage": {
+        "do": [
+          "Trigger from a coroutine: `coroutineScope.launch { snackbarHostState.showSnackbar(\"Settings saved\") }`.",
+          "Keep messages to one short sentence — snackbars autodismiss in seconds; longer copy gets cut off mid-read.",
+          "Pair an `actionLabel` only when the user can sensibly act (\"Undo\", \"Retry\") — orphan actions confuse intent."
+        ],
+        "dont": [
+          "Use snackbars for required confirmations or destructive flows — they auto-dismiss; users miss them.",
+          "Stack multiple snackbars by triggering in rapid succession — the host queues and shows them serially, which feels like spam. Aggregate or coalesce instead.",
+          "Replace inline form-field errors with snackbars — validation must stay anchored to the field that failed."
+        ]
+      },
       "relatedTokens": [
         "interactive.textPrimaryNormal",
         "surface.bgSurfaceHighContrast",
@@ -1720,6 +1903,19 @@
       "codeConnectPath": "aurum/src/main/kotlin/com/jar/app/aurum/component/selection/AurumSwitch.figma.kt",
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/selection/AurumSwitch.html",
       "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/selection/AurumSwitch.kt",
+      "intendedUse": "Use for binary settings that take effect **immediately** — notifications on/off, dark mode, biometric auth toggle. The state change is the action; there is no separate Save step. For a mutually-exclusive choice (between 2+ named options) use [AurumRadioGroup] instead; for form-style submit-on-confirm fields use a labelled [AurumTextField] or [AurumChip] selection.",
+      "usage": {
+        "do": [
+          "Apply the effect synchronously when `onCheckedChange` fires — no \"Apply\" or \"Save\" step.",
+          "Pair with a label and (optionally) a subtitle that names the setting clearly; never use a bare unlabelled switch.",
+          "Reflect remote-sync failures by reverting the visual state and surfacing a transient [AurumSnackbar] error."
+        ],
+        "dont": [
+          "Use a switch as a form field that requires a separate submit — users will toggle and walk away expecting it to stick.",
+          "Wrap `material3.Switch` directly anywhere in feature code; that's exactly what this component prevents.",
+          "Use a switch to represent a 3-state setting (on / off / system-default) — switches are strictly binary."
+        ]
+      },
       "relatedTokens": [
         "iconSize.md",
         "interactive.bgNeutralDefault",
@@ -1794,6 +1990,19 @@
       "codeConnectPath": null,
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/surface/AurumSurface.html",
       "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/surface/AurumSurface.kt",
+      "intendedUse": "Use to wrap visually-distinct content blocks that need consistent token-driven styling — cards, banners, sheet contents, any container that wants Aurum's background / radius / border / elevation in one shot. For full-screen scaffolds use [AurumScreen]; for transient feedback use [AurumSnackbar].",
+      "usage": {
+        "do": [
+          "Pick `color` from semantic surface tokens (`bgSurfaceLowContrast` / `bgSurfaceMidContrast` / `bgSurfaceHighContrast`) so contrast hierarchy stays consistent.",
+          "Pair `elevation` with a token from [AurumElevationLevel] — never construct ad-hoc shadows.",
+          "Use `borderColor = null` (default) when `elevation` is set; combining a hard border with a shadow looks crowded."
+        ],
+        "dont": [
+          "Wrap `material3.Surface` directly anywhere in feature code — that's exactly what this primitive prevents.",
+          "Use as a transparent overlay (use a scrim) or as a full-screen background (use [AurumScreen]).",
+          "Mix raw `Color`s with `Aurum.colors.*` — recolour through tokens only."
+        ]
+      },
       "relatedTokens": [
         "borderWidth.sm",
         "elevation.lowRaised",
@@ -1849,6 +2058,17 @@
       "codeConnectPath": "aurum/src/main/kotlin/com/jar/app/aurum/component/text/AurumLabel.figma.kt",
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/text/AurumLabel.html",
       "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/text/AurumLabel.kt",
+      "intendedUse": "Use for short annotative text — form-field labels, helper / caption text, metadata rows. Labels read as supporting context around real content. For paragraph copy reach for [AurumText] with a `bodyM`+ style; for status pills use [AurumBadge].",
+      "usage": {
+        "do": [
+          "Pick `type` from intent — `Default` for neutral context, `Subtle` for de-emphasised metadata, `Strong` when the label needs to stand out as a section break.",
+          "Use `isUpperCase = true` only for short section markers (\"DETAILS\", \"OPTIONS\") — uppercase paragraphs become unreadable."
+        ],
+        "dont": [
+          "Use as the page or section title — those are [AurumText] with `titleT*` styles or [AurumSectionHeader].",
+          "Reach for [AurumLabel] when you need a coloured pill — that's [AurumBadge]."
+        ]
+      },
       "relatedTokens": [
         "feedback.textPrimaryIntense",
         "spacing.s3",
@@ -1932,8 +2152,22 @@
       "codeConnectPath": null,
       "galleryUrl": "https://changejarapp.github.io/aurum-android/component/text/AurumText.html",
       "sourcePath": "aurum/src/main/kotlin/com/jar/app/aurum/component/text/AurumText.kt",
+      "intendedUse": "Use as the canonical text primitive for **any** text rendered in feature code. Picks up Aurum typography + colour tokens by default so light/dark/state variants flow without per-call wiring. For small annotative text (form labels, captions) use [AurumLabel]; for paragraph copy use this with a `bodyM`+ style role.",
+      "usage": {
+        "do": [
+          "Set `style = Aurum.type.<role>` to anchor in the design system's typographic scale.",
+          "Pass `color` from `Aurum.colors.surface.text*` tokens — never a raw `Color()` literal.",
+          "Cap multi-line copy with `maxLines + overflow = TextOverflow.Ellipsis` for predictable truncation in lists / cards."
+        ],
+        "dont": [
+          "Wrap `androidx.compose.material3.Text` directly anywhere in feature code; this is exactly what `AurumText` prevents.",
+          "Override `style.color` and `color` together — the explicit `color` param wins; pick one channel.",
+          "Pass arbitrary `TextStyle(fontSize = …)` that bypasses `Aurum.type.*` — that's how typography drift starts."
+        ]
+      },
       "relatedTokens": [
         "spacing.s3",
+        "surface.text",
         "surface.textBrandNormal",
         "surface.textDefaultDisabled",
         "surface.textDefaultNormal",
@@ -5672,7 +5906,7 @@
     }
   ],
   "changelog": {
-    "raw": "# Aurum Changelog\n\nAll notable changes to the Aurum design system are documented here.\nFormat follows [Keep a Changelog](https://keepachangelog.com/).\n\n## [Unreleased]\n\n### Tooling\n- **MCP manifest schema v2 — enrichment fields for `aurum-mcp` v0.3.** Bumped `tooling/manifest/schema.json` `schemaVersion` enum from `[\"1\"]` to `[\"1\",\"2\"]` and added four optional, additive fields:\n  - `component.intendedUse: string` — when-to-reach-for prose authored in a new `@AurumIntendedUse` KDoc tag.\n  - `component.usage: { do: string[]; dont: string[] }` — guardrails authored in `@AurumDo` / `@AurumDont` KDoc tags (one bullet per tag instance).\n  - `component.relatedTokens: string[]` — qualified Aurum token names (`surface.bgPageBase`, `spacing.s12`, `typography.bodyMedium`) the component references in its source. Static-analyzed by `analyze_token_refs(source)` against `Aurum.{colors,space,type,radius,borderWidth,elevation,iconSize}.<leaf>` accessors.\n  - `icon.tags: string[]` — hand-curated synonyms (`Delete` → `[trash, remove, bin, garbage, discard]`) sourced from a new `aurum/icons/tags.toml` file. Powers the synonym-aware `aurum_search_icons` tool.\n  All four are absent from v1 manifests and ignored gracefully by older readers. The generator emits `schemaVersion: \"2\"` whenever any of them are populated, otherwise stays on `\"1\"`.\n- **`@AurumIntendedUse` / `@AurumDo` / `@AurumDont` KDoc tags authored on 6 priority components.** `AurumChip`, `AurumButton`, `AurumRadioButton`, `AurumRadioGroup`, `AurumTopAppBar`, `AurumOtpInput` carry intended-use prose plus 3 do / 3 dont guardrails each. The tags are stripped from the rendered KDoc body (so the description doesn't double-print them) and re-emitted as structured fields. Other components remain ungilded for now — extend opportunistically as conversations surface gaps.\n- **`aurum/icons/tags.toml` — curated synonyms for all 60 icons across 9 categories** (Action / Commerce / Content / Media / Navigation / Selection / Status / System / User). 222 tags total. Format is TOML keyed by category → icon name → tag list.\n- **Pages workflow now publishes the manifest.** `.github/workflows/pages.yml` invokes `generate.py --emit-manifest build/gallery/data/manifest.json --also-build-gallery --validate` on every deploy, exposing `https://changejarapp.github.io/aurum-android/data/manifest.json` (previously 404). Closes the cross-repo sync gap that left `aurum-mcp`'s drift-check soft-failing on every PR.\n- **MCP manifest pipeline.** Added `tooling/manifest/schema.json` defining a JSON Schema for an LLM-consumable Aurum manifest, and extended `tooling/gallery/generate.py` with `--emit-manifest <path>` and `--validate` flags. The same parsers that drive the static gallery now also emit a structured JSON describing every component (KDoc + signature + params + Figma deeplink + Code Connect path + gallery URL), every token (semantic colour / visual palette / spacing / radius / border-width / icon-size / elevation / typography), every icon (with paired line/fill Figma node IDs), every Code Connect mapping, and the full Keep-a-Changelog history. Single source of truth, two render targets — HTML for humans, JSON for agents. Consumed by the new `atri-jar/aurum-mcp` (and later `Changejarapp/aurum-mcp`) MCP server. Manifest carries a `platforms[]` field on each component for forward-compatible cross-platform support (`aurum-ios` plugs in as a sibling manifest source without restructuring).\n\n### Changed\n- **`AurumTopAppBar` API constrained to exactly the Figma `4826:1058` axes.** Removed the open-ended `actions: ImmutableList<AurumTopAppBarAction>` parameter; the trailing-action group is now expressed as three named slots — `icon1`, `icon2`, `overflow` — directly mirroring Figma's three boolean axes (`icon1` × `icon2` × `isOverflow`). Combined with the existing `primaryButton` slot, callers can compose all 10 of Figma's `Type` variants (Default, With Icon, With Icons, With Overflow, 1icon+overflow, icons+overflow, With Button, Button + Icon, Button + Icons, Button + Overflow) and nothing beyond. Out-of-spec configurations like four trailing items become impossible to express.\n- **Previews expanded 4 → 14**, covering each of the 10 `Type` variants individually plus four \"axis isolation\" tiles for `backButton` × `subtitle` on Type=Default plus a long-title ellipsis test. Catalog `NavigationDemo` migrated to the new slot API.\n\n### Added\n- **`AurumRadioButton` + `AurumRadioGroup`** — single-choice selection control + group, mapped to the Figma `radioButton` (`5126:2507`) and `RadioGroup` (`5157:2034`) component_sets. `AurumRadioButton` supports `selected`, `enabled`, `error`, optional `label` + `subtext`, and `labelPosition` (`End` = Figma `leftAligned`, `Start` = Figma `rightAligned`); `null` label renders the `withoutLabel` circle-only variant. The 24 dp circle is drawn via `Canvas` (no SVG asset) — outline tints by state (default-neutral, selected/primary, error/negative-intense, disabled-faded), 10 dp inner dot when selected, focus state-layer ring on press. `AurumRadioGroup<T>` takes an `ImmutableList<AurumRadioOption<T>>` plus optional `label`/`helperText`/`errorText`; passing `errorText` switches the group into the validation-error visual. Both ship Code Connect mappings (`AurumRadioButton.figma.kt`, `AurumRadioGroup.figma.kt`) and 8 + 5 `@AurumPreview` previews. Catalog `SelectionDemo` extended with a single-radio row plus a plan-picker radio group.\n\n### Fixed\n- **`AurumTopAppBar` aligned with the canonical Figma \"Page Header\" variant set** (`YvIxqu2oTlM6UnkL0OloHc`, set `4826:1058`). Re-audited against the new component_set after spotting two coexisting Page Header sets in the file. Drifts corrected:\n  - Title: now `Title/S-SemiBold` semantics — 16/24, **SemiBold 600**, primary family (was Medium). Achieved with `titleT1.copy(fontWeight = SemiBold)` until typography tokens get a SemiBold S/XS scale.\n  - Subtitle: now 12/16 **Medium 500** primary family (was Regular `bodyB3`); colour cascades from `contentColor` (matches Figma — hierarchy comes from weight/size, not colour).\n  - Primary button label: now `Title/XS-SemiBold` — 14/20, **SemiBold 600** (was Medium).\n  - Primary button: pinned 32 dp tall × ≤120 dp wide, horizontal-only padding, `interactive/background/primary/default` background — matches the canonical `4826:1812` \"Button + Icons\" instance.\n  - Right-group start padding removed — `justify-between` is already implied by the left's `weight(1f)`.\n  - Stray whitespace cleanup at the right-group block.\n  - Code Connect URL re-pointed to `4826:1058` (was a stale `4238:10259` set with a `Type=Type11` orphan). Per-axis `@FigmaProperty` mappings dropped because `4826:1058` has no `componentPropertyDefinitions` defined on the parent set — its 10 variants exist only as individually-named components, not property combinations. The Code Connect example now renders the canonical \"Button + Icons + back + subtitle\" configuration unconditionally; designers see the same snippet for any variant they instance. Flagged the missing-property-definitions issue in a Figma comment for the design team.\n  - Subtitle-colour API simplified: dropped the short-lived `subtitleColor` parameter — Figma cascades a single colour to the Title group; `contentColor` now governs both lines.\n- **Previews expanded** from 4 → 8 to span the new variant matrix: `Default`, `WithBack`, `WithSubtitle`, `WithBackAndSubtitle`, `WithButton`, `WithOverflowOnly`, `WithIcons`, `FullHeader`.\n\n### Changed\n- **`@AurumPreview` trimmed to two phone tiles.** Foldable (600 dp), tablet (840 dp), and a11y font-scale (1.5×, 2.0×) variants commented out — they cluttered Studio's preview pane on every Composable, and we're not currently solving for those surfaces from design. Active tiles are now just `phone-narrow(320dp)` and `phone-compact(360dp)`. Roborazzi captures only the active tiles. Re-enable any tile later by uncommenting in `AurumPreview.kt`. Knock-on: gallery `DEVICE_META` updated, README updated, all old baselines regenerated on CI.\n- **`/icons.html` UI polish.** Each card now shows the line and filled weights as two clearly-divided cells with `LINE` / `FILLED` captions, the symbol name as the primary heading, and the `AurumIcons.<Cat>.<Symbol>` path as a discrete, button-styled copy chip with a copy icon and proper hover/focus/active states. Reads correctly in both light and dark themes.\n\n### Tooling\n- **Gallery deploy gated on a green Check.** `pages.yml` now triggers on `Check` workflow success (via `workflow_run`) instead of on every push. Eliminates the broken-intermediate-state window when baselines are mid-rollout (e.g. during a structural rename or bulk re-record). `record.yml` no longer dispatches `pages.yml` directly — `Check` succeeding does that automatically.\n\n## [0.1.5] - 2026-04-28\n\n### Fixed\n- **All 114 icons re-rendered to match Figma.** The previous import pipeline used Figma MCP asset URLs that returned only the inner SVG path with `viewBox` set to the path's tight bounding box (e.g. `7.5 × 13.5` for ChevronRight). Combined with `width/height = 24dp`, this caused non-uniform stretch and stripped the surrounding 24×24 frame padding — the chevron rendered fat and squashed, every other non-square icon was distorted, and even square-bbox icons lost their intended 2-3 dp inset.\n- **Stroke-only icons no longer get a fill.** Phosphor regular-weight SVGs carry `fill=\"none\"` at the `<svg>` root, cascading to children. The previous import didn't honour the cascade and emitted both `fillColor` and `strokeColor` — so e.g. `Home` rendered as a solid black house instead of the intended outline.\n\n### Changed\n- **Icon import pipeline rewritten** to fetch via the Figma REST API (`/v1/images?…&format=svg`) using `$FIGMA_ACCESS_TOKEN`. REST exports include the 24×24 frame and proper SVG-level fill cascade, so the conversion is a clean 1:1 to Vector Drawable. The per-icon `COMPOUND_TRANSLATES` workaround (previously hand-coded for SpeakerSimpleX) is no longer needed and was removed. The stale `figma-icon-urls.json` URL manifest was deleted.\n\n### Added\n- **`/icons.html` page** on the gallery website — every icon's line + fill weights side by side, grouped by category, with live search and click-to-copy on `AurumIcons.<Category>.<Symbol>`. Reads `AurumIcons.kt` and inlines each Vector Drawable as `currentColor` SVG so icons follow the page theme. No longer need to install the catalog APK to scan the icon set.\n\n## [0.1.4] - 2026-04-28\n\n### Changed\n- **`AurumChip`** realigned with the Figma \"Action\" chip component (`YvIxqu2oTlM6UnkL0OloHc`, node `4446-701`). Adds `size` (`AurumChipSize.Large` / `Small`) and `leadingIcon` parameters; height tightened to 38 dp Large / 30 dp Small (from 40 dp); padding now asymmetric (12 dp text-side, 8 dp icon-side); inter-element gap reduced 8 → 4 dp; text style varies by size (`titleT2` / `bodySmall`). Existing call sites are unaffected — new parameters default to the prior behaviour. Previews regrouped into Large-trailing / Large-leading / Large-both / Large-text-only / Small / Disabled.\n- **Code Connect** for `AurumChip` picks up the new `Size` axis (`large` ↔ `Large`, `small` ↔ `Small`).\n\n## [0.1.3] - 2026-04-27\n\n### Added\n- **Compose perf guardrails.** Detekt + [`mrmans0n/compose-rules`](https://github.com/mrmans0n/compose-rules) wired in, with the perf/stability rules active (`UnstableCollections`, `MutableStateAutoboxing`, `MutableParams`, `MutableStateParam`, `LambdaParameterInRestartableEffect`, `Material2`). Compose Compiler Metrics enabled on `:aurum` and `:aurum-catalog` (`build/compose_compiler/`).\n- **Compose stability CI gate.** New `verifyComposeStability` Gradle task in `:aurum` fails the build when `aurum_release-classes.txt` reports more inferred-unstable classes than `composeStabilityThreshold` (currently `0`). Wired into `check.yml` after detekt.\n- **Compose metrics dashboard** deployed alongside the gallery at [changejarapp.github.io/aurum-android/metrics/](https://changejarapp.github.io/aurum-android/metrics/), rendered from `build/compose_compiler/` via [`PatilShreyas/compose-report-to-html`](https://github.com/PatilShreyas/compose-report-to-html). Per-PR `compose-metrics` artifact uploaded by `check.yml`.\n- **Aurum icon set** — 57 icons × 2 weights = 114 vector drawables imported from the Figma \"Component Icons\" frame, exposed under `AurumIcons.<Category>.<Name>` (and `<Name>Filled` for the fill variant). 8 categories: `Navigation`, `Action`, `Content`, `Media`, `Commerce`, `System`, `Status`, `User`. Ingested by the new `tooling/icons/import_from_figma.py` script (`make icons-import`); idempotent re-runs.\n- **`IconGallery`** screen in the catalog showing every icon × weight, grouped by category.\n- **114 Code Connect mappings** for the new icons under `aurum/src/main/kotlin/com/jar/app/aurum/component/icon/figma_connect/AurumIcon*.figma.kt`. Auto-published to Figma via the `figma-code-connect.yml` workflow.\n\n### Changed\n- **6 overlapping icons replaced** from the Figma source-of-truth: `Navigation.Back`→`ArrowLeft`, `Navigation.ChevronForward`→`ChevronRight`, `Media.Like`→`Content.Heart` (renames; 12 call-site migrations across `AurumTopAppBar`, `AurumChip`, `AurumSectionHeader`, `AurumLinkButton`, and the catalog gallery). `Navigation.Close`, `Action.Edit`, `Action.Search` kept their names — only their underlying XML content was replaced.\n- **5 components marked codebase-only**: `AurumSearchField`, `AurumIconButton`, `AurumDivider`, `AurumLoader`, `AurumSkeleton` — verified absent from the Figma library via MCP search. File-level marker added so future Code-Connect audits don't keep flagging them.\n- **`AurumIcons.kt` regenerated** from the import script. The 3 legacy entries that lack a Figma counterpart (`Action.Add`, `Action.Overflow`, `Selection.Check`) remain hand-authored under `res/drawable/` and are flagged in-file pending design escalation.\n- **`record.yml` now also dispatches `pages.yml`** after committing fresh baselines on `main`, so the gallery's snapshot embeds redeploy without a manual trigger.\n\n### Fixed\n- **`AurumOtpInput`**: keyed `LaunchedEffect` on the completion-boundary transition (`value.length == maxLength`) instead of `value` itself, so the coroutine no longer relaunches on every keystroke.\n- **`AurumSkeleton`**: moved the `shimmerProgress` state read out of the `drawWithCache` cache block and into `onDrawBehind`, so the cache is no longer invalidated on every animation frame. The gradient `colors` list is now `remember`-ed.\n- **`AurumText`**: `inlineContent` parameter typed as `ImmutableMap<…>` instead of `Map<…>`, restoring skippability (caught by the new compose-rules `UnstableCollections` rule).\n- **CI Java mismatch**: `compose-report-to-html` v1.5.0 JAR is built against Java 21; `check.yml` and `pages.yml` now install JDK 21 alongside JDK 17 and invoke the JAR via `$JAVA_HOME_21_X64/bin/java`.\n\n### Tooling\n- New Makefile targets: `make lint-compose`, `make compose-metrics`, `make compose-metrics-html`, `make icons-import`, `make icons-brand` (rename of the prior `make icons` for clarity vs the new icon-set sync).\n- New tooling scripts: `tooling/icons/import_from_figma.py` (Figma SVG → Vector Drawable + AurumIcons.kt + Code Connect codegen) and `tooling/gallery/render_metrics_index.py` (gallery `/metrics/` landing page).\n\n## [0.1.2] - 2026-04-23\n\n### Added\n- **Screenshot testing** via Roborazzi + ComposablePreviewScanner. 334 baseline\n  PNGs committed under `aurum/src/test/snapshots/` (Git LFS-tracked) covering\n  every `@Preview` and every tile of the `@AurumPreview` 6-device fan-out.\n  Any visual regression fails CI before merge. Tasks: `recordRoborazziDebug`\n  (refresh baselines), `verifyRoborazziDebug` (CI check), `compareRoborazziDebug`\n  (diff without failing).\n- **`.github/workflows/check.yml`** — PR + main-push workflow running library +\n  catalog build, lint, and snapshot verification. Diff PNGs uploaded as a\n  workflow artifact on any screenshot drift so design reviewers can eyeball\n  the exact delta.\n- **Git LFS** (`.gitattributes`) tracking `aurum/src/test/snapshots/**/*.png`\n  — keeps pack files small, surfaces binary diffs in PR UIs.\n\n## [0.1.1] - 2026-04-23\n\n### Changed\n- **Maven coordinate realigned** with Jar's library convention.\n  - Before: `com.jarapp:aurum:<ver>`\n  - After:  `com.jar.internal.library.aurum-android:core:<ver>`\n  - Kotlin import package inside the AAR stays `com.jar.app.aurum.*` — no source rename.\n  - This lets consumers resolve Aurum via the existing `Changejarapp/*` wildcard\n    Maven repo in `jar-android/settings.gradle.kts`, identical to how\n    `com.jar.internal.library.core-network:shared` and siblings are resolved.\n  - The previous `com.jarapp:aurum:0.1.0` artifact is stale and should not be\n    consumed — it's kept in GitHub Packages only to avoid the \"published once,\n    cannot re-publish the same coord\" rule.\n\n### Removed\n- `AurumElevation.toast` + `ElevationTintColors.toast` + `AurumLightElevation.toast` entry + `AurumLightColors.elevationTint.toast` value — Figma ships only a tint for `elevation/_toast` (no dedicated dims) and the fallback shape matched `lowRaised`, so the Kotlin surface added API surface without semantic value. Snackbars/toasts now use `Aurum.elevation.lowRaised` directly. The plugin mapping (`figma-plugin-aurum-sync`) marks `_toast` as an explicitly skipped elevation token and bumps to `0.1.1`.\n\n### Added\n- `AurumColors.visual` — new decorative palette subgroup exposing 77 chromatic tokens (blue/green/orange/pink/purple/red/yellow × shades 50…1000). Mirrors Figma's `visual_colors` collection 1:1 and sources values from `AurumPalette` primitives. Feature code uses `Aurum.colors.visual.<family><shade>` for palette-keyed decorative colours that have no semantic meaning. Raw `AurumPalette` stays `internal`.\n- `AurumPhoneNumberInput` — phone-number variant of `AurumTextField` with country-code prefix slot, optional flag composable, digit-only input filter, `KeyboardType.Phone`, and a default 10-digit max length. Mirrors the Figma \"Phone Number Input\" component set.\n- `AurumTextField.figma.kt` — Code Connect stub against Figma `4623:373` mapping `state`, `validationState`, `multi_line`, `label`, `showHelpText` to `AurumTextField` API props.\n- `AurumPhoneNumberInput.figma.kt` — Code Connect stub against Figma `4904:2455` mapping `state`, `validationState`, `hasValue`, `label`, `showHelpText`.\n- `AurumOtpValidationState.Timer` — fourth validation state for resend-countdown UX. Renders identically to `None` but provides a semantic channel matching the Figma `validationState=timer` variant.\n- `Modifier.aurumHardShadow(color, offsetY, shape)` — solid-colour offset drop shadow for skeuomorphic \"stacked card\" effects (matches Figma's `shadow(0, Ypx, 0, 0, color)` spec). Encapsulates the double-box idiom into a single modifier that expands layout by `offsetY` and paints the shape outline behind content.\n\n### Fixed\n- `AurumOtpInput` disabled digits now use `surface.textDefaultDisabled` (matching Figma `text/default/disabled`) instead of `textDefaultNormal` at 10% alpha.\n- `AurumTopAppBar` synced to Figma `4826:1057` Page Header: title uses SemiBold (was Medium); subtitle uses `labelL2` Medium 12/16 in `textDefaultNormal` (was `bodyB3` Normal in `textDefaultSubtle`); primary button uses SemiBold label and natural 36 dp height from 8 dp padding (was fixed 32 dp, Medium); back + action icons tint via `interactive.iconNeutralNormal` (was `surface.textDefaultNormal` — same hex, correct token). Docstring fix: icon wrapper is 32 × 40 dp (w × h), not 40 × 32.\n- `AurumBadge` synced to Figma `4240:10843`: both emphases now render at `Label/L-Medium` (12/16 Inter Medium) — previously had a 18 sp line-height and Intense emphasis rendered Normal weight. Emphasis-specific text styles collapsed to a single shared style.\n- `AurumSectionHeader` synced to Figma `3702:162168`: title, link label, and text-action label render SemiBold (`Title/S-SemiBold` / `Title/XS-SemiBold`); icon-action tint uses `interactive.iconNeutralNormal` (was `surface.iconDefaultNormal` — same hex, correct semantic).\n- `AurumSwitch` synced to Figma `4018:557`: thumb now uses `interactive.bgNeutralInverse` (was `surface.bgPageBase` — same hex, correct semantic); checked icon uses `interactive.iconPrimaryNormal` (was `bgPrimaryDefault`); disabled-checked icon uses `interactive.iconNeutralDisabled` (was `bgNeutralDisabled` — **real hex drift** fixed).\n- `AurumStepper` synced to Figma `3834:139631`: numeric value and ± symbols render Bold (`Num/XS`); Neutral and Brand state colours moved to the `interactive.*` token family; disabled-state bg/border/icon hexes corrected (`#6C849D17` / `#C3C7D1` were previously rendering as `#ECEEF3` / `#848A99`).\n- `AurumLabel` synced to Figma `3774:137816`: all variants render Medium weight (was SemiBold); `Strong` variant now uses `labelL2` size (was `labelL1`) and `feedback.textPrimaryIntense` colour (was `surface.textDefaultNormal`).\n- `AurumButton` synced to Figma `4692:1074`: primary-disabled text token changed to `textPrimaryDisabled` (was `textOnPrimaryDisabled`); secondary variant border uses `borderPrimaryDefault` when enabled and `borderNeutralMuted` when disabled (was `borderNeutralDefault` / `borderNeutralDisabled`).\n\n## [0.2.0] - 2026-04-16\n\n### Added\n- **Figma Code Connect** infrastructure: Gradle plugin, CLI, `*.figma.kt` pattern\n- `AurumIcons` namespace with 8 XML Vector Drawables from Figma exports\n- `AurumLinkButton` — new component from Figma Button page\n- `AurumBadge` — 6 colors × 2 emphases × 2 sizes from Figma\n- `AurumOtpInput` — digit-by-digit OTP from Figma spec\n- `AurumStepper` — numeric +/− from Figma spec\n- `AurumLabel` — styled text label from Figma spec\n- `AurumSectionHeader` — section divider from Figma spec\n- `AurumSwitch` — toggle from Figma spec\n- `version.properties` for semver tracking\n\n### Changed\n- **AurumButton** rebuilt from Figma spec: 3 variants (removed Ghost/Destructive), corrected heights (40/48/56dp), added `isFullWidth` + `isLoading`, 12dp corner radius\n- **AurumTypography** restructured to match Figma type scale: 14 scale composites (Display/Heading/Body/Caption) + 6 component-level styles\n- **AurumTextField** audited: added success state, readonly treatment, character counter, fixed error token layer\n- All Material Icons replaced with `AurumIcons.*` (XML Vector Drawables loaded via `ImageVector.vectorResource()`)\n- Button size enum renamed `Sm/Md/Lg` → `Small/Medium/Large`\n- Button style enum renamed `AurumButtonStyle` → `AurumButtonVariant`\n\n### Fixed\n- Secondary button was filled grey — now transparent bg + outline border per Figma\n- Typography composites were engineering assumptions — now 14 match actual Figma scale\n- Hand-drawn `ImageVector.Builder` paths replaced with proper XML drawables\n\n## [0.1.0] - 2026-04-16\n\n### Added\n- Initial Aurum module scaffold (`:core-designsystem` + `:core-designsystem-catalog`)\n- 196 semantic colour tokens from Figma export (6 sub-structs)\n- Spacing, radius, border-width, icon-size, elevation, motion, opacity tokens\n- `AurumTheme` composable with `MaterialBridge` (hybrid M3 architecture)\n- Foundation primitives: `AurumText`, `AurumIcon`, `AurumSurface`, `AurumDivider`\n- Interactive primitives: `AurumButton`, `AurumIconButton`, `AurumTextField`, `AurumSearchField`\n- Navigation: `AurumTopAppBar` (10 Figma variants)\n- Feedback: `AurumLoader`, `AurumSkeleton`\n- Preview infrastructure: `@AurumPreview`, `AurumPreviewSurface`\n- `Modifier.aurumShadow()` for elevation rendering\n- CLAUDE.md module guide + 30 documentation files\n- Catalog app with 6 foundation gallery screens\n",
+    "raw": "# Aurum Changelog\n\nAll notable changes to the Aurum design system are documented here.\nFormat follows [Keep a Changelog](https://keepachangelog.com/).\n\n## [Unreleased]\n\n### Tooling\n- **MCP manifest schema v2 — enrichment fields for `aurum-mcp` v0.3.** Bumped `tooling/manifest/schema.json` `schemaVersion` enum from `[\"1\"]` to `[\"1\",\"2\"]` and added four optional, additive fields:\n  - `component.intendedUse: string` — when-to-reach-for prose authored in a new `@AurumIntendedUse` KDoc tag.\n  - `component.usage: { do: string[]; dont: string[] }` — guardrails authored in `@AurumDo` / `@AurumDont` KDoc tags (one bullet per tag instance).\n  - `component.relatedTokens: string[]` — qualified Aurum token names (`surface.bgPageBase`, `spacing.s12`, `typography.bodyMedium`) the component references in its source. Static-analyzed by `analyze_token_refs(source)` against `Aurum.{colors,space,type,radius,borderWidth,elevation,iconSize}.<leaf>` accessors.\n  - `icon.tags: string[]` — hand-curated synonyms (`Delete` → `[trash, remove, bin, garbage, discard]`) sourced from a new `aurum/icons/tags.toml` file. Powers the synonym-aware `aurum_search_icons` tool.\n  All four are absent from v1 manifests and ignored gracefully by older readers. The generator emits `schemaVersion: \"2\"` whenever any of them are populated, otherwise stays on `\"1\"`.\n- **`@AurumIntendedUse` / `@AurumDo` / `@AurumDont` KDoc tags authored on all 24 components.** Every component in the manifest now carries intended-use prose + Do/Don't guardrails. Counts: 24 × `intendedUse`, 70 total `do` entries, 70 total `dont` entries. The 6 priority components (Chip, Button, RadioButton, RadioGroup, TopAppBar, OtpInput) landed first; this extends coverage to AurumIconButton, AurumLinkButton, AurumTextField, AurumPhoneNumberInput, AurumSearchField, AurumSwitch, AurumBadge, AurumLoader, AurumSkeleton, AurumSectionHeader, AurumSurface, AurumScreen, AurumSnackbar, AurumStepper, AurumDivider, AurumIcon, AurumText, AurumLabel. Tags are stripped from the rendered KDoc body and re-emitted as structured manifest fields.\n- **Cross-repo dispatch wired up.** Committed `.github/workflows/notify-mcp.yml`, which fires a `repository_dispatch: aurum-content-changed` event at `Changejarapp/aurum-mcp` on every push to `main` and every release. Drops the manifest-sync latency in aurum-mcp from ≤24 h (cron) to ~1 min. Requires the `MCP_DISPATCH_PAT` org secret (a fine-grained PAT scoped to aurum-mcp with Actions: read+write).\n- **README — manifest pipeline section.** Documents how component changes propagate to `aurum-mcp` end-to-end: pages.yml → manifest URL → notify-mcp dispatch → sync-manifest auto-PR → human merge + release dispatch. Includes the `@AurumIntendedUse` / `@AurumDo` / `@AurumDont` authoring convention and the `aurum/icons/tags.toml` synonym format with quality-bar guidance.\n- **`aurum/icons/tags.toml` — curated synonyms for all 60 icons across 9 categories** (Action / Commerce / Content / Media / Navigation / Selection / Status / System / User). 222 tags total. Format is TOML keyed by category → icon name → tag list.\n- **Pages workflow now publishes the manifest.** `.github/workflows/pages.yml` invokes `generate.py --emit-manifest build/gallery/data/manifest.json --also-build-gallery --validate` on every deploy, exposing `https://changejarapp.github.io/aurum-android/data/manifest.json` (previously 404). Closes the cross-repo sync gap that left `aurum-mcp`'s drift-check soft-failing on every PR.\n- **MCP manifest pipeline.** Added `tooling/manifest/schema.json` defining a JSON Schema for an LLM-consumable Aurum manifest, and extended `tooling/gallery/generate.py` with `--emit-manifest <path>` and `--validate` flags. The same parsers that drive the static gallery now also emit a structured JSON describing every component (KDoc + signature + params + Figma deeplink + Code Connect path + gallery URL), every token (semantic colour / visual palette / spacing / radius / border-width / icon-size / elevation / typography), every icon (with paired line/fill Figma node IDs), every Code Connect mapping, and the full Keep-a-Changelog history. Single source of truth, two render targets — HTML for humans, JSON for agents. Consumed by the new `atri-jar/aurum-mcp` (and later `Changejarapp/aurum-mcp`) MCP server. Manifest carries a `platforms[]` field on each component for forward-compatible cross-platform support (`aurum-ios` plugs in as a sibling manifest source without restructuring).\n\n### Changed\n- **`AurumTopAppBar` API constrained to exactly the Figma `4826:1058` axes.** Removed the open-ended `actions: ImmutableList<AurumTopAppBarAction>` parameter; the trailing-action group is now expressed as three named slots — `icon1`, `icon2`, `overflow` — directly mirroring Figma's three boolean axes (`icon1` × `icon2` × `isOverflow`). Combined with the existing `primaryButton` slot, callers can compose all 10 of Figma's `Type` variants (Default, With Icon, With Icons, With Overflow, 1icon+overflow, icons+overflow, With Button, Button + Icon, Button + Icons, Button + Overflow) and nothing beyond. Out-of-spec configurations like four trailing items become impossible to express.\n- **Previews expanded 4 → 14**, covering each of the 10 `Type` variants individually plus four \"axis isolation\" tiles for `backButton` × `subtitle` on Type=Default plus a long-title ellipsis test. Catalog `NavigationDemo` migrated to the new slot API.\n\n### Added\n- **`AurumRadioButton` + `AurumRadioGroup`** — single-choice selection control + group, mapped to the Figma `radioButton` (`5126:2507`) and `RadioGroup` (`5157:2034`) component_sets. `AurumRadioButton` supports `selected`, `enabled`, `error`, optional `label` + `subtext`, and `labelPosition` (`End` = Figma `leftAligned`, `Start` = Figma `rightAligned`); `null` label renders the `withoutLabel` circle-only variant. The 24 dp circle is drawn via `Canvas` (no SVG asset) — outline tints by state (default-neutral, selected/primary, error/negative-intense, disabled-faded), 10 dp inner dot when selected, focus state-layer ring on press. `AurumRadioGroup<T>` takes an `ImmutableList<AurumRadioOption<T>>` plus optional `label`/`helperText`/`errorText`; passing `errorText` switches the group into the validation-error visual. Both ship Code Connect mappings (`AurumRadioButton.figma.kt`, `AurumRadioGroup.figma.kt`) and 8 + 5 `@AurumPreview` previews. Catalog `SelectionDemo` extended with a single-radio row plus a plan-picker radio group.\n\n### Fixed\n- **`AurumTopAppBar` aligned with the canonical Figma \"Page Header\" variant set** (`YvIxqu2oTlM6UnkL0OloHc`, set `4826:1058`). Re-audited against the new component_set after spotting two coexisting Page Header sets in the file. Drifts corrected:\n  - Title: now `Title/S-SemiBold` semantics — 16/24, **SemiBold 600**, primary family (was Medium). Achieved with `titleT1.copy(fontWeight = SemiBold)` until typography tokens get a SemiBold S/XS scale.\n  - Subtitle: now 12/16 **Medium 500** primary family (was Regular `bodyB3`); colour cascades from `contentColor` (matches Figma — hierarchy comes from weight/size, not colour).\n  - Primary button label: now `Title/XS-SemiBold` — 14/20, **SemiBold 600** (was Medium).\n  - Primary button: pinned 32 dp tall × ≤120 dp wide, horizontal-only padding, `interactive/background/primary/default` background — matches the canonical `4826:1812` \"Button + Icons\" instance.\n  - Right-group start padding removed — `justify-between` is already implied by the left's `weight(1f)`.\n  - Stray whitespace cleanup at the right-group block.\n  - Code Connect URL re-pointed to `4826:1058` (was a stale `4238:10259` set with a `Type=Type11` orphan). Per-axis `@FigmaProperty` mappings dropped because `4826:1058` has no `componentPropertyDefinitions` defined on the parent set — its 10 variants exist only as individually-named components, not property combinations. The Code Connect example now renders the canonical \"Button + Icons + back + subtitle\" configuration unconditionally; designers see the same snippet for any variant they instance. Flagged the missing-property-definitions issue in a Figma comment for the design team.\n  - Subtitle-colour API simplified: dropped the short-lived `subtitleColor` parameter — Figma cascades a single colour to the Title group; `contentColor` now governs both lines.\n- **Previews expanded** from 4 → 8 to span the new variant matrix: `Default`, `WithBack`, `WithSubtitle`, `WithBackAndSubtitle`, `WithButton`, `WithOverflowOnly`, `WithIcons`, `FullHeader`.\n\n### Changed\n- **`@AurumPreview` trimmed to two phone tiles.** Foldable (600 dp), tablet (840 dp), and a11y font-scale (1.5×, 2.0×) variants commented out — they cluttered Studio's preview pane on every Composable, and we're not currently solving for those surfaces from design. Active tiles are now just `phone-narrow(320dp)` and `phone-compact(360dp)`. Roborazzi captures only the active tiles. Re-enable any tile later by uncommenting in `AurumPreview.kt`. Knock-on: gallery `DEVICE_META` updated, README updated, all old baselines regenerated on CI.\n- **`/icons.html` UI polish.** Each card now shows the line and filled weights as two clearly-divided cells with `LINE` / `FILLED` captions, the symbol name as the primary heading, and the `AurumIcons.<Cat>.<Symbol>` path as a discrete, button-styled copy chip with a copy icon and proper hover/focus/active states. Reads correctly in both light and dark themes.\n\n### Tooling\n- **Gallery deploy gated on a green Check.** `pages.yml` now triggers on `Check` workflow success (via `workflow_run`) instead of on every push. Eliminates the broken-intermediate-state window when baselines are mid-rollout (e.g. during a structural rename or bulk re-record). `record.yml` no longer dispatches `pages.yml` directly — `Check` succeeding does that automatically.\n\n## [0.1.5] - 2026-04-28\n\n### Fixed\n- **All 114 icons re-rendered to match Figma.** The previous import pipeline used Figma MCP asset URLs that returned only the inner SVG path with `viewBox` set to the path's tight bounding box (e.g. `7.5 × 13.5` for ChevronRight). Combined with `width/height = 24dp`, this caused non-uniform stretch and stripped the surrounding 24×24 frame padding — the chevron rendered fat and squashed, every other non-square icon was distorted, and even square-bbox icons lost their intended 2-3 dp inset.\n- **Stroke-only icons no longer get a fill.** Phosphor regular-weight SVGs carry `fill=\"none\"` at the `<svg>` root, cascading to children. The previous import didn't honour the cascade and emitted both `fillColor` and `strokeColor` — so e.g. `Home` rendered as a solid black house instead of the intended outline.\n\n### Changed\n- **Icon import pipeline rewritten** to fetch via the Figma REST API (`/v1/images?…&format=svg`) using `$FIGMA_ACCESS_TOKEN`. REST exports include the 24×24 frame and proper SVG-level fill cascade, so the conversion is a clean 1:1 to Vector Drawable. The per-icon `COMPOUND_TRANSLATES` workaround (previously hand-coded for SpeakerSimpleX) is no longer needed and was removed. The stale `figma-icon-urls.json` URL manifest was deleted.\n\n### Added\n- **`/icons.html` page** on the gallery website — every icon's line + fill weights side by side, grouped by category, with live search and click-to-copy on `AurumIcons.<Category>.<Symbol>`. Reads `AurumIcons.kt` and inlines each Vector Drawable as `currentColor` SVG so icons follow the page theme. No longer need to install the catalog APK to scan the icon set.\n\n## [0.1.4] - 2026-04-28\n\n### Changed\n- **`AurumChip`** realigned with the Figma \"Action\" chip component (`YvIxqu2oTlM6UnkL0OloHc`, node `4446-701`). Adds `size` (`AurumChipSize.Large` / `Small`) and `leadingIcon` parameters; height tightened to 38 dp Large / 30 dp Small (from 40 dp); padding now asymmetric (12 dp text-side, 8 dp icon-side); inter-element gap reduced 8 → 4 dp; text style varies by size (`titleT2` / `bodySmall`). Existing call sites are unaffected — new parameters default to the prior behaviour. Previews regrouped into Large-trailing / Large-leading / Large-both / Large-text-only / Small / Disabled.\n- **Code Connect** for `AurumChip` picks up the new `Size` axis (`large` ↔ `Large`, `small` ↔ `Small`).\n\n## [0.1.3] - 2026-04-27\n\n### Added\n- **Compose perf guardrails.** Detekt + [`mrmans0n/compose-rules`](https://github.com/mrmans0n/compose-rules) wired in, with the perf/stability rules active (`UnstableCollections`, `MutableStateAutoboxing`, `MutableParams`, `MutableStateParam`, `LambdaParameterInRestartableEffect`, `Material2`). Compose Compiler Metrics enabled on `:aurum` and `:aurum-catalog` (`build/compose_compiler/`).\n- **Compose stability CI gate.** New `verifyComposeStability` Gradle task in `:aurum` fails the build when `aurum_release-classes.txt` reports more inferred-unstable classes than `composeStabilityThreshold` (currently `0`). Wired into `check.yml` after detekt.\n- **Compose metrics dashboard** deployed alongside the gallery at [changejarapp.github.io/aurum-android/metrics/](https://changejarapp.github.io/aurum-android/metrics/), rendered from `build/compose_compiler/` via [`PatilShreyas/compose-report-to-html`](https://github.com/PatilShreyas/compose-report-to-html). Per-PR `compose-metrics` artifact uploaded by `check.yml`.\n- **Aurum icon set** — 57 icons × 2 weights = 114 vector drawables imported from the Figma \"Component Icons\" frame, exposed under `AurumIcons.<Category>.<Name>` (and `<Name>Filled` for the fill variant). 8 categories: `Navigation`, `Action`, `Content`, `Media`, `Commerce`, `System`, `Status`, `User`. Ingested by the new `tooling/icons/import_from_figma.py` script (`make icons-import`); idempotent re-runs.\n- **`IconGallery`** screen in the catalog showing every icon × weight, grouped by category.\n- **114 Code Connect mappings** for the new icons under `aurum/src/main/kotlin/com/jar/app/aurum/component/icon/figma_connect/AurumIcon*.figma.kt`. Auto-published to Figma via the `figma-code-connect.yml` workflow.\n\n### Changed\n- **6 overlapping icons replaced** from the Figma source-of-truth: `Navigation.Back`→`ArrowLeft`, `Navigation.ChevronForward`→`ChevronRight`, `Media.Like`→`Content.Heart` (renames; 12 call-site migrations across `AurumTopAppBar`, `AurumChip`, `AurumSectionHeader`, `AurumLinkButton`, and the catalog gallery). `Navigation.Close`, `Action.Edit`, `Action.Search` kept their names — only their underlying XML content was replaced.\n- **5 components marked codebase-only**: `AurumSearchField`, `AurumIconButton`, `AurumDivider`, `AurumLoader`, `AurumSkeleton` — verified absent from the Figma library via MCP search. File-level marker added so future Code-Connect audits don't keep flagging them.\n- **`AurumIcons.kt` regenerated** from the import script. The 3 legacy entries that lack a Figma counterpart (`Action.Add`, `Action.Overflow`, `Selection.Check`) remain hand-authored under `res/drawable/` and are flagged in-file pending design escalation.\n- **`record.yml` now also dispatches `pages.yml`** after committing fresh baselines on `main`, so the gallery's snapshot embeds redeploy without a manual trigger.\n\n### Fixed\n- **`AurumOtpInput`**: keyed `LaunchedEffect` on the completion-boundary transition (`value.length == maxLength`) instead of `value` itself, so the coroutine no longer relaunches on every keystroke.\n- **`AurumSkeleton`**: moved the `shimmerProgress` state read out of the `drawWithCache` cache block and into `onDrawBehind`, so the cache is no longer invalidated on every animation frame. The gradient `colors` list is now `remember`-ed.\n- **`AurumText`**: `inlineContent` parameter typed as `ImmutableMap<…>` instead of `Map<…>`, restoring skippability (caught by the new compose-rules `UnstableCollections` rule).\n- **CI Java mismatch**: `compose-report-to-html` v1.5.0 JAR is built against Java 21; `check.yml` and `pages.yml` now install JDK 21 alongside JDK 17 and invoke the JAR via `$JAVA_HOME_21_X64/bin/java`.\n\n### Tooling\n- New Makefile targets: `make lint-compose`, `make compose-metrics`, `make compose-metrics-html`, `make icons-import`, `make icons-brand` (rename of the prior `make icons` for clarity vs the new icon-set sync).\n- New tooling scripts: `tooling/icons/import_from_figma.py` (Figma SVG → Vector Drawable + AurumIcons.kt + Code Connect codegen) and `tooling/gallery/render_metrics_index.py` (gallery `/metrics/` landing page).\n\n## [0.1.2] - 2026-04-23\n\n### Added\n- **Screenshot testing** via Roborazzi + ComposablePreviewScanner. 334 baseline\n  PNGs committed under `aurum/src/test/snapshots/` (Git LFS-tracked) covering\n  every `@Preview` and every tile of the `@AurumPreview` 6-device fan-out.\n  Any visual regression fails CI before merge. Tasks: `recordRoborazziDebug`\n  (refresh baselines), `verifyRoborazziDebug` (CI check), `compareRoborazziDebug`\n  (diff without failing).\n- **`.github/workflows/check.yml`** — PR + main-push workflow running library +\n  catalog build, lint, and snapshot verification. Diff PNGs uploaded as a\n  workflow artifact on any screenshot drift so design reviewers can eyeball\n  the exact delta.\n- **Git LFS** (`.gitattributes`) tracking `aurum/src/test/snapshots/**/*.png`\n  — keeps pack files small, surfaces binary diffs in PR UIs.\n\n## [0.1.1] - 2026-04-23\n\n### Changed\n- **Maven coordinate realigned** with Jar's library convention.\n  - Before: `com.jarapp:aurum:<ver>`\n  - After:  `com.jar.internal.library.aurum-android:core:<ver>`\n  - Kotlin import package inside the AAR stays `com.jar.app.aurum.*` — no source rename.\n  - This lets consumers resolve Aurum via the existing `Changejarapp/*` wildcard\n    Maven repo in `jar-android/settings.gradle.kts`, identical to how\n    `com.jar.internal.library.core-network:shared` and siblings are resolved.\n  - The previous `com.jarapp:aurum:0.1.0` artifact is stale and should not be\n    consumed — it's kept in GitHub Packages only to avoid the \"published once,\n    cannot re-publish the same coord\" rule.\n\n### Removed\n- `AurumElevation.toast` + `ElevationTintColors.toast` + `AurumLightElevation.toast` entry + `AurumLightColors.elevationTint.toast` value — Figma ships only a tint for `elevation/_toast` (no dedicated dims) and the fallback shape matched `lowRaised`, so the Kotlin surface added API surface without semantic value. Snackbars/toasts now use `Aurum.elevation.lowRaised` directly. The plugin mapping (`figma-plugin-aurum-sync`) marks `_toast` as an explicitly skipped elevation token and bumps to `0.1.1`.\n\n### Added\n- `AurumColors.visual` — new decorative palette subgroup exposing 77 chromatic tokens (blue/green/orange/pink/purple/red/yellow × shades 50…1000). Mirrors Figma's `visual_colors` collection 1:1 and sources values from `AurumPalette` primitives. Feature code uses `Aurum.colors.visual.<family><shade>` for palette-keyed decorative colours that have no semantic meaning. Raw `AurumPalette` stays `internal`.\n- `AurumPhoneNumberInput` — phone-number variant of `AurumTextField` with country-code prefix slot, optional flag composable, digit-only input filter, `KeyboardType.Phone`, and a default 10-digit max length. Mirrors the Figma \"Phone Number Input\" component set.\n- `AurumTextField.figma.kt` — Code Connect stub against Figma `4623:373` mapping `state`, `validationState`, `multi_line`, `label`, `showHelpText` to `AurumTextField` API props.\n- `AurumPhoneNumberInput.figma.kt` — Code Connect stub against Figma `4904:2455` mapping `state`, `validationState`, `hasValue`, `label`, `showHelpText`.\n- `AurumOtpValidationState.Timer` — fourth validation state for resend-countdown UX. Renders identically to `None` but provides a semantic channel matching the Figma `validationState=timer` variant.\n- `Modifier.aurumHardShadow(color, offsetY, shape)` — solid-colour offset drop shadow for skeuomorphic \"stacked card\" effects (matches Figma's `shadow(0, Ypx, 0, 0, color)` spec). Encapsulates the double-box idiom into a single modifier that expands layout by `offsetY` and paints the shape outline behind content.\n\n### Fixed\n- `AurumOtpInput` disabled digits now use `surface.textDefaultDisabled` (matching Figma `text/default/disabled`) instead of `textDefaultNormal` at 10% alpha.\n- `AurumTopAppBar` synced to Figma `4826:1057` Page Header: title uses SemiBold (was Medium); subtitle uses `labelL2` Medium 12/16 in `textDefaultNormal` (was `bodyB3` Normal in `textDefaultSubtle`); primary button uses SemiBold label and natural 36 dp height from 8 dp padding (was fixed 32 dp, Medium); back + action icons tint via `interactive.iconNeutralNormal` (was `surface.textDefaultNormal` — same hex, correct token). Docstring fix: icon wrapper is 32 × 40 dp (w × h), not 40 × 32.\n- `AurumBadge` synced to Figma `4240:10843`: both emphases now render at `Label/L-Medium` (12/16 Inter Medium) — previously had a 18 sp line-height and Intense emphasis rendered Normal weight. Emphasis-specific text styles collapsed to a single shared style.\n- `AurumSectionHeader` synced to Figma `3702:162168`: title, link label, and text-action label render SemiBold (`Title/S-SemiBold` / `Title/XS-SemiBold`); icon-action tint uses `interactive.iconNeutralNormal` (was `surface.iconDefaultNormal` — same hex, correct semantic).\n- `AurumSwitch` synced to Figma `4018:557`: thumb now uses `interactive.bgNeutralInverse` (was `surface.bgPageBase` — same hex, correct semantic); checked icon uses `interactive.iconPrimaryNormal` (was `bgPrimaryDefault`); disabled-checked icon uses `interactive.iconNeutralDisabled` (was `bgNeutralDisabled` — **real hex drift** fixed).\n- `AurumStepper` synced to Figma `3834:139631`: numeric value and ± symbols render Bold (`Num/XS`); Neutral and Brand state colours moved to the `interactive.*` token family; disabled-state bg/border/icon hexes corrected (`#6C849D17` / `#C3C7D1` were previously rendering as `#ECEEF3` / `#848A99`).\n- `AurumLabel` synced to Figma `3774:137816`: all variants render Medium weight (was SemiBold); `Strong` variant now uses `labelL2` size (was `labelL1`) and `feedback.textPrimaryIntense` colour (was `surface.textDefaultNormal`).\n- `AurumButton` synced to Figma `4692:1074`: primary-disabled text token changed to `textPrimaryDisabled` (was `textOnPrimaryDisabled`); secondary variant border uses `borderPrimaryDefault` when enabled and `borderNeutralMuted` when disabled (was `borderNeutralDefault` / `borderNeutralDisabled`).\n\n## [0.2.0] - 2026-04-16\n\n### Added\n- **Figma Code Connect** infrastructure: Gradle plugin, CLI, `*.figma.kt` pattern\n- `AurumIcons` namespace with 8 XML Vector Drawables from Figma exports\n- `AurumLinkButton` — new component from Figma Button page\n- `AurumBadge` — 6 colors × 2 emphases × 2 sizes from Figma\n- `AurumOtpInput` — digit-by-digit OTP from Figma spec\n- `AurumStepper` — numeric +/− from Figma spec\n- `AurumLabel` — styled text label from Figma spec\n- `AurumSectionHeader` — section divider from Figma spec\n- `AurumSwitch` — toggle from Figma spec\n- `version.properties` for semver tracking\n\n### Changed\n- **AurumButton** rebuilt from Figma spec: 3 variants (removed Ghost/Destructive), corrected heights (40/48/56dp), added `isFullWidth` + `isLoading`, 12dp corner radius\n- **AurumTypography** restructured to match Figma type scale: 14 scale composites (Display/Heading/Body/Caption) + 6 component-level styles\n- **AurumTextField** audited: added success state, readonly treatment, character counter, fixed error token layer\n- All Material Icons replaced with `AurumIcons.*` (XML Vector Drawables loaded via `ImageVector.vectorResource()`)\n- Button size enum renamed `Sm/Md/Lg` → `Small/Medium/Large`\n- Button style enum renamed `AurumButtonStyle` → `AurumButtonVariant`\n\n### Fixed\n- Secondary button was filled grey — now transparent bg + outline border per Figma\n- Typography composites were engineering assumptions — now 14 match actual Figma scale\n- Hand-drawn `ImageVector.Builder` paths replaced with proper XML drawables\n\n## [0.1.0] - 2026-04-16\n\n### Added\n- Initial Aurum module scaffold (`:core-designsystem` + `:core-designsystem-catalog`)\n- 196 semantic colour tokens from Figma export (6 sub-structs)\n- Spacing, radius, border-width, icon-size, elevation, motion, opacity tokens\n- `AurumTheme` composable with `MaterialBridge` (hybrid M3 architecture)\n- Foundation primitives: `AurumText`, `AurumIcon`, `AurumSurface`, `AurumDivider`\n- Interactive primitives: `AurumButton`, `AurumIconButton`, `AurumTextField`, `AurumSearchField`\n- Navigation: `AurumTopAppBar` (10 Figma variants)\n- Feedback: `AurumLoader`, `AurumSkeleton`\n- Preview infrastructure: `@AurumPreview`, `AurumPreviewSurface`\n- `Modifier.aurumShadow()` for elevation rendering\n- CLAUDE.md module guide + 30 documentation files\n- Catalog app with 6 foundation gallery screens\n",
     "entries": [
       {
         "version": "Unreleased",
