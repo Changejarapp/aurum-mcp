@@ -127,14 +127,20 @@ a one-day add. Not before.
 
 ## Versioning
 
-`aurum-mcp@x.y.z` ships the manifest from `aurum@x.y.z`. The mapping
-removes ambiguity: "what version of Aurum am I asking about?" = the
-version you have installed.
+`aurum-mcp` and the Aurum library are versioned **independently**.
+Up through `v0.1.x` they happened to match 1:1; from v0.2.0 onward,
+MCP-side work (description rewrites, new tools, schema readers) drove
+the MCP ahead of the library, and we deliberately decoupled the two
+SemVer tracks rather than retroactively matching them. The version
+footer on every tool response carries both — `aurum
+aurum-android@0.1.5 · manifest sha …` — so any conversation is
+traceable to a specific (mcp_version, library_version) pair.
 
-The `release.yml` workflow handles bumps via `workflow_dispatch` —
-**no automatic version bumps.** Per the upstream Aurum policy, humans
-own release cadence. Auto-PRs from `sync-manifest.yml` update the
-manifest content but never tag.
+The `release.yml` workflow is the **only** place `package.json` gets
+bumped. It runs via `workflow_dispatch` — **no automatic version
+bumps.** Per the upstream Aurum policy, humans own release cadence.
+Auto-PRs from `sync-manifest.yml` update the manifest content (and
+nothing else) but never tag.
 
 ## The `#latest-stable` floating tag
 
@@ -142,10 +148,35 @@ A CI-managed Git tag that always points at the newest stable release.
 After every `release.yml` run:
 
 ```bash
-git tag -f latest-stable v0.1.6
+git tag -f latest-stable v0.3.1
 git push -f origin latest-stable
 ```
 
 Users who paste the default README snippet get auto-updates on each
-fresh `npx` cache miss. Users who pin `#v0.1.6` are reproducible.
+fresh `npx` cache miss. Users who pin `#v0.3.1` are reproducible.
 Documented as the README's primary install snippet.
+
+## CI workflow inventory
+
+| Workflow | Trigger | Purpose |
+|---|---|---|
+| `build.yml` | push to `main`, every PR | TypeScript compile + `pnpm smoke` |
+| `smoke-test.yml` | every PR | `npx -y github:…#sha` end-to-end install + `tools/list` assertion |
+| `drift-check.yml` | every PR | bundled `data/manifest.json` byte-equals live URL (soft-skips on 404) |
+| `sync-manifest.yml` | `repository_dispatch` from aurum-android, daily cron, manual | fetches live URL into bundled, opens auto-PR |
+| `release.yml` | manual `workflow_dispatch` only | bumps `package.json`, tags, force-moves `latest-stable`, creates GitHub Release |
+| `stale-main.yml` | weekday cron at 09:00 UTC | opens issue when `main` is ≥7 days ahead of latest release |
+| `docs.yml` | push to `main`, paths `docs/**` | publishes `docs/` to GitHub Pages via Jekyll |
+
+## Contributor mental model
+
+- **Component author working in aurum-android**: open PR there, merge.
+  Forget aurum-mcp exists. The pipeline takes care of propagation up
+  to the merge of the auto-PR; a human dispatches release when ready.
+- **aurum-mcp maintainer**: review + merge incoming
+  `chore: sync manifest …` auto-PRs. Dispatch `release.yml` at your
+  cadence (after batched syncs, before a team demo, after a known-
+  good Aurum release). The `stale-main.yml` issue gently nudges if
+  ≥7 days pass with unreleased content.
+- **End user (Jar engineer / designer)**: never touch a config; the
+  default `#latest-stable` install snippet carries them along.

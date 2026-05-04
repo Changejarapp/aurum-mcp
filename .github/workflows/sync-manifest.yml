@@ -64,12 +64,17 @@ jobs:
           echo "aurum_version=$AURUM_VERSION" >> "$GITHUB_OUTPUT"
           echo "manifest_sha=${MANIFEST_SHA:0:8}" >> "$GITHUB_OUTPUT"
 
-      - name: Bump package.json to match aurum version
-        if: steps.diff.outputs.changed == 'true'
-        run: |
-          # Mirror the upstream Aurum library version 1:1 so users always
-          # know which Aurum release they have installed.
-          npm version "${{ steps.meta.outputs.aurum_version }}" --no-git-tag-version --allow-same-version
+      # NOTE: we deliberately do NOT bump package.json to match the Aurum
+      # library version here. v0.1 versioned aurum-mcp 1:1 with Aurum, but
+      # MCP-side work (description rewrites, new tools, schema readers)
+      # has driven aurum-mcp ahead of the library — Aurum is at 0.1.5
+      # while aurum-mcp is at 0.3.x. Pre-bumping to the Aurum version
+      # would now downgrade SemVer non-monotonically. The version footer
+      # on every tool response already prints both versions
+      # (`aurum aurum-android@0.1.5 · manifest sha …`), so users still
+      # know which Aurum library they're talking to. release.yml's
+      # manual `npm version <bump>` is the single source of MCP version
+      # changes.
 
       - name: Open auto-merging PR
         if: steps.diff.outputs.changed == 'true'

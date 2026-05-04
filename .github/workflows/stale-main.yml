@@ -1,0 +1,98 @@
+name: Stale main warning
+
+# Opens (or updates) a single tracking issue when `main` has manifest /
+# source content ahead of the latest tagged release for ≥7 days. Gentle
+# nudge to dispatch `release.yml` so users on `#latest-stable` aren't
+# permanently stranded behind unmerged-but-unreleased work.
+#
+# This is a safety valve, not a hard gate. release.yml stays manual by
+# design (humans own release cadence). The issue auto-closes when main
+# catches up to a fresh release.
+
+on:
+  schedule:
+    # Mon-Fri at 09:00 UTC. Skipping weekends keeps the issue from
+    # nagging someone on a Saturday over a Friday-evening merge.
+    - cron: '0 9 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: stale-main
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Compute lag
+        id: lag
+        run: |
+          # Find the latest semver release tag (skip the floating
+          # latest-stable). Sort descending by version.
+          LATEST_TAG=$(git tag -l 'v[0-9]*.[0-9]*.[0-9]*' --sort=-v:refname | head -1)
+          if [ -z "$LATEST_TAG" ]; then
+            echo "no_release=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          BEHIND=$(git rev-list --count "$LATEST_TAG"..origin/main -- data/manifest.json src package.json CHANGELOG.md)
+          DAYS_AHEAD=$(( ( $(date +%s) - $(git log -1 --format=%ct "$LATEST_TAG") ) / 86400 ))
+          echo "latest_tag=$LATEST_TAG"      >> "$GITHUB_OUTPUT"
+          echo "commits_ahead=$BEHIND"       >> "$GITHUB_OUTPUT"
+          echo "days_since_release=$DAYS_AHEAD" >> "$GITHUB_OUTPUT"
+          # Stale only when there's actual content lag AND ≥7 days passed.
+          if [ "$BEHIND" -gt 0 ] && [ "$DAYS_AHEAD" -ge 7 ]; then
+            echo "stale=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "stale=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open or update tracking issue
+        if: steps.lag.outputs.stale == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LATEST_TAG: ${{ steps.lag.outputs.latest_tag }}
+          COMMITS_AHEAD: ${{ steps.lag.outputs.commits_ahead }}
+          DAYS_AHEAD: ${{ steps.lag.outputs.days_since_release }}
+        run: |
+          TITLE="Release stale — main is $COMMITS_AHEAD commits ahead of $LATEST_TAG"
+          BODY=$(cat <<EOF
+          \`main\` is **$COMMITS_AHEAD commits** ahead of the latest release ($LATEST_TAG, **$DAYS_AHEAD days ago**) on release-relevant paths (\`data/manifest.json\`, \`src\`, \`package.json\`, \`CHANGELOG.md\`).
+
+          Users on \`#latest-stable\` are still on **$LATEST_TAG** and won't see merged changes until the next release. To ship them:
+
+          1. Open Actions → **Release** → Run workflow
+          2. Pick \`bump\` (\`patch\` if it's only manifest content, \`minor\` for new tools / schema, \`major\` for breaking changes)
+          3. CI tags the new version, force-moves \`latest-stable\`, publishes a GitHub Release. ~3 min total.
+
+          This issue will close automatically once a new release lands.
+          EOF
+          )
+          # Find an existing open issue with the same prefix; update it
+          # rather than spawning a duplicate every weekday.
+          EXISTING=$(gh issue list --state open --label release-stale --json number --jq '.[0].number' || true)
+          if [ -n "$EXISTING" ]; then
+            gh issue edit "$EXISTING" --title "$TITLE" --body "$BODY"
+            echo "Updated existing issue #$EXISTING"
+          else
+            gh issue create --title "$TITLE" --body "$BODY" --label release-stale
+            echo "Opened new release-stale issue"
+          fi
+
+      - name: Close stale issue when fresh
+        if: steps.lag.outputs.stale == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # No drift detected — close any tracking issue that may still be open.
+          for n in $(gh issue list --state open --label release-stale --json number --jq '.[].number' || true); do
+            gh issue close "$n" --comment "Auto-closed: \`main\` is no longer ahead of the latest release."
+          done

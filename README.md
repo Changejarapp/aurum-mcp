@@ -158,10 +158,93 @@ explicit tag:
 "args": ["-y", "github:Changejarapp/aurum-mcp#v0.2.0"]
 ```
 
-Every version of `aurum-mcp` ships the manifest from the matching Aurum
-library version (`aurum-mcp@0.1.6` ⇄ `aurum@0.1.6`). Call
-`aurum_get_aurum_version` from your LLM client to see exactly what
-you're talking to.
+**MCP version vs Aurum library version.** These are two independent
+SemVer tracks. Up through `aurum-mcp@v0.1.x` they happened to match
+1:1; from v0.2.0 onward, MCP-side work (description rewrites, new
+tools, schema readers) drove the MCP ahead of the library while the
+Aurum library version moves on its own cadence. The version footer on
+every tool response prints **both** so any conversation is traceable:
+
+```
+*aurum aurum-android@0.1.5 · manifest sha 9af3b21c · generated 2026-05-04 04:22 UTC*
+```
+
+Or call `aurum_get_aurum_version` from your LLM client for the full
+provenance block.
+
+---
+
+## How content gets here (manifest pipeline)
+
+`aurum-mcp` is a thin renderer over a single JSON manifest produced
+upstream by the Aurum library. Here's how a component / token / icon
+change in `Changejarapp/aurum-android` reaches a developer's editor:
+
+```
+                       Push to aurum-android main
+                                    │
+                                    ▼
+                check.yml  ─►  pages.yml
+                              (gradle)    (gallery + manifest)
+                                    │
+                                    ▼
+            https://changejarapp.github.io/aurum-android/data/manifest.json
+                                    │
+                ┌───────────────────┼─────────────────────┐
+                │                   │                     │
+        repository_dispatch    daily cron          workflow_dispatch
+        (~1 min, instant)      (06:00 UTC)            (manual)
+                │                   │                     │
+                └───────────────────┴──────────┬──────────┘
+                                               ▼
+                       aurum-mcp/sync-manifest.yml
+                                               │
+                                               ▼
+                opens "chore: sync manifest to aurum@X.Y.Z" auto-PR
+                                               │
+                          👤 human reviews + clicks Merge
+                                               │
+                                               ▼
+                              main carries new manifest
+                                               │
+                          👤 human dispatches release.yml
+                          (Actions → Release → Run workflow → bump)
+                                               │
+                                               ▼
+            tag vX.Y.Z + force-move latest-stable + GitHub Release
+                                               │
+                                               ▼
+              users on `#latest-stable` pick up on next npx cache miss
+                          (~10 min on Claude Code)
+```
+
+**What's automatic vs manual**:
+
+| Step | Automatic | Manual |
+|---|---|---|
+| Aurum gallery rebuild | ✅ on push | |
+| Manifest URL refresh | ✅ ~10 min | |
+| Cross-repo dispatch | ✅ via `notify-mcp.yml` | |
+| Sync-manifest auto-PR | ✅ | |
+| Auto-PR review + merge | | 👤 |
+| Release dispatch | | 👤 |
+| Tag / latest-stable / Release | ✅ on dispatch | |
+| User picks up new content | ✅ npx cache miss | |
+
+**Why release is manual**: a half-baked Aurum change shouldn't
+auto-broadcast to every team-member's editor at 06:00 UTC. Manual
+dispatch lets you batch several manifest syncs into one release and
+gives a human moment to review the CHANGELOG before users see new
+behaviour.
+
+**Stale-main safety valve**: a weekday cron (`stale-main.yml`) opens
+a tracking issue when `main` is ≥7 days ahead of the latest release on
+release-relevant paths — gentle nudge, not a hard gate. Auto-closes
+when a fresh release lands.
+
+For the upstream side of this pipeline (how component changes reach
+the manifest URL), see
+[`Changejarapp/aurum-android`'s README — Manifest pipeline section](https://github.com/Changejarapp/aurum-android#manifest-pipeline-feeding-aurum-mcp).
 
 ---
 
