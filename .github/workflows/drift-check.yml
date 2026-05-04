@@ -41,14 +41,40 @@ jobs:
       - name: Compare
         if: steps.fetch.outputs.skipped != 'true'
         run: |
-          # We compare the parsed JSON (canonical formatting) so trivial
-          # whitespace differences don't trip the check.
-          jq --sort-keys . data/manifest.json > /tmp/local-canon.json
-          jq --sort-keys . /tmp/live-manifest.json > /tmp/live-canon.json
+          # Content-aware comparison.
+          #
+          # We scrub three fields that change on EVERY upstream gallery
+          # deploy without affecting MCP behaviour:
+          #
+          #   aurum.sha          ─ git commit SHA at gallery-deploy time
+          #   meta.generatedAt   ─ ISO timestamp from generate.py
+          #   meta.manifestSha   ─ SHA-256 over the manifest content,
+          #                        rolls up the two above
+          #
+          # Without this scrub, drift-check fails on every aurum-mcp PR
+          # opened after any aurum-android push to main — even when the
+          # actual content (components, tokens, icons, codeConnect,
+          # changelog, schema) is byte-identical. The scrub turns this
+          # gate into a "real content drift" check rather than a
+          # "did upstream redeploy" tripwire.
+          #
+          # Real content drift in any of:
+          #   schemaVersion, aurum.{library,version,platforms},
+          #   meta.{figmaFileKey,galleryUrl},
+          #   components, tokens, icons, codeConnect, changelog
+          # still fails the diff and blocks the PR — exactly what we want.
+          #
+          # If the manifest schema later adds a new volatile metadata
+          # field, extend the SCRUB filter below to drop it. `jq del()`
+          # is a no-op on missing keys, so the filter is forward-safe
+          # against older bundled manifests that pre-date a field.
+          SCRUB='del(.aurum.sha, .meta.generatedAt, .meta.manifestSha)'
+          jq --sort-keys "$SCRUB" data/manifest.json     > /tmp/local-canon.json
+          jq --sort-keys "$SCRUB" /tmp/live-manifest.json > /tmp/live-canon.json
           if ! diff -q /tmp/local-canon.json /tmp/live-canon.json > /dev/null; then
-            echo "::error::Bundled manifest is out of sync with the live gallery."
+            echo "::error::Bundled manifest is out of sync with the live gallery (real content drift, not just provenance)."
             echo "Run \`make manifest-fetch\` (or wait for the auto-PR from sync-manifest.yml) before merging."
             diff -u /tmp/local-canon.json /tmp/live-canon.json | head -60 || true
             exit 1
           fi
-          echo "✓ Bundled manifest matches live gallery."
+          echo "✓ Bundled manifest matches live gallery (provenance fields scrubbed)."
