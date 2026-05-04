@@ -1,4 +1,4 @@
-name: Build
+name: PR validation
 
 # Verifies the TypeScript compile and an end-to-end smoke run on every PR
 # and every push to main. Does NOT commit dist/ — dist/ is gitignored, and
