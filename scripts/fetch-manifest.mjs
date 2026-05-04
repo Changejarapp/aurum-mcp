@@ -36,9 +36,14 @@ async function readIfExists(path) {
 async function main() {
   console.log(`Fetching ${SOURCE_URL}`);
   const remote = await fetchText(SOURCE_URL);
-  // Re-serialise to canonical form (matches generate.py's output).
+  // Preserve the raw bytes the gallery serves so drift-check has something
+  // exact to compare against. JSON.parse + re-stringify drops Python's
+  // numeric formatting (`1.0` → `1`, `4.0` → `4`) and breaks the byte-level
+  // equality check `drift-check.yml` performs.
+  // We still parse to surface the version + counts for the operator.
   const parsed = JSON.parse(remote);
-  const canonical = JSON.stringify(parsed, null, 2) + "\n";
+  // Normalise trailing newline only — leave the JSON body untouched.
+  const canonical = remote.endsWith("\n") ? remote : remote + "\n";
 
   const local = await readIfExists(DATA_PATH);
   if (local === canonical) {

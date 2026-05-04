@@ -1956,31 +1956,31 @@
           {
             "name": "bgPageBase",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/background/page/base"
           },
           {
             "name": "bgPageBaseAlternate",
             "hex": "#ECEEF3",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/background/page/base-alternate"
           },
           {
             "name": "bgSurfaceLowContrast",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/background/surface/lowContrast"
           },
           {
             "name": "bgSurfaceMidContrast",
             "hex": "#ECEEF3",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/background/surface/midContrast"
           },
           {
             "name": "bgSurfaceHighContrast",
             "hex": "#DCDDE3",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/background/surface/highContrast"
           },
           {
@@ -1992,31 +1992,31 @@
           {
             "name": "bgBrandIntense",
             "hex": "#7029CC",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/background/brand/intense"
           },
           {
             "name": "borderSurfaceInverse",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/border/surface/inverse"
           },
           {
             "name": "borderSurfaceLowContrast",
             "hex": "#ECEEF3",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/border/surface/lowContrast"
           },
           {
             "name": "borderSurfaceMidContrast",
             "hex": "#DCDDE3",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/border/surface/midContrast"
           },
           {
             "name": "borderSurfaceHighContrast",
             "hex": "#C3C7D1",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/border/surface/highContrast"
           },
           {
@@ -2028,55 +2028,55 @@
           {
             "name": "borderBrandNormal",
             "hex": "#7029CC",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/border/brand/normal"
           },
           {
             "name": "textDefaultNormal",
             "hex": "#121212",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/text/default/normal"
           },
           {
             "name": "textDefaultSubtle",
             "hex": "#4A4F5C",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/text/default/subtle"
           },
           {
             "name": "textDefaultDisabled",
             "hex": "#848A99",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/text/default/disabled"
           },
           {
             "name": "textDefaultInverse",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/text/default/inverse"
           },
           {
             "name": "textBrandNormal",
             "hex": "#7029CC",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/text/brand/normal"
           },
           {
             "name": "textOnBrandNormal",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/text/onBrand/normal"
           },
           {
             "name": "textOnBrandSubtle",
             "hex": "#E2D4F5",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/text/onBrand/subtle"
           },
           {
             "name": "textStaticWhiteNormal",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/text/staticWhite/normal"
           },
           {
@@ -2094,7 +2094,7 @@
           {
             "name": "textStaticBlackNormal",
             "hex": "#121212",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/text/staticBlack/normal"
           },
           {
@@ -2112,43 +2112,43 @@
           {
             "name": "iconDefaultNormal",
             "hex": "#121212",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/icon/default/normal"
           },
           {
             "name": "iconDefaultSubtle",
             "hex": "#4A4F5C",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/icon/default/subtle"
           },
           {
             "name": "iconDefaultDisabled",
             "hex": "#848A99",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/icon/default/disabled"
           },
           {
             "name": "iconDefaultInverse",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/icon/default/inverse"
           },
           {
             "name": "iconBrandNormal",
             "hex": "#7029CC",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/icon/brand/normal"
           },
           {
             "name": "iconOnBrandNormal",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/icon/onBrand/normal"
           },
           {
             "name": "iconStaticWhiteNormal",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/icon/staticWhite/normal"
           },
           {
@@ -2166,7 +2166,7 @@
           {
             "name": "iconStaticBlackNormal",
             "hex": "#121212",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "surface/icon/staticBlack/normal"
           },
           {
@@ -2186,7 +2186,7 @@
           {
             "name": "bgPositiveIntense",
             "hex": "#10A342",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/background/positive/intense"
           },
           {
@@ -2198,7 +2198,7 @@
           {
             "name": "bgNegativeIntense",
             "hex": "#D83209",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/background/negative/intense"
           },
           {
@@ -2210,7 +2210,7 @@
           {
             "name": "bgNoticeIntense",
             "hex": "#DA6105",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/background/notice/intense"
           },
           {
@@ -2222,7 +2222,7 @@
           {
             "name": "bgInformationIntense",
             "hex": "#055FDC",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/background/information/intense"
           },
           {
@@ -2234,7 +2234,7 @@
           {
             "name": "bgPrimaryIntense",
             "hex": "#7029CC",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/background/primary/intense"
           },
           {
@@ -2246,7 +2246,7 @@
           {
             "name": "bgNeutralIntense",
             "hex": "#343844",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/background/neutral/intense"
           },
           {
@@ -2258,7 +2258,7 @@
           {
             "name": "borderPositiveIntense",
             "hex": "#10A342",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/border/positive/intense"
           },
           {
@@ -2270,7 +2270,7 @@
           {
             "name": "borderNegativeIntense",
             "hex": "#D83209",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/border/negative/intense"
           },
           {
@@ -2282,7 +2282,7 @@
           {
             "name": "borderNoticeIntense",
             "hex": "#DA6105",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/border/notice/intense"
           },
           {
@@ -2294,7 +2294,7 @@
           {
             "name": "borderInformationIntense",
             "hex": "#055FDC",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/border/information/intense"
           },
           {
@@ -2306,7 +2306,7 @@
           {
             "name": "borderNeutralIntense",
             "hex": "#343844",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/border/neutral/intense"
           },
           {
@@ -2318,7 +2318,7 @@
           {
             "name": "borderPrimaryIntense",
             "hex": "#7029CC",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/border/primary/intense"
           },
           {
@@ -2330,145 +2330,145 @@
           {
             "name": "textPositiveIntense",
             "hex": "#10A342",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/text/positive/intense"
           },
           {
             "name": "textPositiveSubtle",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/text/positive/subtle"
           },
           {
             "name": "textNegativeIntense",
             "hex": "#D83209",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/text/negative/intense"
           },
           {
             "name": "textNegativeSubtle",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/text/negative/subtle"
           },
           {
             "name": "textNoticeIntense",
             "hex": "#DA6105",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/text/notice/intense"
           },
           {
             "name": "textNoticeSubtle",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/text/notice/subtle"
           },
           {
             "name": "textInformationIntense",
             "hex": "#055FDC",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/text/information/intense"
           },
           {
             "name": "textInformationSubtle",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/text/information/subtle"
           },
           {
             "name": "textNeutralIntense",
             "hex": "#343844",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/text/neutral/intense"
           },
           {
             "name": "textNeutralSubtle",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/text/neutral/subtle"
           },
           {
             "name": "textPrimaryIntense",
             "hex": "#7029CC",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/text/primary/intense"
           },
           {
             "name": "textPrimarySubtle",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/text/primary/subtle"
           },
           {
             "name": "iconPositiveIntense",
             "hex": "#10A342",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/icon/positive/intense"
           },
           {
             "name": "iconPositiveSubtle",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/icon/positive/subtle"
           },
           {
             "name": "iconNegativeIntense",
             "hex": "#D83209",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/icon/negative/intense"
           },
           {
             "name": "iconNegativeSubtle",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/icon/negative/subtle"
           },
           {
             "name": "iconNoticeIntense",
             "hex": "#DA6105",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/icon/notice/intense"
           },
           {
             "name": "iconNoticeSubtle",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/icon/notice/subtle"
           },
           {
             "name": "iconInformationIntense",
             "hex": "#055FDC",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/icon/information/intense"
           },
           {
             "name": "iconInformationSubtle",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/icon/information/subtle"
           },
           {
             "name": "iconNeutralIntense",
             "hex": "#343844",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/icon/neutral/intense"
           },
           {
             "name": "iconNeutralSubtle",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/icon/neutral/subtle"
           },
           {
             "name": "iconPrimaryIntense",
             "hex": "#7029CC",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/icon/primary/intense"
           },
           {
             "name": "iconPrimarySubtle",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "feedback/icon/primary/subtle"
           }
         ],
@@ -2476,13 +2476,13 @@
           {
             "name": "bgPositiveDefault",
             "hex": "#10A342",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/background/positive/default"
           },
           {
             "name": "bgPositiveHighlighted",
             "hex": "#0C7A31",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/background/positive/highlighted"
           },
           {
@@ -2494,19 +2494,19 @@
           {
             "name": "bgPositiveFaded",
             "hex": "#A1EBBA",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/background/positive/faded"
           },
           {
             "name": "bgNegativeDefault",
             "hex": "#D83209",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/background/negative/default"
           },
           {
             "name": "bgNegativeHighlighted",
             "hex": "#902206",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/background/negative/highlighted"
           },
           {
@@ -2518,19 +2518,19 @@
           {
             "name": "bgNegativeFaded",
             "hex": "#F9AF9D",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/background/negative/faded"
           },
           {
             "name": "bgInformationDefault",
             "hex": "#055FDC",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/background/information/default"
           },
           {
             "name": "bgInformationHighlighted",
             "hex": "#033F93",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/background/information/highlighted"
           },
           {
@@ -2542,19 +2542,19 @@
           {
             "name": "bgInformationFaded",
             "hex": "#9BC3FB",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/background/information/faded"
           },
           {
             "name": "bgNeutralDefault",
             "hex": "#DCDDE3",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/background/neutral/default"
           },
           {
             "name": "bgNeutralHighlighted",
             "hex": "#C3C7D1",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/background/neutral/highlighted"
           },
           {
@@ -2566,25 +2566,25 @@
           {
             "name": "bgNeutralFaded",
             "hex": "#ECEEF3",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/background/neutral/faded"
           },
           {
             "name": "bgNeutralInverse",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/background/neutral/Inverse"
           },
           {
             "name": "bgPrimaryDefault",
             "hex": "#7029CC",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/background/primary/default"
           },
           {
             "name": "bgPrimaryHighlighted",
             "hex": "#43197A",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/background/primary/highlighted"
           },
           {
@@ -2596,13 +2596,13 @@
           {
             "name": "bgPrimaryFaded",
             "hex": "#C6A9EB",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/background/primary/faded"
           },
           {
             "name": "bgStaticWhiteDefault",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/background/staticWhite/default"
           },
           {
@@ -2632,7 +2632,7 @@
           {
             "name": "bgStaticBlackDefault",
             "hex": "#121212",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/background/staticBlack/default"
           },
           {
@@ -2662,13 +2662,13 @@
           {
             "name": "borderPositiveDefault",
             "hex": "#10A342",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/border/positive/default"
           },
           {
             "name": "borderPositiveHighlighted",
             "hex": "#0C7A31",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/border/positive/highlighted"
           },
           {
@@ -2686,13 +2686,13 @@
           {
             "name": "borderNegativeDefault",
             "hex": "#D83209",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/border/negative/default"
           },
           {
             "name": "borderNegativeHighlighted",
             "hex": "#902206",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/border/negative/highlighted"
           },
           {
@@ -2710,19 +2710,19 @@
           {
             "name": "borderInformationDefault",
             "hex": "#055FDC",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/border/information/default"
           },
           {
             "name": "borderInformationHighlighted",
             "hex": "#033F93",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/border/information/highlighted"
           },
           {
             "name": "borderInformationDisabled",
             "hex": "#A4A9B6",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/border/information/disabled"
           },
           {
@@ -2734,19 +2734,19 @@
           {
             "name": "borderNeutralDefault",
             "hex": "#848A99",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/border/neutral/default"
           },
           {
             "name": "borderNeutralHighlighted",
             "hex": "#646A78",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/border/neutral/highlighted"
           },
           {
             "name": "borderNeutralDisabled",
             "hex": "#A4A9B6",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/border/neutral/disabled"
           },
           {
@@ -2758,19 +2758,19 @@
           {
             "name": "borderPrimaryDefault",
             "hex": "#7029CC",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/border/primary/default"
           },
           {
             "name": "borderPrimaryHighlighted",
             "hex": "#43197A",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/border/primary/highlighted"
           },
           {
             "name": "borderPrimaryDisabled",
             "hex": "#A4A9B6",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/border/primary/disabled"
           },
           {
@@ -2782,97 +2782,97 @@
           {
             "name": "textPositiveNormal",
             "hex": "#10A342",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/text/positive/normal"
           },
           {
             "name": "textPositiveSubtle",
             "hex": "#43D675",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/text/positive/subtle"
           },
           {
             "name": "textPositiveDisabled",
             "hex": "#C3C7D1",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/text/positive/disabled"
           },
           {
             "name": "textNegativeNormal",
             "hex": "#D83209",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/text/negative/normal"
           },
           {
             "name": "textNegativeSubtle",
             "hex": "#F3603B",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/text/negative/subtle"
           },
           {
             "name": "textNegativeDisabled",
             "hex": "#C3C7D1",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/text/negative/disabled"
           },
           {
             "name": "textNoticeNormal",
             "hex": "#055FDC",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/text/notice/normal"
           },
           {
             "name": "textNoticeSubtle",
             "hex": "#3787F7",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/text/notice/subtle"
           },
           {
             "name": "textNoticeDisabled",
             "hex": "#C3C7D1",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/text/notice/disabled"
           },
           {
             "name": "textNeutralNormal",
             "hex": "#121212",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/text/neutral/normal"
           },
           {
             "name": "textNeutralSubtle",
             "hex": "#4A4F5C",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/text/neutral/subtle"
           },
           {
             "name": "textNeutralDisabled",
             "hex": "#C3C7D1",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/text/neutral/disabled"
           },
           {
             "name": "textPrimaryNormal",
             "hex": "#7029CC",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/text/primary/normal"
           },
           {
             "name": "textPrimarySubtle",
             "hex": "#8D54D6",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/text/primary/subtle"
           },
           {
             "name": "textPrimaryDisabled",
             "hex": "#C3C7D1",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/text/primary/disabled"
           },
           {
             "name": "textOnPrimaryNormal",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/text/onPrimary/normal"
           },
           {
@@ -2890,7 +2890,7 @@
           {
             "name": "textStaticWhiteNormal",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/text/staticWhite/normal"
           },
           {
@@ -2908,7 +2908,7 @@
           {
             "name": "textStaticBlackNormal",
             "hex": "#121212",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/text/staticBlack/normal"
           },
           {
@@ -2926,79 +2926,79 @@
           {
             "name": "iconPositiveNormal",
             "hex": "#10A342",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/icon/positive/normal"
           },
           {
             "name": "iconPositiveSubtle",
             "hex": "#43D675",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/icon/positive/subtle"
           },
           {
             "name": "iconPositiveDisabled",
             "hex": "#C3C7D1",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/icon/positive/disabled"
           },
           {
             "name": "iconNegativeNormal",
             "hex": "#D83209",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/icon/negative/normal"
           },
           {
             "name": "iconNegativeSubtle",
             "hex": "#F3603B",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/icon/negative/subtle"
           },
           {
             "name": "iconNegativeDisabled",
             "hex": "#C3C7D1",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/icon/negative/disabled"
           },
           {
             "name": "iconNoticeNormal",
             "hex": "#055FDC",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/icon/notice/normal"
           },
           {
             "name": "iconNoticeSubtle",
             "hex": "#3787F7",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/icon/notice/subtle"
           },
           {
             "name": "iconNoticeDisabled",
             "hex": "#C3C7D1",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/icon/notice/disabled"
           },
           {
             "name": "iconPrimaryNormal",
             "hex": "#7029CC",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/icon/primary/normal"
           },
           {
             "name": "iconPrimarySubtle",
             "hex": "#8D54D6",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/icon/primary/subtle"
           },
           {
             "name": "iconPrimaryDisabled",
             "hex": "#C3C7D1",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/icon/primary/disabled"
           },
           {
             "name": "iconOnPrimaryNormal",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/icon/onPrimary/normal"
           },
           {
@@ -3016,25 +3016,25 @@
           {
             "name": "iconNeutralNormal",
             "hex": "#121212",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/icon/neutral/normal"
           },
           {
             "name": "iconNeutralSubtle",
             "hex": "#4A4F5C",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/icon/neutral/subtle"
           },
           {
             "name": "iconNeutralDisabled",
             "hex": "#C3C7D1",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/icon/neutral/disabled"
           },
           {
             "name": "iconStaticWhiteNormal",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/icon/staticWhite/normal"
           },
           {
@@ -3052,7 +3052,7 @@
           {
             "name": "iconStaticBlackNormal",
             "hex": "#121212",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "interactive/icon/staticBlack/normal"
           },
           {
@@ -3086,25 +3086,25 @@
           {
             "name": "bgSubtle",
             "hex": "#ECEEF3",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "popup/background/subtle"
           },
           {
             "name": "bgIntense",
             "hex": "#FFFFFF",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "popup/background/intense"
           },
           {
             "name": "bordersSubtle",
             "hex": "#DCDDE3",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "popup/borders/subtle"
           },
           {
             "name": "bordersIntense",
             "hex": "#343844",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "popup/borders/intense"
           }
         ],
@@ -3146,67 +3146,67 @@
           {
             "name": "purple50",
             "hex": "#E2D4F5",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/purple/purple_50"
           },
           {
             "name": "purple100",
             "hex": "#C6A9EB",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/purple/purple_100"
           },
           {
             "name": "purple200",
             "hex": "#A97FE0",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/purple/purple_200"
           },
           {
             "name": "purple300",
             "hex": "#8D54D6",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/purple/purple_300"
           },
           {
             "name": "purple400",
             "hex": "#7E3ED1",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/purple/purple_400"
           },
           {
             "name": "purple500",
             "hex": "#7029CC",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/purple/purple_500"
           },
           {
             "name": "purple600",
             "hex": "#6525B8",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/purple/purple_600"
           },
           {
             "name": "purple-700",
             "hex": "#5A21A3",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/purple/purple-700"
           },
           {
             "name": "purple-800",
             "hex": "#43197A",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/purple/purple-800"
           },
           {
             "name": "purple-900",
             "hex": "#2D1052",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/purple/purple-900"
           },
           {
             "name": "purple-1000",
             "hex": "#160829",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/purple/purple-1000"
           }
         ],
@@ -3214,67 +3214,67 @@
           {
             "name": "yellow-50",
             "hex": "#FDF4CE",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/yellow/yellow-50"
           },
           {
             "name": "yellow-100",
             "hex": "#FCE99D",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/yellow/yellow-100"
           },
           {
             "name": "yellow-200",
             "hex": "#FADE6C",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/yellow/yellow-200"
           },
           {
             "name": "yellow-300",
             "hex": "#F9D33B",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/yellow/yellow-300"
           },
           {
             "name": "yellow-400",
             "hex": "#F8CD23",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/yellow/yellow-400"
           },
           {
             "name": "yellow-500",
             "hex": "#F7C80A",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/yellow/yellow-500"
           },
           {
             "name": "yellow-600",
             "hex": "#DEB409",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/yellow/yellow-600"
           },
           {
             "name": "yellow-700",
             "hex": "#C6A008",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/yellow/yellow-700"
           },
           {
             "name": "yellow-800",
             "hex": "#947806",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/yellow/yellow-800"
           },
           {
             "name": "yellow-900",
             "hex": "#635004",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/yellow/yellow-900"
           },
           {
             "name": "yellow-1000",
             "hex": "#312802",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/yellow/yellow-1000"
           }
         ],
@@ -3282,67 +3282,67 @@
           {
             "name": "green-50",
             "hex": "#D0F5DC",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/green/green-50"
           },
           {
             "name": "green-100",
             "hex": "#A1EBBA",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/green/green-100"
           },
           {
             "name": "green-200",
             "hex": "#72E097",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/green/green-200"
           },
           {
             "name": "green-300",
             "hex": "#43D675",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/green/green-300"
           },
           {
             "name": "green-400",
             "hex": "#2CD163",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/green/green-400"
           },
           {
             "name": "green-500",
             "hex": "#14CC52",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/green/green-500"
           },
           {
             "name": "green-600",
             "hex": "#12B84A",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/green/green-600"
           },
           {
             "name": "green-700",
             "hex": "#10A342",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/green/green-700"
           },
           {
             "name": "green-800",
             "hex": "#0C7A31",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/green/green-800"
           },
           {
             "name": "green-900",
             "hex": "#085221",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/green/green-900"
           },
           {
             "name": "green-1000",
             "hex": "#042910",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/green/green-1000"
           }
         ],
@@ -3350,67 +3350,67 @@
           {
             "name": "red-50",
             "hex": "#FCD7CE",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/red/red-50"
           },
           {
             "name": "red-100",
             "hex": "#F9AF9D",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/red/red-100"
           },
           {
             "name": "red-200",
             "hex": "#F6886C",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/red/red-200"
           },
           {
             "name": "red-300",
             "hex": "#F3603B",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/red/red-300"
           },
           {
             "name": "red-400",
             "hex": "#F14C23",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/red/red-400"
           },
           {
             "name": "red-500",
             "hex": "#F0380A",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/red/red-500"
           },
           {
             "name": "red-600",
             "hex": "#D83209",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/red/red-600"
           },
           {
             "name": "red-700",
             "hex": "#C02D08",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/red/red-700"
           },
           {
             "name": "red-800",
             "hex": "#902206",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/red/red-800"
           },
           {
             "name": "red-900",
             "hex": "#601604",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/red/red-900"
           },
           {
             "name": "red-1000",
             "hex": "#300B02",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/red/red-1000"
           }
         ],
@@ -3418,67 +3418,67 @@
           {
             "name": "orange-50",
             "hex": "#FCE2CD",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/orange/orange-50"
           },
           {
             "name": "orange-100",
             "hex": "#FAC49B",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/orange/orange-100"
           },
           {
             "name": "orange-200",
             "hex": "#F7A769",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/orange/orange-200"
           },
           {
             "name": "orange-300",
             "hex": "#F58937",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/orange/orange-300"
           },
           {
             "name": "orange-400",
             "hex": "#F37B1E",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/orange/orange-400"
           },
           {
             "name": "orange-500",
             "hex": "#F26C05",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/orange/orange-500"
           },
           {
             "name": "orange-600",
             "hex": "#DA6105",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/orange/orange-600"
           },
           {
             "name": "orange-700",
             "hex": "#C25604",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/orange/orange-700"
           },
           {
             "name": "orange-800",
             "hex": "#914103",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/orange/orange-800"
           },
           {
             "name": "orange-900",
             "hex": "#612B02",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/orange/orange-900"
           },
           {
             "name": "orange-1000",
             "hex": "#301601",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/orange/orange-1000"
           }
         ],
@@ -3486,67 +3486,67 @@
           {
             "name": "blue-50",
             "hex": "#CDE1FD",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/blue/blue-50"
           },
           {
             "name": "blue-100",
             "hex": "#9BC3FB",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/blue/blue-100"
           },
           {
             "name": "blue-200",
             "hex": "#69A5F9",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/blue/blue-200"
           },
           {
             "name": "blue-300",
             "hex": "#3787F7",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/blue/blue-300"
           },
           {
             "name": "blue-400",
             "hex": "#1E78F6",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/blue/blue-400"
           },
           {
             "name": "blue-500",
             "hex": "#0569F5",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/blue/blue-500"
           },
           {
             "name": "blue-600",
             "hex": "#055FDC",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/blue/blue-600"
           },
           {
             "name": "blue-700",
             "hex": "#0454C4",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/blue/blue-700"
           },
           {
             "name": "blue-800",
             "hex": "#033F93",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/blue/blue-800"
           },
           {
             "name": "blue-900",
             "hex": "#022A62",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/blue/blue-900"
           },
           {
             "name": "blue-1000",
             "hex": "#011531",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/blue/blue-1000"
           }
         ],
@@ -3554,67 +3554,67 @@
           {
             "name": "pink-50",
             "hex": "#FCCEE9",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/pink/pink-50"
           },
           {
             "name": "pink-100",
             "hex": "#FA9ED3",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/pink/pink-100"
           },
           {
             "name": "pink-200",
             "hex": "#F76DBE",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/pink/pink-200"
           },
           {
             "name": "pink-300",
             "hex": "#F53DA8",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/pink/pink-300"
           },
           {
             "name": "pink-400",
             "hex": "#F3249D",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/pink/pink-400"
           },
           {
             "name": "pink-500",
             "hex": "#F20C92",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/pink/pink-500"
           },
           {
             "name": "pink-600",
             "hex": "#DA0B83",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/pink/pink-600"
           },
           {
             "name": "pink-700",
             "hex": "#C20A75",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/pink/pink-700"
           },
           {
             "name": "pink-800",
             "hex": "#910758",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/pink/pink-800"
           },
           {
             "name": "pink-900",
             "hex": "#61053A",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/pink/pink-900"
           },
           {
             "name": "pink-1000",
             "hex": "#30021D",
-            "alpha": 1,
+            "alpha": 1.0,
             "path": "colors/pink/pink-1000"
           }
         ]
@@ -3623,69 +3623,69 @@
     "spacing": [
       {
         "name": "s0",
-        "dp": 0,
+        "dp": 0.0,
         "comment": ""
       },
       {
         "name": "s1",
-        "dp": 2,
+        "dp": 2.0,
         "comment": ""
       },
       {
         "name": "s2",
-        "dp": 4,
+        "dp": 4.0,
         "comment": ""
       },
       {
         "name": "s3",
-        "dp": 8,
+        "dp": 8.0,
         "comment": ""
       },
       {
         "name": "s4",
-        "dp": 12,
+        "dp": 12.0,
         "comment": ""
       },
       {
         "name": "s5",
-        "dp": 16,
+        "dp": 16.0,
         "comment": ""
       },
       {
         "name": "s6",
-        "dp": 20,
+        "dp": 20.0,
         "comment": ""
       },
       {
         "name": "s7",
-        "dp": 24,
+        "dp": 24.0,
         "comment": ""
       },
       {
         "name": "s8",
-        "dp": 32,
+        "dp": 32.0,
         "comment": ""
       },
       {
         "name": "s9",
-        "dp": 40,
+        "dp": 40.0,
         "comment": ""
       },
       {
         "name": "s10",
-        "dp": 48,
+        "dp": 48.0,
         "comment": ""
       },
       {
         "name": "s11",
-        "dp": 56,
+        "dp": 56.0,
         "comment": ""
       }
     ],
     "radius": [
       {
         "name": "none",
-        "dp": 0,
+        "dp": 0.0,
         "comment": ""
       },
       {
@@ -3695,39 +3695,39 @@
       },
       {
         "name": "sm",
-        "dp": 2,
+        "dp": 2.0,
         "comment": ""
       },
       {
         "name": "md",
-        "dp": 4,
+        "dp": 4.0,
         "comment": ""
       },
       {
         "name": "lg",
-        "dp": 8,
+        "dp": 8.0,
         "comment": ""
       },
       {
         "name": "xl",
-        "dp": 16,
+        "dp": 16.0,
         "comment": ""
       },
       {
         "name": "xxl",
-        "dp": 24,
+        "dp": 24.0,
         "comment": ""
       },
       {
         "name": "max",
-        "dp": 1000,
+        "dp": 1000.0,
         "comment": "Pill sentinel — use AurumShapes.pill instead of this raw value"
       }
     ],
     "borderWidth": [
       {
         "name": "none",
-        "dp": 0,
+        "dp": 0.0,
         "comment": ""
       },
       {
@@ -3737,7 +3737,7 @@
       },
       {
         "name": "sm",
-        "dp": 1,
+        "dp": 1.0,
         "comment": ""
       },
       {
@@ -3747,211 +3747,211 @@
       },
       {
         "name": "lg",
-        "dp": 2,
+        "dp": 2.0,
         "comment": ""
       },
       {
         "name": "xl",
-        "dp": 4,
+        "dp": 4.0,
         "comment": ""
       }
     ],
     "iconSize": [
       {
         "name": "xs",
-        "dp": 8,
+        "dp": 8.0,
         "comment": ""
       },
       {
         "name": "sm",
-        "dp": 12,
+        "dp": 12.0,
         "comment": ""
       },
       {
         "name": "md",
-        "dp": 16,
+        "dp": 16.0,
         "comment": ""
       },
       {
         "name": "lg",
-        "dp": 20,
+        "dp": 20.0,
         "comment": ""
       },
       {
         "name": "xl",
-        "dp": 24,
+        "dp": 24.0,
         "comment": "Canonical icon size — default for navigation and action icons"
       },
       {
         "name": "xxl",
-        "dp": 32,
+        "dp": 32.0,
         "comment": ""
       }
     ],
     "elevation": [
       {
         "name": "lowRaised",
-        "offsetY": 2,
-        "blur": 16,
+        "offsetY": 2.0,
+        "blur": 16.0,
         "tintName": "lowRaised"
       },
       {
         "name": "midRaised",
-        "offsetY": 8,
-        "blur": 24,
+        "offsetY": 8.0,
+        "blur": 24.0,
         "tintName": "midRaised"
       },
       {
         "name": "highRaised",
-        "offsetY": 16,
-        "blur": 48,
+        "offsetY": 16.0,
+        "blur": 48.0,
         "tintName": "highRaised"
       },
       {
         "name": "bottomSheet",
-        "offsetY": 16,
-        "blur": 48,
+        "offsetY": 16.0,
+        "blur": 48.0,
         "tintName": "bottomSheet"
       }
     ],
     "typography": [
       {
         "name": "displayXLarge",
-        "sizeSp": 72,
-        "lineHeightSp": 78,
+        "sizeSp": 72.0,
+        "lineHeightSp": 78.0,
         "weight": "SemiBold",
         "family": "display"
       },
       {
         "name": "displayLarge",
-        "sizeSp": 64,
-        "lineHeightSp": 70,
+        "sizeSp": 64.0,
+        "lineHeightSp": 70.0,
         "weight": "SemiBold",
         "family": "display"
       },
       {
         "name": "displayMedium",
-        "sizeSp": 56,
-        "lineHeightSp": 62,
+        "sizeSp": 56.0,
+        "lineHeightSp": 62.0,
         "weight": "SemiBold",
         "family": "display"
       },
       {
         "name": "displaySmall",
-        "sizeSp": 48,
-        "lineHeightSp": 52,
+        "sizeSp": 48.0,
+        "lineHeightSp": 52.0,
         "weight": "SemiBold",
         "family": "display"
       },
       {
         "name": "heading2XLarge",
-        "sizeSp": 40,
-        "lineHeightSp": 44,
+        "sizeSp": 40.0,
+        "lineHeightSp": 44.0,
         "weight": "SemiBold",
         "family": "display"
       },
       {
         "name": "headingXLarge",
-        "sizeSp": 32,
-        "lineHeightSp": 36,
+        "sizeSp": 32.0,
+        "lineHeightSp": 36.0,
         "weight": "SemiBold",
         "family": "display"
       },
       {
         "name": "headingLarge",
-        "sizeSp": 24,
-        "lineHeightSp": 28,
+        "sizeSp": 24.0,
+        "lineHeightSp": 28.0,
         "weight": "SemiBold",
         "family": "display"
       },
       {
         "name": "headingMedium",
-        "sizeSp": 20,
-        "lineHeightSp": 24,
+        "sizeSp": 20.0,
+        "lineHeightSp": 24.0,
         "weight": "SemiBold",
         "family": "display"
       },
       {
         "name": "headingSmall",
-        "sizeSp": 18,
-        "lineHeightSp": 22,
+        "sizeSp": 18.0,
+        "lineHeightSp": 22.0,
         "weight": "SemiBold",
         "family": "display"
       },
       {
         "name": "bodyLarge",
-        "sizeSp": 16,
-        "lineHeightSp": 24,
+        "sizeSp": 16.0,
+        "lineHeightSp": 24.0,
         "weight": "Normal",
         "family": "primary"
       },
       {
         "name": "bodyMedium",
-        "sizeSp": 14,
-        "lineHeightSp": 20,
+        "sizeSp": 14.0,
+        "lineHeightSp": 20.0,
         "weight": "Normal",
         "family": "primary"
       },
       {
         "name": "bodySmall",
-        "sizeSp": 12,
-        "lineHeightSp": 16,
+        "sizeSp": 12.0,
+        "lineHeightSp": 16.0,
         "weight": "Normal",
         "family": "primary"
       },
       {
         "name": "bodyXSmall",
-        "sizeSp": 10,
-        "lineHeightSp": 14,
+        "sizeSp": 10.0,
+        "lineHeightSp": 14.0,
         "weight": "Normal",
         "family": "primary"
       },
       {
         "name": "captionMedium",
-        "sizeSp": 11,
-        "lineHeightSp": 16,
+        "sizeSp": 11.0,
+        "lineHeightSp": 16.0,
         "weight": "Normal",
         "family": "primary"
       },
       {
         "name": "titleT1",
-        "sizeSp": 16,
-        "lineHeightSp": 24,
+        "sizeSp": 16.0,
+        "lineHeightSp": 24.0,
         "weight": "Medium",
         "family": "primary"
       },
       {
         "name": "titleT2",
-        "sizeSp": 14,
-        "lineHeightSp": 20,
+        "sizeSp": 14.0,
+        "lineHeightSp": 20.0,
         "weight": "Medium",
         "family": "primary"
       },
       {
         "name": "bodyB3",
-        "sizeSp": 12,
-        "lineHeightSp": 16,
+        "sizeSp": 12.0,
+        "lineHeightSp": 16.0,
         "weight": "Normal",
         "family": "primary"
       },
       {
         "name": "headingH6",
-        "sizeSp": 14,
-        "lineHeightSp": 14,
+        "sizeSp": 14.0,
+        "lineHeightSp": 14.0,
         "weight": "Bold",
         "family": "primary"
       },
       {
         "name": "labelL1",
-        "sizeSp": 14,
-        "lineHeightSp": 20,
+        "sizeSp": 14.0,
+        "lineHeightSp": 20.0,
         "weight": "SemiBold",
         "family": "primary"
       },
       {
         "name": "labelL2",
-        "sizeSp": 12,
-        "lineHeightSp": 16,
+        "sizeSp": 12.0,
+        "lineHeightSp": 16.0,
         "weight": "SemiBold",
         "family": "primary"
       }
