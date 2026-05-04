@@ -6,6 +6,48 @@ this project adheres to [SemVer](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.3.0] — Schema-v2 enrichment surfaces
+
+### Added
+- **Schema-v2 manifest support.** `data/manifest.json` is now `schemaVersion: "2"`,
+  bringing the four enrichment fields the v2 reader (shipped silently in
+  v0.2.x) was waiting on:
+  - `component.intendedUse` — when-to-reach-for prose authored upstream as
+    `@AurumIntendedUse` KDoc tags. 6 priority components carry it today
+    (AurumChip / AurumButton / AurumRadioButton / AurumRadioGroup /
+    AurumTopAppBar / AurumOtpInput); others remain ungilded.
+  - `component.usage.do[]` / `component.usage.dont[]` — guardrail bullets
+    authored as `@AurumDo` / `@AurumDont` KDoc tags. 3 + 3 per priority
+    component.
+  - `component.relatedTokens[]` — qualified token names statically analyzed
+    from each component's `Aurum.<accessor>.<leaf>` references. 235 total
+    references across all 24 components, all round-trip through
+    `aurum_get_token_value`.
+  - `icon.tags[]` — hand-curated synonyms for all 60 icons (222 tags
+    total) sourced from `aurum/icons/tags.toml` upstream. Powers the
+    "find the trash icon" → `Action.Delete` routing in `aurum_search_icons`.
+
+### Surfaces
+- **`aurum_get_component`** now renders three new sections when the
+  upstream content exists: `## Intended use`, `## Usage` (Do/Don't), and
+  `## Related tokens` (with `aurum_get_token_value` cross-references).
+- **`aurum_find_components_by_token`** switches from best-effort regex to
+  exact lookup against `relatedTokens[]` whenever any component carries
+  the field. Response shape gains `mode: "related-tokens" | "regex"` so
+  callers know which path was used.
+- **`aurum_search_icons`** matches `query` against `tags[]` (case-
+  insensitive substring) and renders matched tags in the response. The
+  broader `aurum_search` lunr index also folds tags into the icon doc
+  body so synonyms route correctly there too.
+- **`aurum_get_icon`** adds a `**Tags:**` line when the icon carries
+  synonyms.
+
+### Pipeline
+- The upstream pages workflow now publishes `data/manifest.json` to
+  `https://changejarapp.github.io/aurum-android/data/manifest.json`,
+  which closes the cross-repo sync gap that left `drift-check` soft-
+  failing on every PR. `sync-manifest.yml`'s daily cron now functions.
+
 ## [0.2.0] — Enrichment pass
 
 ### Added
