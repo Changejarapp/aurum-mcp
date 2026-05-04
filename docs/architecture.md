@@ -158,15 +158,10 @@ Documented as the README's primary install snippet.
 
 ## CI workflow inventory
 
-| Workflow | Trigger | Purpose |
-|---|---|---|
-| `build.yml` | push to `main`, every PR | TypeScript compile + `pnpm smoke` |
-| `smoke-test.yml` | every PR | `npx -y github:…#sha` end-to-end install + `tools/list` assertion |
-| `drift-check.yml` | every PR | bundled `data/manifest.json` byte-equals live URL (soft-skips on 404) |
-| `sync-manifest.yml` | `repository_dispatch` from aurum-android, daily cron, manual | fetches live URL into bundled, opens auto-PR |
-| `release.yml` | manual `workflow_dispatch` only | bumps `package.json`, tags, force-moves `latest-stable`, creates GitHub Release |
-| `stale-main.yml` | weekday cron at 09:00 UTC | opens issue when `main` is ≥7 days ahead of latest release |
-| `docs.yml` | push to `main`, paths `docs/**` | publishes `docs/` to GitHub Pages via Jekyll |
+See the [**CI workflows** section in the
+README](../README.md#ci-workflows) for the full table + per-workflow
+notes (triggers, secrets, edge cases, what each one explicitly does
+not do). Kept canonical there so they don't drift.
 
 ## Contributor mental model
 
