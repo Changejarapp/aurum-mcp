@@ -344,6 +344,22 @@ Counts commits ahead of the latest `v*.*.*` tag on `data/manifest.json`, `src/**
 
 GitHub Pages with "Source: GitHub Actions" doesn't auto-run Jekyll — `actions/upload-pages-artifact@v5` serves whatever directory it's pointed at, verbatim. We invoke `actions/jekyll-build-pages@v1` explicitly to render markdown to HTML before upload. Path-filtered to `docs/**` / `README.md` / this workflow so unrelated PR merges don't trigger redeploys. Permissions: `pages: write`, `id-token: write`.
 
+### Labels
+
+Curated to the small set we actually use. Most GitHub default labels (`enhancement`, `good first issue`, `wontfix`, etc.) were unused noise and have been removed.
+
+| Label | Color | What it does |
+|---|---|---|
+| `manifest-sync` | green | **Bot marker** — applied by [`sync-manifest.yml`](.github/workflows/sync-manifest.yml) to every auto-PR it opens. Lets maintainers filter "PRs from the sync bot" in the PR list. |
+| `auto-merge` | blue | **Bot marker** — also applied by `sync-manifest.yml`. Decorative until the repo's `allow_auto_merge` setting is flipped on (currently `false`); when it is, GitHub will pick this label up and auto-merge sync PRs after CI green. |
+| `release-stale` | yellow | **Tracking marker** — applied by [`stale-main.yml`](.github/workflows/stale-main.yml) to its single tracking issue when `main` is ≥7 days ahead of the latest release on release-relevant paths. Auto-closes when a fresh release lands. |
+| `breaking-change` | red | **Release-time signal** — apply to PRs that change tool names, remove tools, or change response shape in ways that force consumers to update their LLM client config or prompts. Drives the `bump: major` choice when `release.yml` is dispatched. |
+| `bug`, `documentation` | red, blue | Issue-tracker conventions. Used sparingly — most work goes through PRs directly. |
+
+`stale-main.yml` calls `gh issue create --label release-stale` which 422s on a missing label — so `release-stale` is **required to exist** (not just a marker). Same for the other workflow-applied labels: pre-creating them avoids first-fire surprises.
+
+Other labels intentionally NOT used: `feat`/`fix`/`chore`/`docs` type labels (Keep-a-Changelog headings already organise this), priority labels (overhead vs value at our PR volume), area labels (small enough surface that grep wins).
+
 ---
 
 ## Architecture in one paragraph
