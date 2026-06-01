@@ -12,9 +12,17 @@ name: Drift check
 
 on:
   pull_request:
+  # Run on a schedule too — NOT just PRs. A PR-only gate can't see drift
+  # when no PR is open, which is exactly how the manifest silently fell a
+  # month behind the gallery. The daily run (1h after sync-manifest's
+  # 06:00 fetch) is the independent alarm; it files an issue on real drift.
+  schedule:
+    - cron: '0 7 * * *'
+  workflow_dispatch:
 
 permissions:
   contents: read
+  issues: write
 
 jobs:
   drift:
@@ -78,3 +86,21 @@ jobs:
             exit 1
           fi
           echo "✓ Bundled manifest matches live gallery (provenance fields scrubbed)."
+
+      # On a SCHEDULED run, a drift failure means the sync push didn't land —
+      # make it loud (a red cron nobody watches is how this rotted for a
+      # month). File/append a tracking issue so it reaches a human.
+      - name: Alarm on scheduled drift
+        if: ${{ failure() && github.event_name == 'schedule' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TITLE="⚠️ MCP manifest drifted from the live aurum gallery"
+          BODY=$'The bundled `data/manifest.json` no longer matches the live gallery manifest (scheduled drift-check failed) — the sync-manifest push likely failed.\n\nFix: re-run **Sync manifest** (or `pnpm manifest:fetch` + push), then cut a **release** to redeploy the bundled manifest into the served MCP.\n\n_auto-filed by drift-check.yml_'
+          NUM=$(gh issue list --state open --search "$TITLE in:title" --json number --jq '.[0].number' 2>/dev/null)
+          if [ -n "$NUM" ]; then
+            gh issue comment "$NUM" --body "$BODY"
+          else
+            gh issue create --title "$TITLE" --body "$BODY" --label manifest-sync 2>/dev/null \
+              || gh issue create --title "$TITLE" --body "$BODY"
+          fi
