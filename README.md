@@ -172,6 +172,25 @@ every tool response prints **both** so any conversation is traceable:
 Or call `aurum_get_aurum_version` from your LLM client for the full
 provenance block.
 
+**Multi-platform (forward-looking).** aurum-mcp is an *aggregator*: it
+serves whatever the gallery manifest contains, and the gallery may later
+merge **aurum-android + aurum-ios** — each on its own release cadence. The
+manifest's `aurum` block is built for that: `platforms` lists every covered
+platform, and an optional `aurum.sources` map carries a *separate version +
+SHA per platform* (`{ android: {version, sha}, ios: {version, sha} }`).
+`aurum_get_aurum_version` prints each when present. The MCP's own SemVer
+stays independent of all of them — **never pin the MCP to a source
+library's version.**
+
+**Consumers point at `#latest-stable`** — correct for a design-time
+advisory tool (you always see the newest catalog). One caveat: the MCP can
+run *ahead* of a build that pins an older AAR (it may show a `0.4.0`
+component your `libs.versions.toml` pins at `0.3.5`). Don't fix that by
+pinning the MCP — compare the footer's `aurum-android@X` to your pin and
+treat a mismatch as a signal ("this catalog is newer/older than what I
+build against"). The inverse — the MCP running *behind* because the bundled
+manifest went stale — is what the scheduled drift-check below now guards.
+
 ---
 
 ## How content gets here (manifest pipeline)
@@ -200,9 +219,9 @@ change in `Changejarapp/aurum-android` reaches a developer's editor:
                        aurum-mcp/sync-manifest.yml
                                                │
                                                ▼
-                opens "chore: sync manifest to aurum@X.Y.Z" auto-PR
-                                               │
-                          👤 human reviews + clicks Merge
+              commits the manifest STRAIGHT to main (no PR —
+              it's generated data, nothing to review). A daily
+              drift-check files an issue if this ever fails.
                                                │
                                                ▼
                               main carries new manifest
@@ -225,8 +244,8 @@ change in `Changejarapp/aurum-android` reaches a developer's editor:
 | Aurum gallery rebuild | ✅ on push | |
 | Manifest URL refresh | ✅ ~10 min | |
 | Cross-repo dispatch | ✅ via `notify-mcp.yml` | |
-| Sync-manifest auto-PR | ✅ | |
-| Auto-PR review + merge | | 👤 |
+| Sync-manifest commit to main | ✅ direct-push, no PR | |
+| Scheduled drift alarm | ✅ daily; files an issue on drift | |
 | Release dispatch | | 👤 |
 | Tag / latest-stable / Release | ✅ on dispatch | |
 | User picks up new content | ✅ npx cache miss | |
@@ -326,11 +345,11 @@ Pinned to **Node 24** because Node 22 ships npm 10, which has a known GitFetcher
 
 #### [`drift-check.yml`](.github/workflows/drift-check.yml) — manifest currency gate
 
-Soft-skips on 404 because the upstream Pages manifest URL hasn't always existed historically; failing every PR over an upstream gap was net-negative. When the URL is reachable, comparison is **content-aware**: a `jq` filter (`del(.aurum.sha, .meta.generatedAt, .meta.manifestSha)`) scrubs the provenance fields that change on every upstream gallery deploy regardless of content, then `jq --sort-keys` canonicalises both sides before `diff`. Without this scrub the gate would fail every aurum-mcp PR opened after any aurum-android push to main, even when the actual content was byte-identical — that turned out to be intrinsically noisy once branch protection made `drift` a hard required check. [`scripts/fetch-manifest.mjs`](scripts/fetch-manifest.mjs) preserves the upstream's raw bytes (rather than re-serializing through `JSON.parse → JSON.stringify`) so Python-emitted `1.0` doesn't normalise to `1` and break the diff in unrelated ways. **Doesn't** auto-fix drift — it forces the auto-PR from `sync-manifest.yml` to merge first.
+Soft-skips on 404 because the upstream Pages manifest URL hasn't always existed historically; failing every PR over an upstream gap was net-negative. When the URL is reachable, comparison is **content-aware**: a `jq` filter (`del(.aurum.sha, .meta.generatedAt, .meta.manifestSha)`) scrubs the provenance fields that change on every upstream gallery deploy regardless of content, then `jq --sort-keys` canonicalises both sides before `diff`. Without this scrub the gate would fail every aurum-mcp PR opened after any aurum-android push to main, even when the actual content was byte-identical — that turned out to be intrinsically noisy once branch protection made `drift` a hard required check. [`scripts/fetch-manifest.mjs`](scripts/fetch-manifest.mjs) preserves the upstream's raw bytes (rather than re-serializing through `JSON.parse → JSON.stringify`) so Python-emitted `1.0` doesn't normalise to `1` and break the diff in unrelated ways. **Now runs on a daily `schedule` (07:00 UTC) + `workflow_dispatch`, not just on PRs** — a PR-only gate can't see drift when no PR is open, which is exactly how the bundled manifest silently fell ~1 month behind the gallery (60 vs 88 icons; `Content.Star` and 27 others missing). On a scheduled run, real drift files/appends a tracking issue (`issues: write`) so it reaches a human instead of being a red check nobody watches. **Doesn't** auto-fix drift — `sync-manifest.yml` does.
 
 #### [`sync-manifest.yml`](.github/workflows/sync-manifest.yml) — content propagation
 
-Three triggers, in order of latency: (1) `repository_dispatch` from `aurum-android/notify-mcp.yml` (~1 min, requires the upstream PAT to be properly scoped), (2) daily cron at 06:00 UTC (≤24 h, the safety net), (3) manual `workflow_dispatch` (instant, useful for ad-hoc syncs). The repo's "Allow GitHub Actions to create and approve pull requests" setting is currently **off**, so the workflow successfully pushes the `auto/manifest-sync` branch but its PR-creation step exits failure — recovery is one `gh pr create --head auto/manifest-sync` from a maintainer. **Doesn't** bump `package.json` (the original `npm version <aurum_version>` step was deliberately removed — the MCP and Aurum library versions are independent SemVer tracks; the version footer on tool responses already prints both). Permissions: `contents: write`, `pull-requests: write`.
+Three triggers, in order of latency: (1) `repository_dispatch` from `aurum-android/notify-mcp.yml` (~1 min, requires the upstream PAT to be properly scoped — historically 403s, so treat the cron as the real path), (2) daily cron at 06:00 UTC (≤24 h, the safety net), (3) manual `workflow_dispatch`. **Commits the regenerated manifest straight to `main`** (`git push origin HEAD:main`) — it's generated, derived data, nothing to review. This replaced an auto-merge PR via `peter-evans/create-pull-request`: `GITHUB_TOKEN`-created PRs **don't trigger workflows**, so the `auto-merge` automation never fired and the PRs piled up unmerged — that pileup is exactly why `main` froze at aurum@0.2.0 for a month while the gallery moved to 0.3.5. The scheduled `drift-check` is the independent alarm if the push ever fails. **Doesn't** bump `package.json` — MCP and source versions are independent SemVer tracks, and since the MCP aggregates *multiple* sources there's no single version to mirror (the footer prints each). Permissions: `contents: write` (no `pull-requests`). **Note:** branch protection on `main` must allow this workflow's direct push (or the bot must be on the bypass list).
 
 #### [`release.yml`](.github/workflows/release.yml) — the only place version changes
 

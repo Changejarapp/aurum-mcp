@@ -55,11 +55,24 @@ export const getAurumVersionTool: ToolDef = {
       `- **Version:** ${aurum.version}`,
       `- **Source SHA:** ${aurum.sha || "(unknown)"}`,
       `- **Platforms:** ${aurum.platforms.join(", ")}`,
+    ];
+    // Per-platform source versions, when this is a merged multi-platform
+    // manifest (aurum-android + aurum-ios). Each source has its own cadence;
+    // aurum-mcp's own SemVer is independent of all of them.
+    if (aurum.sources) {
+      for (const [platform, src] of Object.entries(aurum.sources)) {
+        if (src) {
+          const sha = src.sha ? ` (\`${src.sha.slice(0, 8)}\`)` : "";
+          lines.push(`  - **${platform}:** ${src.version}${sha}`);
+        }
+      }
+    }
+    lines.push(
       `- **Manifest SHA:** ${meta.manifestSha}`,
       `- **Generated at:** ${meta.generatedAt}`,
       `- **Figma file:** ${meta.figmaFileKey}`,
       `- **Gallery:** ${meta.galleryUrl}`,
-    ];
+    );
     return {
       content: [{ type: "text", text: withFooter(manifest, lines.join("\n")) }],
       structuredContent: { aurum, meta },

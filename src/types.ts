@@ -16,6 +16,19 @@ export interface Manifest {
     version: string;
     sha: string;
     platforms: Platform[];
+    /**
+     * Per-platform source versions — the forward-compatible shape for a
+     * MERGED, multi-platform manifest (aurum-android + aurum-ios later),
+     * each on its own release cadence. aurum-mcp itself keeps a SEPARATE
+     * SemVer (it aggregates these sources); it is NOT pinned to any one.
+     *
+     * Absent on single-platform manifests today — readers fall back to
+     * `library`/`version`/`platforms` above. When present it is
+     * authoritative; `version` then mirrors the primary platform's version
+     * for back-compat. Generated downstream by the gallery once a second
+     * platform ships; see `tooling/manifest/schema.json` (`aurum.sources`).
+     */
+    sources?: Partial<Record<Platform, { version: string; sha?: string }>>;
   };
   meta: {
     generatedAt: string;
