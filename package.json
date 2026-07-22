@@ -1,6 +1,6 @@
 {
   "name": "aurum-mcp",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "description": "MCP server for the Aurum Design System — talk to Aurum from your LLM client",
   "license": "MIT",
   "type": "module",
