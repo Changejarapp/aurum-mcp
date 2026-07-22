@@ -6,6 +6,8 @@ this project adheres to [SemVer](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.4.0] — iOS ingestion: the merged android + ios catalog
+
 ### Added
 - **iOS ingestion — the manifest is now a MERGED android + ios catalog.**
   `scripts/fetch-manifest.mjs` fetches both live gallery manifests
