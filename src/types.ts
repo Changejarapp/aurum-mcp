@@ -40,10 +40,18 @@ export interface Manifest {
   tokens: Tokens;
   icons: Icon[];
   codeConnect: CodeConnectMapping[];
-  changelog: {
-    raw: string;
-    entries: ChangelogEntry[];
-  };
+  /** On merged multi-platform manifests this is the PRIMARY platform's
+   *  (android) changelog; per-platform logs live in `changelogs`. */
+  changelog: Changelog;
+  /** Merged manifests only: per-platform changelogs — each source library
+   *  keeps its own release history and cadence. Absent on single-platform
+   *  manifests; readers fall back to `changelog`. */
+  changelogs?: Partial<Record<Platform, Changelog>>;
+}
+
+export interface Changelog {
+  raw: string;
+  entries: ChangelogEntry[];
 }
 
 export interface Component {
@@ -69,6 +77,28 @@ export interface Component {
    *  `spacing.s12`, `typography.bodyMRegular`). Static-analyzed by the
    *  gallery generator; round-trips through `aurum_get_token_value`. */
   relatedTokens?: string[];
+  /** The @AurumFigma doc-tag deeplink authored on the component; validated
+   *  upstream to equal `figmaUrl`. Null / absent for code-only components. */
+  figmaTagUrl?: string | null;
+  /** Merged manifests only: per-platform implementation detail. When a
+   *  component exists on more than one platform, the top-level fields above
+   *  describe the PRIMARY platform (android) and each platform's own
+   *  signature/paths live here. Written by the merge step, never by the
+   *  single-platform generators. */
+  sources?: Partial<Record<Platform, ComponentSource>>;
+}
+
+/** One platform's implementation of a component (`component.sources`).
+ *  Everything but sourcePath is optional because the platforms' generators
+ *  emit different levels of detail (aurum-ios has no signature/params yet). */
+export interface ComponentSource {
+  sourcePath: string;
+  signature?: string;
+  params?: Param[];
+  kdoc?: string;
+  codeConnectPath?: string | null;
+  galleryUrl?: string | null;
+  previews?: string[];
 }
 
 export interface Param {
@@ -142,14 +172,21 @@ export interface Icon {
   /** schema v2: hand-curated synonyms for icon search (e.g. `Delete` →
    *  `["trash","remove","bin"]`). Sourced from `aurum/icons/tags.yaml`. */
   tags?: string[];
+  /** Merged manifests only: platforms whose icon catalogs include this
+   *  icon. Absent on single-platform manifests. */
+  platforms?: Platform[];
 }
 
 export interface CodeConnectMapping {
   component: string;
   figmaNodeId: string;
   figmaUrl: string;
+  /** Android-era field name — on ios entries it carries the .figma.swift
+   *  path (v3 rename to `sourcePath` is tracked upstream). */
   kotlinPath: string;
   snippet?: string;
+  /** Merged manifests only: which platform this mapping belongs to. */
+  platform?: Platform;
 }
 
 export interface ChangelogEntry {

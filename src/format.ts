@@ -9,7 +9,16 @@ import type { Manifest } from "./types.js";
 export function versionFooter(manifest: Manifest): string {
   const sha = manifest.meta.manifestSha.slice(0, 8);
   const generated = manifest.meta.generatedAt.replace("T", " ").replace(/\+.*$/, "").slice(0, 19) + " UTC";
-  return `\n\n---\n*aurum ${manifest.aurum.library}@${manifest.aurum.version} · manifest sha \`${sha}\` · generated ${generated}*`;
+  // Merged multi-platform manifests: name each source's own version so the
+  // LLM never attributes an android version to ios content (or vice versa).
+  const sources = manifest.aurum.sources;
+  const label = sources
+    ? Object.entries(sources)
+        .filter(([, v]) => v)
+        .map(([platform, v]) => `${platform} ${v!.version}`)
+        .join(" + ")
+    : `${manifest.aurum.library}@${manifest.aurum.version}`;
+  return `\n\n---\n*aurum ${label} · manifest sha \`${sha}\` · generated ${generated}*`;
 }
 
 /** Wrap a tool's body markdown with the version footer. */

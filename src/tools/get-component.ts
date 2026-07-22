@@ -1,16 +1,20 @@
 import type { ToolDef } from "./index.js";
+import type { Platform } from "../types.js";
 import { fence, withFooter } from "../format.js";
+
+const PLATFORM_LANG: Record<string, string> = { android: "kotlin", ios: "swift", web: "tsx" };
 
 export const getComponentTool: ToolDef = {
   name: "aurum_get_component",
   description:
-    "Fetch full details of a single Aurum component by name: KDoc, Compose signature, every parameter " +
-    "(types/defaults/per-param docs), preview function names, Figma deeplink, Code Connect path, gallery URL. " +
-    "Use after `aurum_list_components` or `aurum_search` once you know the exact composable name; " +
+    "Fetch full details of a single Aurum component by name: doc comment, signature, every parameter " +
+    "(types/defaults/per-param docs), preview names, Figma deeplink, Code Connect path, gallery URL — " +
+    "for the Compose (android) and/or SwiftUI (ios) implementation. " +
+    "Use after `aurum_list_components` or `aurum_search` once you know the exact component name; " +
     "this is the primary source for 'how do I use AurumX?'. " +
-    "Do NOT use this if the user wants the bare canonical-usage Kotlin snippet only — `aurum_get_code_connect_snippet` " +
+    "Do NOT use this if the user wants the bare canonical-usage code snippet only — `aurum_get_code_connect_snippet` " +
     "is leaner. " +
-    "The `name` argument is case-sensitive and must match the composable name exactly (e.g. `AurumChip`, not `aurumChip`).",
+    "The `name` argument is case-sensitive and must match the component name exactly (e.g. `AurumChip`, not `aurumChip`).",
   annotations: {
     title: "Get Aurum Component",
     readOnlyHint: true,
@@ -30,7 +34,10 @@ export const getComponentTool: ToolDef = {
         type: "string",
         enum: ["android", "ios", "all"],
         default: "all",
-        description: "Reserved for future cross-platform manifests. Currently always resolves to `android`.",
+        description:
+          "Which implementation to render. `all` (default) shows the shared doc plus a per-platform " +
+          "implementations section; `android` / `ios` swaps in that platform's source paths, signature, " +
+          "and gallery link. Errors if the component doesn't exist on the requested platform.",
       },
     },
     additionalProperties: false,
@@ -92,8 +99,30 @@ export const getComponentTool: ToolDef = {
       };
     }
 
+    const platform = String(args.platform ?? "all") as Platform | "all";
+    if (platform !== "all" && !c.platforms.includes(platform)) {
+      return {
+        content: [{
+          type: "text",
+          text: `\`${c.name}\` is not available on ${platform} (platforms: ${c.platforms.join(", ")}).`,
+        }],
+        isError: true,
+      };
+    }
+    // On merged manifests the top-level fields describe the primary platform
+    // (android); a specific platform request swaps in that platform's detail.
+    const sel = platform !== "all" ? c.sources?.[platform] : undefined;
+    const sourcePath = sel?.sourcePath ?? c.sourcePath;
+    const codeConnectPath = sel ? sel.codeConnectPath ?? null : c.codeConnectPath;
+    const galleryUrl = sel ? sel.galleryUrl ?? null : c.galleryUrl;
+    const signature = sel ? sel.signature : c.signature;
+    const params = sel ? sel.params : c.params;
+    const previews = sel?.previews ?? c.previews;
+    const kdoc = sel?.kdoc ?? c.kdoc;
+    const lang = platform !== "all" ? PLATFORM_LANG[platform] ?? "kotlin" : "kotlin";
+
     const lines: string[] = [
-      `# ${c.name}`,
+      `# ${c.name}${platform !== "all" ? ` (${platform})` : ""}`,
       "",
       `${c.summary}`,
       "",
@@ -101,15 +130,15 @@ export const getComponentTool: ToolDef = {
       `**Platforms:** ${c.platforms.join(", ")}  `,
     ];
     if (c.figmaUrl) lines.push(`**Figma:** [${c.figmaNodeId}](${c.figmaUrl})  `);
-    if (c.galleryUrl) lines.push(`**Gallery:** ${c.galleryUrl}  `);
-    if (c.codeConnectPath) lines.push(`**Code Connect:** \`${c.codeConnectPath}\`  `);
-    lines.push(`**Source:** \`${c.sourcePath}\`  `);
+    if (galleryUrl) lines.push(`**Gallery:** ${galleryUrl}  `);
+    if (codeConnectPath) lines.push(`**Code Connect:** \`${codeConnectPath}\`  `);
+    lines.push(`**Source:** \`${sourcePath}\`  `);
     lines.push("");
 
-    if (c.kdoc) {
+    if (kdoc) {
       lines.push("## Description");
       lines.push("");
-      lines.push(c.kdoc);
+      lines.push(kdoc);
       lines.push("");
     }
 
@@ -137,17 +166,23 @@ export const getComponentTool: ToolDef = {
       }
     }
 
-    if (c.signature) {
+    if (signature) {
       lines.push("## Signature");
       lines.push("");
-      lines.push(fence("kotlin", c.signature));
+      lines.push(fence(lang, signature));
+      lines.push("");
+    } else if (platform === "ios" && c.signature) {
+      lines.push(
+        "_The aurum-ios generator does not emit signatures/params yet — see the " +
+          "source file above, or the android signature via `platform: \"android\"`._",
+      );
       lines.push("");
     }
 
-    if (c.params && c.params.length > 0) {
+    if (params && params.length > 0) {
       lines.push("## Parameters");
       lines.push("");
-      for (const p of c.params) {
+      for (const p of params) {
         const def = p.default ? ` = \`${p.default}\`` : "";
         const doc = p.doc ? ` — ${p.doc}` : "";
         lines.push(`- **${p.name}**: \`${p.type}\`${def}${doc}`);
@@ -155,10 +190,10 @@ export const getComponentTool: ToolDef = {
       lines.push("");
     }
 
-    if (c.previews && c.previews.length > 0) {
+    if (previews && previews.length > 0) {
       lines.push("## Previews");
       lines.push("");
-      lines.push(c.previews.map((p) => `\`${p}\``).join(", "));
+      lines.push(previews.map((p) => `\`${p}\``).join(", "));
       lines.push("");
     }
 
@@ -171,6 +206,28 @@ export const getComponentTool: ToolDef = {
       );
       lines.push("");
       for (const t of c.relatedTokens) lines.push(`- \`${t}\``);
+      lines.push("");
+    }
+
+    if (platform === "all" && c.sources && Object.keys(c.sources).length > 1) {
+      lines.push("## Platform implementations");
+      lines.push("");
+      for (const [p, src] of Object.entries(c.sources)) {
+        if (!src) continue;
+        lines.push(`### ${p}`);
+        lines.push("");
+        lines.push(`- **Source:** \`${src.sourcePath}\``);
+        if (src.codeConnectPath) lines.push(`- **Code Connect:** \`${src.codeConnectPath}\``);
+        if (src.galleryUrl) lines.push(`- **Gallery:** ${src.galleryUrl}`);
+        if (src.signature) {
+          lines.push("");
+          lines.push(fence(PLATFORM_LANG[p] ?? "kotlin", src.signature));
+        }
+        lines.push("");
+      }
+      lines.push(
+        "_Pass `platform: \"android\"` or `platform: \"ios\"` to render one implementation's full detail._",
+      );
       lines.push("");
     }
 

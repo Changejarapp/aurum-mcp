@@ -1,14 +1,18 @@
 name: Drift check
 
-# Fails any PR whose `data/manifest.json` is out of sync with the live
-# gallery URL. Forces the auto-merging sync-manifest PR to land first
-# before unrelated changes can ship.
+# Fails any PR whose `data/manifest.json` is out of sync with the MERGE of
+# the two live gallery manifests (aurum-android + aurum-ios). Forces the
+# sync-manifest push to land first before unrelated changes can ship.
 #
-# Soft-fails (warns but passes) when the live manifest URL is 404 — the
-# upstream `aurum-android` Pages site doesn't always publish data/
-# alongside the HTML gallery. When that's the case we have nothing to
-# compare against; better to let the PR through and rely on the
-# committed manifest than to block every PR on an upstream pipeline gap.
+# The bundled manifest is a MERGED artifact now — the only way to know what
+# it should contain is to re-run the same merge (`pnpm manifest:fetch`)
+# against the live galleries and compare, with volatile provenance fields
+# scrubbed.
+#
+# Soft-fails (warns but passes) when either live manifest URL is
+# unreachable — with nothing to compare against, better to let the PR
+# through on the committed manifest than to block every PR on an upstream
+# pipeline gap. The SCHEDULED run stays the independent alarm.
 
 on:
   pull_request:
@@ -27,20 +31,32 @@ permissions:
 jobs:
   drift:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v6
 
-      - name: Fetch live manifest
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Rebuild merged manifest from the live galleries
         id: fetch
         run: |
           set +e
-          curl -fsS https://changejarapp.github.io/aurum-android/data/manifest.json \
-            -o /tmp/live-manifest.json
+          pnpm manifest:fetch
           rc=$?
           set -e
           if [ "$rc" -ne 0 ]; then
-            echo "::warning::Live gallery manifest not reachable (curl exit $rc). Skipping drift comparison — see drift-check.yml header."
+            echo "::warning::Live gallery manifest(s) not reachable (manifest:fetch exit $rc). Skipping drift comparison — see drift-check.yml header."
+            git checkout -- data/manifest.json
             echo "skipped=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -51,41 +67,29 @@ jobs:
         run: |
           # Content-aware comparison.
           #
-          # We scrub three fields that change on EVERY upstream gallery
-          # deploy without affecting MCP behaviour:
+          # We scrub the fields that change on EVERY upstream gallery deploy
+          # without affecting MCP behaviour:
           #
-          #   aurum.sha          ─ git commit SHA at gallery-deploy time
-          #   meta.generatedAt   ─ ISO timestamp from generate.py
-          #   meta.manifestSha   ─ SHA-256 over the manifest content,
-          #                        rolls up the two above
-          #
-          # Without this scrub, drift-check fails on every aurum-mcp PR
-          # opened after any aurum-android push to main — even when the
-          # actual content (components, tokens, icons, codeConnect,
-          # changelog, schema) is byte-identical. The scrub turns this
-          # gate into a "real content drift" check rather than a
-          # "did upstream redeploy" tripwire.
+          #   aurum.sha              ─ primary source's commit SHA at deploy time
+          #   aurum.sources[].sha    ─ per-platform source SHAs (same churn)
+          #   meta.generatedAt       ─ derived from upstream deploy timestamps
+          #   meta.manifestSha       ─ SHA-256 over content, rolls up the above
           #
           # Real content drift in any of:
-          #   schemaVersion, aurum.{library,version,platforms},
+          #   schemaVersion, aurum.{library,version,platforms,sources[].version},
           #   meta.{figmaFileKey,galleryUrl},
-          #   components, tokens, icons, codeConnect, changelog
+          #   components, tokens, icons, codeConnect, changelog(s)
           # still fails the diff and blocks the PR — exactly what we want.
-          #
-          # If the manifest schema later adds a new volatile metadata
-          # field, extend the SCRUB filter below to drop it. `jq del()`
-          # is a no-op on missing keys, so the filter is forward-safe
-          # against older bundled manifests that pre-date a field.
-          SCRUB='del(.aurum.sha, .meta.generatedAt, .meta.manifestSha)'
-          jq --sort-keys "$SCRUB" data/manifest.json     > /tmp/local-canon.json
-          jq --sort-keys "$SCRUB" /tmp/live-manifest.json > /tmp/live-canon.json
+          SCRUB='del(.aurum.sha, .aurum.sources[]?.sha, .meta.generatedAt, .meta.manifestSha)'
+          git show HEAD:data/manifest.json | jq --sort-keys "$SCRUB" > /tmp/local-canon.json
+          jq --sort-keys "$SCRUB" data/manifest.json > /tmp/live-canon.json
           if ! diff -q /tmp/local-canon.json /tmp/live-canon.json > /dev/null; then
-            echo "::error::Bundled manifest is out of sync with the live gallery (real content drift, not just provenance)."
-            echo "Run \`make manifest-fetch\` (or wait for the auto-PR from sync-manifest.yml) before merging."
+            echo "::error::Bundled manifest is out of sync with the merged live galleries (real content drift, not just provenance)."
+            echo "Run \`pnpm manifest:fetch\` and commit (or wait for sync-manifest.yml) before merging."
             diff -u /tmp/local-canon.json /tmp/live-canon.json | head -60 || true
             exit 1
           fi
-          echo "✓ Bundled manifest matches live gallery (provenance fields scrubbed)."
+          echo "✓ Bundled manifest matches the merged live galleries (provenance fields scrubbed)."
 
       # On a SCHEDULED run, a drift failure means the sync push didn't land —
       # make it loud (a red cron nobody watches is how this rotted for a
@@ -95,8 +99,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          TITLE="⚠️ MCP manifest drifted from the live aurum gallery"
-          BODY=$'The bundled `data/manifest.json` no longer matches the live gallery manifest (scheduled drift-check failed) — the sync-manifest push likely failed.\n\nFix: re-run **Sync manifest** (or `pnpm manifest:fetch` + push), then cut a **release** to redeploy the bundled manifest into the served MCP.\n\n_auto-filed by drift-check.yml_'
+          TITLE="⚠️ MCP manifest drifted from the live aurum galleries"
+          BODY=$'The bundled `data/manifest.json` no longer matches the merge of the live aurum-android + aurum-ios gallery manifests (scheduled drift-check failed) — the sync-manifest push likely failed.\n\nFix: re-run **Sync manifest** (or `pnpm manifest:fetch` + push), then cut a **release** to redeploy the bundled manifest into the served MCP.\n\n_auto-filed by drift-check.yml_'
           NUM=$(gh issue list --state open --search "$TITLE in:title" --json number --jq '.[0].number' 2>/dev/null)
           if [ -n "$NUM" ]; then
             gh issue comment "$NUM" --body "$BODY"
