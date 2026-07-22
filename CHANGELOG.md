@@ -6,6 +6,15 @@ this project adheres to [SemVer](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.4.1] — manifest refresh
+
+### Changed
+- Bundled manifest refreshed to the post-redesign gallery builds
+  (android 0.3.28 + ios 0.2.2, manifest sha `23bf7795`) — content
+  unchanged, provenance current. Also the first release cut entirely by
+  `release.yml` after the `main` ruleset trim (the workflow's push step
+  previously failed on the pull-request rule).
+
 ## [0.4.0] — iOS ingestion: the merged android + ios catalog
 
 ### Added
