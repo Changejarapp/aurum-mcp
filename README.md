@@ -172,13 +172,16 @@ every tool response prints **both** so any conversation is traceable:
 Or call `aurum_get_aurum_version` from your LLM client for the full
 provenance block.
 
-**Multi-platform (forward-looking).** aurum-mcp is an *aggregator*: it
-serves whatever the gallery manifest contains, and the gallery may later
-merge **aurum-android + aurum-ios** — each on its own release cadence. The
-manifest's `aurum` block is built for that: `platforms` lists every covered
-platform, and an optional `aurum.sources` map carries a *separate version +
+**Multi-platform (active).** aurum-mcp is an *aggregator*: the bundled
+manifest is the **merge of aurum-android + aurum-ios** — each on its own
+release cadence — produced by `scripts/fetch-manifest.mjs` from the two
+live gallery manifests. The manifest's `aurum` block reflects that:
+`platforms` lists both, and `aurum.sources` carries a *separate version +
 SHA per platform* (`{ android: {version, sha}, ios: {version, sha} }`).
-`aurum_get_aurum_version` prints each when present. The MCP's own SemVer
+Components that exist on both platforms carry per-platform detail in
+`component.sources`; each library's release history lives in `changelogs`.
+`aurum_get_aurum_version` prints each source; the per-tool footer names
+both (`*aurum android 0.3.28 + ios 0.2.2 · …*`). The MCP's own SemVer
 stays independent of all of them — **never pin the MCP to a source
 library's version.**
 
@@ -195,33 +198,40 @@ manifest went stale — is what the scheduled drift-check below now guards.
 
 ## How content gets here (manifest pipeline)
 
-`aurum-mcp` is a thin renderer over a single JSON manifest produced
-upstream by the Aurum library. Here's how a component / token / icon
-change in `Changejarapp/aurum-android` reaches a developer's editor:
+`aurum-mcp` is a thin renderer over a single JSON manifest — the **merge**
+of the two platform libraries' manifests. Here's how a component / token /
+icon change in `Changejarapp/aurum-android` or `Changejarapp/aurum-ios`
+reaches a developer's editor:
 
 ```
-                       Push to aurum-android main
-                                    │
-                                    ▼
-                check.yml  ─►  pages.yml
-                              (gradle)    (gallery + manifest)
-                                    │
-                                    ▼
-            https://changejarapp.github.io/aurum-android/data/manifest.json
-                                    │
-                ┌───────────────────┼─────────────────────┐
-                │                   │                     │
-        repository_dispatch    daily cron          workflow_dispatch
-        (~1 min, instant)      (06:00 UTC)            (manual)
-                │                   │                     │
-                └───────────────────┴──────────┬──────────┘
-                                               ▼
-                       aurum-mcp/sync-manifest.yml
-                                               │
-                                               ▼
-              commits the manifest STRAIGHT to main (no PR —
-              it's generated data, nothing to review). A daily
-              drift-check files an issue if this ever fails.
+     Push to aurum-android main              Push to aurum-ios main
+                │                                     │
+                ▼                                     ▼
+      check.yml ─► pages.yml                check.yml ─► pages.yml
+      (gradle)     (gallery+manifest)       (spm)        (gallery+manifest)
+                │                                     │
+                ▼                                     ▼
+  …/aurum-android/data/manifest.json     …/aurum-ios/data/manifest.json
+                │                                     │
+                └──────────────────┬──────────────────┘
+                                   │
+       ┌───────────────────────────┼─────────────────────┐
+       │                           │                     │
+repository_dispatch           daily cron          workflow_dispatch
+(android only, ~1 min)        (06:00 UTC —           (manual)
+                              also picks up
+                              iOS releases)
+       │                           │                     │
+       └───────────────────────────┴──────────┬──────────┘
+                                              ▼
+                      aurum-mcp/sync-manifest.yml
+                      (scripts/fetch-manifest.mjs:
+                       fetch BOTH + deterministic merge)
+                                              │
+                                              ▼
+              commits the merged manifest STRAIGHT to main (no
+              PR — it's generated data, nothing to review). A
+              daily drift-check files an issue if this ever fails.
                                                │
                                                ▼
                               main carries new manifest
@@ -327,7 +337,7 @@ explicitly *doesn't* do.
 |---|---|---|
 | [`build.yml`](.github/workflows/build.yml) | PR · push `main` | TypeScript compile · `pnpm smoke` (real MCP handshake against the in-tree `dist/`). Concurrency cancels superseded runs. |
 | [`smoke-test.yml`](.github/workflows/smoke-test.yml) | PR | Real `npx -y github:Changejarapp/aurum-mcp#<sha>` install on a fresh Ubuntu runner with Node 24, then JSON-RPC handshake — exactly the path real users hit. Asserts ≥7 tools and acceptable response shape. |
-| [`drift-check.yml`](.github/workflows/drift-check.yml) | PR | Compares bundled `data/manifest.json` against the live gallery URL (<https://changejarapp.github.io/aurum-android/data/manifest.json>) — content-aware via `jq` filter that scrubs the provenance fields (`aurum.sha`, `meta.generatedAt`, `meta.manifestSha`) which change on every upstream gallery deploy without affecting MCP behaviour. Soft-skips with a warning when the URL is 404 (an upstream gap, not a per-PR concern). |
+| [`drift-check.yml`](.github/workflows/drift-check.yml) | PR | Re-runs the merge against BOTH live gallery manifests (`pnpm manifest:fetch`) and compares the result to the bundled `data/manifest.json` — content-aware via a `jq` filter that scrubs the provenance fields (`aurum.sha`, `aurum.sources[].sha`, `meta.generatedAt`, `meta.manifestSha`) which change on every upstream gallery deploy without affecting MCP behaviour. Soft-skips with a warning when either URL is unreachable (an upstream gap, not a per-PR concern). |
 | [`sync-manifest.yml`](.github/workflows/sync-manifest.yml) | `repository_dispatch: aurum-content-changed` from aurum-android · cron `0 6 * * *` (06:00 UTC daily) · manual | Fetches the live manifest, diffs against bundled, opens an auto-PR (`auto/manifest-sync` branch, labelled `manifest-sync` + `auto-merge`) if anything changed. |
 | [`release.yml`](.github/workflows/release.yml) | manual dispatch only (`bump: patch \| minor \| major`) | `npm version` bump → tag → force-move `latest-stable` → create GitHub Release with auto-generated notes. The single source of `package.json` version changes. |
 | [`stale-main.yml`](.github/workflows/stale-main.yml) | weekday cron `0 9 * * 1-5` (09:00 UTC) · manual | Opens (or updates) a single `release-stale`-labelled tracking issue when `main` is ≥7 days ahead of latest tag on release-relevant paths. Auto-closes any open issue when fresh. |

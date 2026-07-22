@@ -6,6 +6,34 @@ this project adheres to [SemVer](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+- **iOS ingestion — the manifest is now a MERGED android + ios catalog.**
+  `scripts/fetch-manifest.mjs` fetches both live gallery manifests
+  (aurum-android + aurum-ios) and merges them deterministically (same
+  inputs → byte-identical output; fail-closed if either gallery is
+  unreachable): `aurum.sources` carries each library's version+sha,
+  overlapping components (37 of 39 at merge time) carry per-platform
+  `component.sources` (sourcePath / signature / params / kdoc /
+  codeConnectPath / galleryUrl / previews), codeConnect entries carry
+  `platform` (android `.figma.kt` + ios `.figma.swift`, 395 mappings),
+  icons carry `platforms`, and each library's release history lives in
+  `changelogs`. Schema stays v2 — all merged fields are additive
+  (contract: `aurum-android/tooling/manifest/schema.json`).
+- **Platform-aware tools.** `aurum_get_component` renders a chosen
+  platform's implementation (`platform: "ios"` swaps in the SwiftUI
+  source/gallery/Code Connect paths) or a per-platform section under
+  `all`; `aurum_get_changelog` and `aurum_get_code_connect_snippet`
+  take `platform`; the version footer names both sources
+  (`*aurum android 0.3.28 + ios 0.2.2 · …*`).
+- **Token parity check at merge time** — alpha-normalised comparison of
+  the two platforms' token sets, WARNED (not fatal) on drift so
+  release-cadence lag doesn't block syncs but real drift is loud.
+
+### Changed
+- `drift-check.yml` re-runs the merge against both live galleries and
+  compares scrubbed content (bytes can't be compared to one source
+  anymore); `sync-manifest.yml` commit messages name both versions.
+
 ## [0.3.0] — Schema-v2 enrichment surfaces
 
 ### Added

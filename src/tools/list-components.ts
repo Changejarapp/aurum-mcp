@@ -10,7 +10,8 @@ export const listComponentsTool: ToolDef = {
     "for the canonical signature/snippet, or `aurum_search` if the user gave a vague description. " +
     "Do NOT use this for design-token lookups (use `aurum_list_tokens` / `aurum_get_token_value`) or " +
     "icon queries (use `aurum_search_icons`). " +
-    "The `platform` parameter is reserved for the future iOS rollout and currently always resolves to `android`.",
+    "The catalog is merged across platforms (Compose android + SwiftUI ios) — filter with `platform`, " +
+    "or read each entry's `platforms` to see where it exists.",
   annotations: {
     title: "List Aurum Components",
     readOnlyHint: true,

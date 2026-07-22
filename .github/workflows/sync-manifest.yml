@@ -1,11 +1,14 @@
 name: Sync manifest
 
-# Pulls the latest manifest from the live aurum-android gallery into
-# `data/manifest.json` and opens an auto-merging PR if it changed.
+# Pulls the latest manifests from BOTH live galleries (aurum-android +
+# aurum-ios), merges them into one multi-platform manifest
+# (`scripts/fetch-manifest.mjs`), and commits `data/manifest.json` if it
+# changed.
 #
 # Triggers:
 #   - `repository_dispatch: aurum-content-changed` (Stage 2 — fired by
-#     aurum-android when its main branch updates).
+#     aurum-android when its main branch updates; aurum-ios has no notify
+#     hook, so iOS releases land via the daily cron within 24h).
 #   - Daily cron at 06:00 UTC as a safety net.
 #   - Manual `workflow_dispatch` for ad-hoc syncs.
 
@@ -54,13 +57,16 @@ jobs:
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Read aurum version from new manifest
+      - name: Read aurum versions from new manifest
         if: steps.diff.outputs.changed == 'true'
         id: meta
         run: |
-          AURUM_VERSION=$(jq -r '.aurum.version' data/manifest.json)
+          ANDROID_VERSION=$(jq -r '.aurum.sources.android.version // .aurum.version' data/manifest.json)
+          IOS_VERSION=$(jq -r '.aurum.sources.ios.version // empty' data/manifest.json)
           MANIFEST_SHA=$(jq -r '.meta.manifestSha' data/manifest.json)
-          echo "aurum_version=$AURUM_VERSION" >> "$GITHUB_OUTPUT"
+          LABEL="android@${ANDROID_VERSION}"
+          if [ -n "$IOS_VERSION" ]; then LABEL="${LABEL} + ios@${IOS_VERSION}"; fi
+          echo "aurum_version=$LABEL" >> "$GITHUB_OUTPUT"
           echo "manifest_sha=${MANIFEST_SHA:0:8}" >> "$GITHUB_OUTPUT"
 
       # The manifest is generated, derived data — there is nothing to
@@ -80,7 +86,7 @@ jobs:
         run: |
           git config user.name  "aurum-sync[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -am "chore: sync manifest to aurum@${{ steps.meta.outputs.aurum_version }} (${{ steps.meta.outputs.manifest_sha }})"
+          git commit -am "chore: sync manifest — ${{ steps.meta.outputs.aurum_version }} (${{ steps.meta.outputs.manifest_sha }})"
           git push origin HEAD:main
 
       - name: No-op summary
