@@ -138,7 +138,7 @@ in one call. Each response ends with a version footer:
 
 ```
 ---
-*aurum aurum-android@0.1.5 · manifest sha `9af3b21c` · generated 2026-05-03 12:00:00 UTC*
+*aurum android 0.3.28 + ios 0.2.2 · manifest sha `23bf7795` · generated 2026-07-23 06:39:04 UTC · lens: android*
 ```
 
 Full per-tool reference with example prompts, params, and example
