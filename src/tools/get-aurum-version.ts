@@ -1,5 +1,6 @@
 import type { ToolDef } from "./index.js";
 import { withFooter } from "../format.js";
+import { describeSessionPlatform } from "../platform.js";
 
 export const getAurumVersionTool: ToolDef = {
   name: "aurum_get_aurum_version",
@@ -72,6 +73,7 @@ export const getAurumVersionTool: ToolDef = {
       `- **Generated at:** ${meta.generatedAt}`,
       `- **Figma file:** ${meta.figmaFileKey}`,
       `- **Gallery:** ${meta.galleryUrl}`,
+      `- **Session platform lens:** ${describeSessionPlatform()} — platform-aware tools default to it`,
     );
     return {
       content: [{ type: "text", text: withFooter(manifest, lines.join("\n")) }],

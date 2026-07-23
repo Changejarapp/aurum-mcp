@@ -1,5 +1,6 @@
 import type { ToolDef } from "./index.js";
 import { fence } from "../format.js";
+import { SESSION_PLATFORM } from "../platform.js";
 
 export const getCodeConnectSnippetTool: ToolDef = {
   name: "aurum_get_code_connect_snippet",
@@ -30,15 +31,16 @@ export const getCodeConnectSnippetTool: ToolDef = {
       platform: {
         type: "string",
         enum: ["android", "ios"],
-        default: "android",
-        description: "Which platform's mapping to read. Defaults to android (Kotlin).",
+        description:
+          "Which platform's mapping to read. Defaults to the SESSION's platform (auto-detected " +
+          "from the repo the session runs in, or AURUM_MCP_PLATFORM), else android (Kotlin).",
       },
     },
     additionalProperties: false,
   },
   async handler(manifest, args) {
     const name = String(args.component ?? "").trim();
-    const platform = String(args.platform ?? "android");
+    const platform = String(args.platform ?? SESSION_PLATFORM ?? "android");
     if (!name) {
       return {
         content: [{ type: "text", text: "Missing required `component` argument." }],

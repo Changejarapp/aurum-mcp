@@ -6,6 +6,28 @@ this project adheres to [SemVer](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.5.0] — session platform lens
+
+### Added
+- **Session platform lens** (`src/platform.ts`): the server resolves the
+  session's platform once at startup — `AURUM_MCP_PLATFORM` env var
+  (`android`/`ios`/`all`) wins, else working-directory fingerprints
+  (`gradlew`/`settings.gradle*` → android; `Package.swift`/`Podfile`/
+  `*.xcodeproj` → ios). Platform-aware tools (`aurum_get_component`,
+  `aurum_get_code_connect_snippet`, `aurum_get_changelog`,
+  `aurum_list_components`) default their `platform` argument to the lens,
+  so a jar-android session gets Kotlin answers and a jar-ios session gets
+  SwiftUI with zero configuration. Explicit arguments always win;
+  `get_component` degrades to `all` when the requested component doesn't
+  exist on the lens platform. The response footer appends `· lens: <p>`
+  when a lens is active, and `aurum_get_aurum_version` reports how it was
+  resolved.
+
+### Fixed
+- `initialize` responses reported a hardcoded `serverInfo.version` of
+  `0.2.0` regardless of release — now read from `package.json`. The
+  stderr ready-line also prints the real version and the active lens.
+
 ## [0.4.1] — manifest refresh
 
 ### Changed

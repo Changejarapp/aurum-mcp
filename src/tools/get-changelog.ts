@@ -1,5 +1,6 @@
 import type { ToolDef } from "./index.js";
 import { withFooter } from "../format.js";
+import { SESSION_PLATFORM } from "../platform.js";
 
 export const getChangelogTool: ToolDef = {
   name: "aurum_get_changelog",
@@ -28,15 +29,16 @@ export const getChangelogTool: ToolDef = {
       platform: {
         type: "string",
         enum: ["android", "ios"],
-        default: "android",
-        description: "Which library's changelog to read (each has its own release cadence). Defaults to android.",
+        description:
+          "Which library's changelog to read (each has its own release cadence). Defaults to the " +
+          "SESSION's platform (auto-detected from the repo, or AURUM_MCP_PLATFORM), else android.",
       },
     },
     additionalProperties: false,
   },
   async handler(manifest, args) {
     const requested = (args.version as string | undefined)?.trim() || "Unreleased";
-    const platform = String(args.platform ?? "android");
+    const platform = String(args.platform ?? SESSION_PLATFORM ?? "android");
 
     // Merged manifests carry per-platform logs in `changelogs`; the
     // top-level `changelog` mirrors android (primary) for back-compat.

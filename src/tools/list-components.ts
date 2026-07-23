@@ -1,6 +1,7 @@
 import type { ToolDef } from "./index.js";
 import type { Component, Platform } from "../types.js";
 import { withFooter } from "../format.js";
+import { SESSION_PLATFORM } from "../platform.js";
 
 export const listComponentsTool: ToolDef = {
   name: "aurum_list_components",
@@ -25,8 +26,9 @@ export const listComponentsTool: ToolDef = {
       platform: {
         type: "string",
         enum: ["android", "ios", "all"],
-        default: "all",
-        description: "Restrict results to a single platform. Omit or pass 'all' for everything.",
+        description:
+          "Restrict results to a single platform. Defaults to the SESSION's platform (auto-detected " +
+          "from the repo the session runs in, or AURUM_MCP_PLATFORM), else 'all'.",
       },
     },
     additionalProperties: false,
@@ -53,7 +55,7 @@ export const listComponentsTool: ToolDef = {
     },
   },
   async handler(manifest, args) {
-    const platform = (args.platform as string | undefined) ?? "all";
+    const platform = (args.platform as string | undefined) ?? SESSION_PLATFORM ?? "all";
     const filtered = manifest.components.filter((c) =>
       platform === "all" ? true : c.platforms.includes(platform as Platform),
     );

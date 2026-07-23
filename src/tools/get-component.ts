@@ -1,6 +1,7 @@
 import type { ToolDef } from "./index.js";
 import type { Platform } from "../types.js";
 import { fence, withFooter } from "../format.js";
+import { SESSION_PLATFORM } from "../platform.js";
 
 const PLATFORM_LANG: Record<string, string> = { android: "kotlin", ios: "swift", web: "tsx" };
 
@@ -35,9 +36,10 @@ export const getComponentTool: ToolDef = {
         enum: ["android", "ios", "all"],
         default: "all",
         description:
-          "Which implementation to render. `all` (default) shows the shared doc plus a per-platform " +
-          "implementations section; `android` / `ios` swaps in that platform's source paths, signature, " +
-          "and gallery link. Errors if the component doesn't exist on the requested platform.",
+          "Which implementation to render. Defaults to the SESSION's platform (auto-detected from the repo " +
+          "the session runs in, or the AURUM_MCP_PLATFORM env var), else `all`. `all` shows the shared doc " +
+          "plus a per-platform implementations section; `android` / `ios` swaps in that platform's source " +
+          "paths, signature, and gallery link. Errors if the component doesn't exist on the requested platform.",
       },
     },
     additionalProperties: false,
@@ -99,7 +101,14 @@ export const getComponentTool: ToolDef = {
       };
     }
 
-    const platform = String(args.platform ?? "all") as Platform | "all";
+    // Explicit argument wins; otherwise the session lens; otherwise `all`.
+    // Session-lens fallback: if the component doesn't exist on the lens
+    // platform, degrade to `all` rather than erroring — the developer asked
+    // about a component, not about the lens.
+    let platform = String(args.platform ?? SESSION_PLATFORM ?? "all") as Platform | "all";
+    if (!args.platform && platform !== "all" && !c.platforms.includes(platform as Platform)) {
+      platform = "all";
+    }
     if (platform !== "all" && !c.platforms.includes(platform)) {
       return {
         content: [{

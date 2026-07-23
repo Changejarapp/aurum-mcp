@@ -185,6 +185,20 @@ both (`*aurum android 0.3.28 + ios 0.2.2 · …*`). The MCP's own SemVer
 stays independent of all of them — **never pin the MCP to a source
 library's version.**
 
+**Session platform lens.** A session usually runs inside ONE platform repo,
+and a Compose developer should never be handed SwiftUI by default. The
+server resolves a *session platform* once at startup — from the
+`AURUM_MCP_PLATFORM` env var (`android` | `ios` | `all`; set it in the
+repo's `.mcp.json` `env` block for a guaranteed lens), else from
+working-directory fingerprints (`gradlew`/`settings.gradle*` → android;
+`Package.swift`/`Podfile`/`*.xcodeproj` → ios; both or neither → no lens).
+Platform-aware tools (`aurum_get_component`, `aurum_get_code_connect_snippet`,
+`aurum_get_changelog`, `aurum_list_components`) default their `platform`
+argument to the lens; an explicit argument always wins, and `all` is always
+available. The footer appends `· lens: <platform>` whenever one is active,
+and `aurum_get_aurum_version` reports how it was resolved. In jar-android
+this means Kotlin answers with zero configuration; in jar-ios, SwiftUI.
+
 **Consumers point at `#latest-stable`** — correct for a design-time
 advisory tool (you always see the newest catalog). One caveat: the MCP can
 run *ahead* of a build that pins an older AAR (it may show a `0.4.0`

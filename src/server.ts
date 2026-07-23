@@ -12,6 +12,8 @@
  * with a single `mcp.json` snippet — see README.md.
  */
 
+import { createRequire } from "node:module";
+
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {
@@ -22,6 +24,12 @@ import {
 import { loadManifest } from "./manifest.js";
 import { tools, dispatchTool } from "./tools/index.js";
 import { AURUM_PLAYBOOK } from "./playbook.js";
+import { describeSessionPlatform } from "./platform.js";
+
+// The real package version — serverInfo must never lag behind releases
+// (a hardcoded "0.2.0" shipped in initialize responses for four releases).
+const PKG_VERSION: string =
+  createRequire(import.meta.url)("../package.json").version ?? "0.0.0";
 
 async function main(): Promise<void> {
   const manifest = await loadManifest();
@@ -29,7 +37,7 @@ async function main(): Promise<void> {
   const server = new Server(
     {
       name: "aurum-mcp",
-      version: "0.2.0",
+      version: PKG_VERSION,
     },
     {
       capabilities: {
@@ -58,7 +66,9 @@ async function main(): Promise<void> {
   // Logged to stderr so MCP clients (which read stdout for JSON-RPC) don't
   // see this. The line is the canonical "ready" signal for ad-hoc smoke tests.
   process.stderr.write(
-    `aurum-mcp ready · aurum ${manifest.aurum.version} · ${manifest.components.length} components, ${manifest.icons.length} icons\n`,
+    `aurum-mcp ${PKG_VERSION} ready · aurum ${manifest.aurum.version} · ` +
+      `${manifest.components.length} components, ${manifest.icons.length} icons · ` +
+      `platform lens: ${describeSessionPlatform()}\n`,
   );
 }
 

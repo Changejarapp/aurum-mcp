@@ -3,6 +3,7 @@
  */
 
 import type { Manifest } from "./types.js";
+import { SESSION_PLATFORM } from "./platform.js";
 
 /** Standard footer attached to every content tool's response — gives the LLM
  *  a self-check signal of which Aurum version it's reasoning about. */
@@ -18,7 +19,8 @@ export function versionFooter(manifest: Manifest): string {
         .map(([platform, v]) => `${platform} ${v!.version}`)
         .join(" + ")
     : `${manifest.aurum.library}@${manifest.aurum.version}`;
-  return `\n\n---\n*aurum ${label} · manifest sha \`${sha}\` · generated ${generated}*`;
+  const lens = SESSION_PLATFORM ? ` · lens: ${SESSION_PLATFORM}` : "";
+  return `\n\n---\n*aurum ${label} · manifest sha \`${sha}\` · generated ${generated}${lens}*`;
 }
 
 /** Wrap a tool's body markdown with the version footer. */
